@@ -1,5 +1,7 @@
 import Header from '@/components/layout/Header'
 import Hero from '@/components/sections/Hero'
+import StatStrip from '@/components/sections/StatStrip'
+import HowItWorks from '@/components/sections/HowItWorks'
 
 export default function LandingPage() {
   return (
@@ -7,6 +9,8 @@ export default function LandingPage() {
       <Header />
       <main className="content-stretch flex flex-col items-start relative shrink-0 w-full">
         <Hero />
+        <StatStrip />
+        <HowItWorks />
       </main>
     </div>
   )
