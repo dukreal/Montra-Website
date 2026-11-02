@@ -1,4 +1,5 @@
 import logo from '@/assets/images/logo.png'
+import { PRODUCT_LINKS, COMPANY_LINKS } from '@/constants/content'
 
 function FooterColumn({ colClass, title, links, listWidth }) {
   return (
@@ -48,13 +49,13 @@ export default function Footer() {
           <FooterColumn
             colClass="col-2"
             title="Product"
-            links={['Features', 'How it works', 'Benefits', 'Reviews']}
+            links={PRODUCT_LINKS}
             listWidth="w-[315.297px]"
           />
           <FooterColumn
             colClass="col-3"
             title="Company"
-            links={['About', 'Privacy Policy', 'Terms', 'Contact']}
+            links={COMPANY_LINKS}
             listWidth="w-[315.281px]"
           />
         </div>

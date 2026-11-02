@@ -1,13 +1,7 @@
 import logo from '@/assets/images/logo.png'
 import navWebIcon from '@/assets/icons/nav-web.svg'
 import navDownloadIcon from '@/assets/icons/nav-download.svg'
-
-const NAV_LINKS = [
-  { label: 'Home', href: '#home' },
-  { label: 'How it works', href: '#how-it-works' },
-  { label: 'Benefits', href: '#benefits' },
-  { label: 'Reviews', href: '#reviews' },
-]
+import { NAV_LINKS } from '@/constants/content'
 
 export default function Header() {
   return (

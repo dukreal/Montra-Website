@@ -2,39 +2,7 @@ import StarRating from '@/components/ui/StarRating'
 import ReviewCard from '@/components/ui/ReviewCard'
 import starLgIcon from '@/assets/icons/star-lg.svg'
 import arrowRightIcon from '@/assets/icons/arrow-right.svg'
-
-const REVIEWS = [
-  {
-    quote: "“Motra made budgeting effortless. Logging a jeepney fare takes two taps and the monthly view is gorgeous.”",
-    name: 'Maya Collins',
-    role: 'Financial Consultant',
-    nameWidth: 'w-[115px]',
-  },
-  {
-    quote: "“Fast, clean, and genuinely useful. The location tagging is a small thing that I now can't live without.”",
-    name: 'Daniel Cruz',
-    role: 'Small Business Owner',
-    nameWidth: 'w-[126px]',
-  },
-  {
-    quote: "“I've tried every tracker out there. This is the first one I've actually kept using past a week.”",
-    name: 'Lara Whitmore',
-    role: 'Freelance Designer',
-    nameWidth: 'w-[110px]',
-  },
-  {
-    quote: '“The analytics breakdown finally showed me where my salary was quietly disappearing each month.”',
-    name: 'Paolo Reyes',
-    role: 'Software Engineer',
-    nameWidth: 'w-[104px]',
-  },
-  {
-    quote: "“Works perfectly offline on my commute. Everything syncs the moment I'm back online.”",
-    name: 'Bea Santos',
-    role: 'Nurse',
-    nameWidth: 'w-[77px]',
-  },
-]
+import { REVIEWS } from '@/constants/content'
 
 export default function Testimonials() {
   return (
