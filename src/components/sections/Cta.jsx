@@ -9,32 +9,32 @@ export default function Cta() {
     <section className="content-stretch flex flex-col items-center pb-[32px] px-[24px] relative shrink-0 w-full">
       <div
         style={{ backgroundImage: CTA_BG }}
-        className="h-[735.578px] max-w-[1200px] overflow-clip relative rounded-[32px] shrink-0 w-[1200px]"
+        className="h-[735.578px] max-w-[1200px] overflow-clip relative rounded-[32px] shrink-0 w-[1200px] max-xl:h-auto max-xl:w-full"
       >
-        <div aria-hidden="true" className="absolute content-stretch flex flex-col items-start left-[1049.17px] opacity-10 top-[555.58px]">
+        <div aria-hidden="true" className="absolute content-stretch flex flex-col items-start left-[1049.17px] opacity-10 top-[555.58px] max-xl:bottom-[-40px] max-xl:left-auto max-xl:right-[-8px] max-xl:top-auto">
           <p className="[word-break:break-word] font-black leading-[220px] not-italic relative shrink-0 text-[#03130a] text-[220px] whitespace-nowrap">₱</p>
         </div>
 
-        <div className="absolute gap-x-[40px] gap-y-[40px] grid-cols-[__516px_516px] grid-rows-[_575.58px] inline-grid left-[64px] top-[80px]">
-          <div className="col-1 content-stretch flex flex-col h-[322.281px] items-start justify-self-stretch relative row-1 self-center shrink-0">
+        <div className="absolute gap-x-[40px] gap-y-[40px] grid-cols-[__516px_516px] grid-rows-[_575.58px] inline-grid left-[64px] top-[80px] max-xl:relative max-xl:left-0 max-xl:top-0 max-xl:w-full max-xl:grid-cols-2 max-xl:grid-rows-none max-xl:px-[48px] max-xl:py-[64px] max-lg:grid-cols-1 max-lg:gap-y-[32px] max-md:px-[24px] max-md:py-[48px]">
+          <div className="col-1 content-stretch flex flex-col h-[322.281px] items-start justify-self-stretch relative row-1 self-center shrink-0 max-xl:h-auto max-lg:col-auto max-lg:row-auto">
             <div className="content-stretch flex flex-col items-start relative shrink-0 w-full">
               <p className="[word-break:break-word] font-semibold leading-[20px] not-italic relative shrink-0 text-[#04220f] text-[14px] whitespace-nowrap">Join the money-clarity movement</p>
             </div>
             <div className="content-stretch flex flex-col items-start pt-[12px] relative shrink-0 w-full">
-              <h2 className="[word-break:break-word] font-black leading-[50.4px] not-italic relative shrink-0 text-[#03130a] text-[48px] w-[516px]">Start tracking smarter today.</h2>
+              <h2 className="[word-break:break-word] font-black leading-[50.4px] not-italic relative shrink-0 text-[#03130a] text-[48px] w-[516px] max-xl:w-full max-xl:text-balance max-md:text-[40px]">Start tracking smarter today.</h2>
             </div>
             <div className="content-stretch flex flex-col items-start pt-[16px] relative shrink-0">
-              <p className="[word-break:break-word] font-normal leading-[28px] not-italic relative shrink-0 text-[#053b1c] text-[18px] w-[448px]">Free, offline-first, and built for the way you actually spend.</p>
+              <p className="[word-break:break-word] font-normal leading-[28px] not-italic relative shrink-0 text-[#053b1c] text-[18px] w-[448px] max-md:w-full">Free, offline-first, and built for the way you actually spend.</p>
             </div>
-            <div className="content-stretch flex flex-col gap-[8px] h-[118px] items-start pt-[32px] relative shrink-0 w-[516px]">
-              <div className="content-stretch flex gap-[12px] items-start relative shrink-0">
-                <button type="button" className="bg-white content-stretch drop-shadow-[0px_14px_20px_rgba(0,0,0,0.25)] flex gap-[10px] items-center px-[32px] py-[16px] relative rounded-[33554400px] self-stretch shrink-0">
+            <div className="content-stretch flex flex-col gap-[8px] h-[118px] items-start pt-[32px] relative shrink-0 w-[516px] max-xl:w-full max-md:h-auto">
+              <div className="content-stretch flex gap-[12px] items-start relative shrink-0 max-md:flex-col max-md:items-stretch max-md:w-full">
+                <button type="button" className="bg-white content-stretch drop-shadow-[0px_14px_20px_rgba(0,0,0,0.25)] flex gap-[10px] items-center px-[32px] py-[16px] relative rounded-[33554400px] self-stretch shrink-0 max-md:justify-center">
                   <span className="relative shrink-0 size-[20px]">
                     <img alt="" className="absolute block inset-0 max-w-none size-full" src={downloadIcon} />
                   </span>
                   <span className="[word-break:break-word] font-bold leading-[24px] not-italic relative shrink-0 text-[#03130a] text-[16px] text-center whitespace-nowrap">Download App</span>
                 </button>
-                <button type="button" className="border border-[rgba(3,19,10,0.35)] border-solid content-stretch flex gap-[10px] items-center px-[32px] py-[16px] relative rounded-[33554400px] self-stretch shrink-0">
+                <button type="button" className="border border-[rgba(3,19,10,0.35)] border-solid content-stretch flex gap-[10px] items-center px-[32px] py-[16px] relative rounded-[33554400px] self-stretch shrink-0 max-md:justify-center">
                   <span className="relative shrink-0 size-[20px]">
                     <img alt="" className="absolute block inset-0 max-w-none size-full" src={webDarkIcon} />
                   </span>
@@ -45,11 +45,11 @@ export default function Cta() {
             </div>
           </div>
 
-          <div className="col-2 content-stretch flex h-[575.578px] items-start justify-end justify-self-stretch relative row-1 self-center shrink-0">
-            <div className="h-full relative shrink-0 w-[230px]">
-              <div className="-translate-x-1/2 -translate-y-1/2 absolute flex h-[1025.492px] items-center justify-center left-[calc(50%-68.5px)] top-[calc(50%+62.29px)] w-[1278.152px]">
-                <div className="flex-none rotate-[6.34deg]">
-                  <div className="h-[900px] relative w-[1186px]">
+          <div className="col-2 content-stretch flex h-[575.578px] items-start justify-end justify-self-stretch relative row-1 self-center shrink-0 max-xl:h-auto max-lg:col-auto max-lg:row-auto max-lg:justify-center">
+            <div className="h-full relative shrink-0 w-[230px] max-xl:h-auto max-xl:w-full max-xl:max-w-[400px] max-xl:aspect-[400/710] max-xl:overflow-clip">
+              <div className="-translate-x-1/2 -translate-y-1/2 absolute flex h-[1025.492px] items-center justify-center left-[calc(50%-68.5px)] top-[calc(50%+62.29px)] w-[1278.152px] max-xl:h-[126.76%] max-xl:left-[48.13%] max-xl:top-[59.15%] max-xl:w-[296.5%]">
+                <div className="flex-none rotate-[6.34deg] max-xl:h-full max-xl:w-full">
+                  <div className="h-[900px] relative w-[1186px] max-xl:h-full max-xl:w-full">
                     <img alt="Motra app on a phone" className="absolute inset-0 max-w-none object-cover pointer-events-none size-full" src={ctaPhone} />
                   </div>
                 </div>
