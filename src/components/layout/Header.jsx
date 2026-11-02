@@ -44,7 +44,45 @@ export default function Header() {
             </span>
             <span className="[word-break:break-word] font-bold leading-[20px] not-italic relative shrink-0 text-[#03130a] text-[14px] text-center whitespace-nowrap">Download App</span>
           </button>
+          <button
+            type="button"
+            aria-label={menuOpen ? 'Close menu' : 'Open menu'}
+            aria-expanded={menuOpen}
+            aria-controls="mobile-menu"
+            onClick={() => setMenuOpen((open) => !open)}
+            className="bg-[#191919] border border-[#242424] border-solid flex items-center justify-center relative rounded-[33554400px] shrink-0 size-[40px] lg:hidden"
+          >
+            <img alt="" className="size-[20px]" src={menuOpen ? closeIcon : menuIcon} />
+          </button>
         </div>
+
+        {menuOpen && (
+          <div
+            id="mobile-menu"
+            className="absolute bg-[#141414] border border-[#242424] border-solid flex flex-col gap-[4px] left-0 mt-[8px] p-[16px] right-0 rounded-[24px] top-full lg:hidden"
+          >
+            {NAV_LINKS.map((link) => (
+              <a
+                key={link.label}
+                href={link.href}
+                onClick={() => setMenuOpen(false)}
+                className="font-medium px-[16px] py-[12px] rounded-[12px] text-[#a3a3a3] text-[16px] hover:bg-[rgba(255,255,255,0.06)] hover:text-white"
+              >
+                {link.label}
+              </a>
+            ))}
+            <div className="flex flex-col gap-[10px] pt-[12px] md:hidden">
+              <button type="button" className="bg-[#191919] border border-[#242424] border-solid flex gap-[10px] items-center justify-center px-[20px] py-[12px] rounded-[33554400px]">
+                <img alt="" className="size-[17px]" src={navWebIcon} />
+                <span className="font-bold text-[14px] text-white">Web Version</span>
+              </button>
+              <button type="button" className="bg-[#27ae60] flex gap-[10px] items-center justify-center px-[20px] py-[12px] rounded-[33554400px]">
+                <img alt="" className="size-[17px]" src={navDownloadIcon} />
+                <span className="font-bold text-[#03130a] text-[14px]">Download App</span>
+              </button>
+            </div>
+          </div>
+        )}
       </div>
     </header>
   )
