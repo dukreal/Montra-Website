@@ -9,11 +9,11 @@ import webGreenIcon from '@/assets/icons/web-green.svg'
 export default function Hero() {
   return (
     <section id="home" className="h-[1468.188px] relative shrink-0 w-full">
-      <div className="absolute h-[1468.188px] left-0 overflow-clip top-0 w-[1337px]">
-        <div className="absolute bg-[#27ae60] blur-[140px] h-[560px] left-[218.5px] opacity-25 rounded-[33554400px] top-[-128px] w-[900px]"></div>
+      <div className="absolute h-[1468.188px] left-0 overflow-clip top-0 w-full">
+        <div className="absolute bg-[#27ae60] blur-[140px] h-[560px] left-1/2 -translate-x-1/2 opacity-25 rounded-[33554400px] top-[-128px] w-[900px]"></div>
       </div>
 
-      <div className="absolute content-stretch flex flex-col items-start left-[68.5px] max-w-[1200px] pb-[32px] pt-[112px] px-[24px] top-0 w-[1200px]">
+      <div className="absolute content-stretch flex flex-col items-start left-1/2 -translate-x-1/2 max-w-[1200px] pb-[32px] pt-[112px] px-[24px] top-0 w-[1200px]">
         <div className="content-stretch flex flex-col items-start relative shrink-0 w-full">
           <div className="content-stretch flex flex-col items-center relative shrink-0 w-full">
             <div className="content-stretch flex flex-col items-center max-w-[896px] relative shrink-0 w-[896px]">

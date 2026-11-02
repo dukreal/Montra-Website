@@ -6,7 +6,7 @@ const CTA_BG = 'linear-gradient(133.28541469119173deg, rgb(39, 174, 96) 7.735%, 
 
 export default function Cta() {
   return (
-    <section className="content-stretch flex flex-col items-center pb-[32px] px-[24px] relative shrink-0 w-[1337px]">
+    <section className="content-stretch flex flex-col items-center pb-[32px] px-[24px] relative shrink-0 w-full">
       <div
         style={{ backgroundImage: CTA_BG }}
         className="h-[735.578px] max-w-[1200px] overflow-clip relative rounded-[32px] shrink-0 w-[1200px]"

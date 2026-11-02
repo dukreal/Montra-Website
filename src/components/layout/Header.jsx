@@ -5,7 +5,7 @@ import { NAV_LINKS } from '@/constants/content'
 
 export default function Header() {
   return (
-    <header className="content-stretch flex flex-col h-[76px] items-center pt-[16px] px-[16px] relative shrink-0 w-[1337px]">
+    <header className="content-stretch flex flex-col h-[76px] items-center pt-[16px] px-[16px] relative shrink-0 w-full">
       <div className="backdrop-blur-[24px] bg-[rgba(20,20,20,0.82)] border border-[#242424] border-solid content-stretch flex items-center justify-between max-w-[1200px] pl-[20px] pr-[8px] py-[8px] relative rounded-[33554400px] shrink-0 w-[1200px]">
         <div className="content-stretch flex gap-[10px] items-center relative shrink-0">
           <div className="bg-[rgba(255,255,255,0.06)] border border-[rgba(255,255,255,0.1)] border-solid grid grid-cols-[_38px] grid-rows-[_38px] relative rounded-[12px] shrink-0 size-[40px]">

@@ -10,7 +10,7 @@ import Cta from '@/components/sections/Cta'
 
 export default function LandingPage() {
   return (
-    <div className="bg-[#0b0b0b] content-stretch flex flex-col items-start min-h-[903px] relative shrink-0 w-[1337px]">
+    <div className="bg-[#0b0b0b] content-stretch flex flex-col items-start min-h-[903px] relative shrink-0 w-full">
       <Header />
       <main className="content-stretch flex flex-col items-start relative shrink-0 w-full">
         <Hero />
