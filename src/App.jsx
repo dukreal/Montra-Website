@@ -1,7 +1,11 @@
+import LandingPage from '@/pages/LandingPage'
+
 export default function App() {
   return (
-    <div className="flex min-h-screen items-center justify-center bg-[#0b0b0b] text-white">
-      <h1 className="text-3xl font-bold">Motra</h1>
+    <div className="bg-[#050505] content-stretch flex flex-col items-start relative size-full">
+      <div className="content-stretch flex flex-col h-[903px] items-start relative shrink-0 w-[1337px]">
+        <LandingPage />
+      </div>
     </div>
   )
 }
