@@ -2,6 +2,7 @@ import Header from '@/components/layout/Header'
 import Hero from '@/components/sections/Hero'
 import StatStrip from '@/components/sections/StatStrip'
 import HowItWorks from '@/components/sections/HowItWorks'
+import Benefits from '@/components/sections/Benefits'
 
 export default function LandingPage() {
   return (
@@ -11,6 +12,7 @@ export default function LandingPage() {
         <Hero />
         <StatStrip />
         <HowItWorks />
+        <Benefits />
       </main>
     </div>
   )
