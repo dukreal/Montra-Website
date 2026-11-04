@@ -77,6 +77,7 @@ export default function Hero() {
                   style={{
                     position: "absolute",
                     width: 2000,
+                    maxWidth: "none",
                     height: "auto",
                     left: -763,
                     top: -158,
