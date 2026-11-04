@@ -79,61 +79,74 @@ export default function Hero() {
                     width: 2000,
                     maxWidth: "none",
                     height: "auto",
-                    left: -763,
-                    top: -158,
+                    left: -752.5,
+                    top: -130,
                     display: "block",
                   }}
                 />
               </div>
 
+              {/* Floating cards: sizes and positions measured from the Figma design (px, so they do not depend on the browser's font-size setting).
+                  Shown from lg (1024px) up, where they fit on screen. */}
+
               {/* Saved! chip — upper left */}
-              <FloatCard className="hidden md:flex absolute items-center gap-2.5 px-4 py-2.5" style={{ left: -152, top: 130 }}>
-                <span className="grid place-items-center rounded-full shrink-0" style={{ width: 28, height: 28, background: ACCENT + "25" }}>
-                  <Check size={14} color={ACCENT_SOFT} strokeWidth={3} />
+              <FloatCard
+                className="hidden lg:flex absolute items-center"
+                style={{ left: -141, top: 178, width: 262, height: 90, paddingLeft: 28, paddingRight: 24, gap: 12, borderRadius: 22 }}
+              >
+                <span className="grid place-items-center rounded-full shrink-0" style={{ width: 46, height: 46, background: ACCENT + "25" }}>
+                  <Check size={21} color={ACCENT_SOFT} strokeWidth={3} />
                 </span>
-                <div>
-                  <p className="text-[12px] font-bold" style={{ color: INK }}>Saved!</p>
-                  <p className="text-[10px]" style={{ color: MUTE }}>Transaction added</p>
+                <div className="flex-1 text-center">
+                  <p className="font-bold" style={{ fontSize: 20, lineHeight: "24px", color: INK }}>Saved!</p>
+                  <p style={{ fontSize: 16, lineHeight: "22px", color: MUTE }}>Transaction added</p>
                 </div>
               </FloatCard>
 
               {/* Food & Dining card — lower left */}
-              <FloatCard className="hidden md:block absolute w-56 p-3.5" style={{ left: -216, bottom: 300 }}>
-                <div className="flex items-center gap-3">
-                  <span className="grid place-items-center rounded-xl" style={{ width: 38, height: 38, background: "#F5A62320" }}>
-                    <Utensils size={17} color="#F5A623" />
-                  </span>
-                  <div className="flex-1 min-w-0 text-left">
-                    <p className="text-[13px] font-bold" style={{ color: INK }}>Food &amp; Dining</p>
-                    <p className="text-[11px]" style={{ color: MUTE }}>12:40 PM</p>
-                  </div>
-                  <span className="text-sm font-bold" style={{ color: "#E05252" }}>-₱340</span>
+              <FloatCard
+                className="hidden lg:flex absolute items-center"
+                style={{ left: -202, top: 645, width: 327, height: 99, paddingLeft: 21, paddingRight: 22, gap: 16, borderRadius: 20 }}
+              >
+                <span className="grid place-items-center shrink-0" style={{ width: 54, height: 54, borderRadius: 16, background: "#F5A62320" }}>
+                  <Utensils size={24} color="#F5A623" />
+                </span>
+                <div className="flex-1 min-w-0 text-left">
+                  <p className="font-bold" style={{ fontSize: 18, lineHeight: "22px", color: INK }}>Food &amp; Dining</p>
+                  <p style={{ fontSize: 15, lineHeight: "20px", marginTop: 4, color: MUTE }}>12:40 PM</p>
                 </div>
+                <span className="font-bold" style={{ fontSize: 22, lineHeight: "28px", color: "#E05252" }}>-₱340</span>
               </FloatCard>
 
               {/* Summary card — upper right */}
-              <FloatCard className="hidden md:block absolute w-72 p-5 text-left" style={{ right: -280, top: 80 }}>
-                <p className="text-[11px] font-semibold mb-3" style={{ color: MUTE }}>Summary this month</p>
-                <div className="grid grid-cols-3 gap-3">
+              <FloatCard
+                className="hidden lg:block absolute text-left"
+                style={{ left: 391, top: 145, width: 342, height: 132, padding: 24, borderRadius: 18 }}
+              >
+                <p className="font-semibold" style={{ fontSize: 14, lineHeight: "20px", marginBottom: 16, color: MUTE }}>Summary this month</p>
+                <div className="grid grid-cols-3" style={{ columnGap: 12 }}>
                   {[
                     { label: "Income", value: "+₱3,000", color: "#2ECC71" },
                     { label: "Expense", value: "-₱213", color: "#FF6B6B" },
                     { label: "Balance", value: "₱2,787", color: INK },
                   ].map(({ label, value, color }) => (
                     <div key={label}>
-                      <p className="text-[10px] font-medium" style={{ color: MUTE }}>{label}</p>
-                      <p className="text-[14px] font-bold mt-1" style={{ color }}>{value}</p>
+                      <p className="font-medium" style={{ fontSize: 13, lineHeight: "18px", color: MUTE }}>{label}</p>
+                      <p className="font-bold" style={{ fontSize: 17, lineHeight: "24px", marginTop: 5, color }}>{value}</p>
                     </div>
                   ))}
                 </div>
               </FloatCard>
 
               {/* Banilad chip — lower right */}
-              <FloatCard className="hidden md:flex absolute items-center gap-2.5 px-3.5 py-2.5 w-52" style={{ right: -200, bottom: 240 }}>
-                <span className="grid place-items-center rounded-lg shrink-0" style={{ width: 28, height: 28, background: ACCENT + "20" }}>
-                  <MapPin size={14} color={ACCENT} />
+              <FloatCard
+                className="hidden lg:flex absolute items-center"
+                style={{ left: 349, top: 640, width: 353, height: 85, paddingLeft: 25, paddingRight: 20, gap: 18, borderRadius: 22 }}
+              >
+                <span className="grid place-items-center shrink-0" style={{ width: 48, height: 48, borderRadius: 14, background: ACCENT + "20" }}>
+                  <MapPin size={22} color={ACCENT} />
                 </span>
-                <span className="text-[12px] font-semibold truncate" style={{ color: INK }}>Banilad, Cebu City</span>
+                <span className="font-semibold truncate" style={{ fontSize: 20, color: INK }}>Banilad, Cebu City</span>
               </FloatCard>
             </div>
           </div>
