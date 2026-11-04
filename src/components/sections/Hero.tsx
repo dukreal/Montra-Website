@@ -66,7 +66,7 @@ export default function Hero() {
                   top: 0,
                   left: 0,
                   width: 494,
-                  height: 1128,
+                  height: "calc(780px + 2rem)",
                   overflow: "hidden",
                   pointerEvents: "none",
                 }}
