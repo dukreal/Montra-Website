@@ -1,10 +1,11 @@
-# Motra
+# Montra
 
-Marketing landing page for **Motra**, a personal money tracker. Converted from a Figma export into a React application.
+Marketing landing page for **Montra**, a personal money tracker. Built with React, TypeScript and Tailwind CSS from a Figma Make design.
 
 ## Tech stack
 
-- React 19 (JSX)
+- React 19
+- TypeScript
 - Vite 8
 - Tailwind CSS 4
 - Inter font, self-hosted via `@fontsource/inter`
@@ -25,34 +26,35 @@ npm run dev
 | `npm run build` | Create the production build in `dist/` |
 | `npm run preview` | Serve the production build locally |
 | `npm run lint` | Run the linter |
+| `npm run typecheck` | Check the TypeScript types |
 
 ## Project structure
 
 ```
 src/
 ├── assets/
-│   ├── images/       Logo and app screenshots
-│   └── icons/        SVG icons
+│   └── images/       Logo, 3D phone and app screenshots
 ├── components/
 │   ├── layout/       Header, Footer
 │   ├── sections/     Hero, StatStrip, HowItWorks, Benefits,
 │   │                 Testimonials, Secure, Cta
-│   └── ui/           BenefitCard, IconTile, ReviewCard, StarRating, StepCard
+│   └── ui/           Shared pieces: PhoneMock, FloatCard, Reveal,
+│                     StepCard, BenefitCard, MiniDonut, icons, ...
 ├── constants/
-│   └── content.js    Page text: nav links, stats, reviews, footer links
+│   └── theme.ts      Colors used across the page
 ├── pages/
-│   └── LandingPage.jsx
+│   └── LandingPage.tsx
 ├── styles/
-│   └── index.css     Tailwind and font setup
-├── App.jsx
-└── main.jsx
+│   └── index.css     Tailwind, fonts and global styles
+├── App.tsx
+└── main.tsx
 ```
 
 The `@` import alias points to `src/` (for example `@/components/layout/Header`).
 
-## Design notes
+## Status
 
-The layout comes straight from the Figma export: a fixed 1337px-wide desktop design using Tailwind arbitrary values. It is not responsive yet.
+This repository contains the landing page only. The web app (sign-in and transaction tracking) is planned as a separate phase.
 
 ## Branching workflow
 
@@ -71,3 +73,7 @@ Never commit directly to `master`.
 Format: `type: description`
 
 Examples: `feat: add pricing section`, `fix: resolve layout issues`, `style: adjust spacing`, `chore: update dependencies`, `docs: update README`, `refactor: simplify components`.
+
+## Environment variables
+
+Copy `.env.example` to `.env` when the web app is added. Never commit a real `.env` file.
