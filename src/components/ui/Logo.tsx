@@ -13,10 +13,10 @@ export default function Logo({ size = 22, tone = "light" }: { size?: number; ton
           border: `1px solid ${tone === "dark" ? "rgba(0,0,0,0.08)" : "rgba(255,255,255,0.1)"}`,
         }}
       >
-        <img src={logoUrl} alt="Montra logo" style={{ width: size + 4, height: size + 4, padding: 0 }} className="object-contain" />
+        <img src={logoUrl} alt="Motra logo" style={{ width: size + 4, height: size + 4, padding: 0 }} className="object-contain" />
       </span>
       <span className="font-black tracking-tight" style={{ fontSize: size + 3, color: tone === "dark" ? "#0b0b0b" : "#ffffff" }}>
-        Montra
+        Motra
       </span>
     </div>
   );

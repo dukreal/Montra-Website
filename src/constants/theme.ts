@@ -1,5 +1,5 @@
 /* ═══════════════════════════════════════════════════════════════
-   MONTRA — MARKETING WEBSITE
+   MOTRA — MARKETING WEBSITE
    Polished fintech landing, dark ground + green accent.
    Patterns: pill nav, two-tone headings, floating UI cards,
    dark step section, bento benefits, testimonial slider.

@@ -295,13 +295,13 @@ export const TrendingUp = makeIcon(
 export const STEPS = [
   { n: "STEP 1", title: "Add a transaction", body: "Tap the + button, choose expense or income, and enter the amount in seconds." },
   { n: "STEP 2", title: "Tag it with context", body: "Pick a category and sub-category, drop a location, and attach a receipt photo." },
-  { n: "STEP 3", title: "Watch it add up", body: "Montra rolls everything into daily balances and monthly analytics automatically." },
+  { n: "STEP 3", title: "Watch it add up", body: "Motra rolls everything into daily balances and monthly analytics automatically." },
 ];
 
 
 /* ─────────────────────── TESTIMONIALS ─────────────────────── */
 export const REVIEWS = [
-  { stars: 5, quote: "Montra made budgeting effortless. Logging a jeepney fare takes two taps and the monthly view is gorgeous.", name: "Maya Collins", role: "Financial Consultant" },
+  { stars: 5, quote: "Motra made budgeting effortless. Logging a jeepney fare takes two taps and the monthly view is gorgeous.", name: "Maya Collins", role: "Financial Consultant" },
   { stars: 5, quote: "Fast, clean, and genuinely useful. The location tagging is a small thing that I now can't live without.", name: "Daniel Cruz", role: "Small Business Owner" },
   { stars: 5, quote: "I've tried every tracker out there. This is the first one I've actually kept using past a week.", name: "Lara Whitmore", role: "Freelance Designer" },
   { stars: 5, quote: "The analytics breakdown finally showed me where my salary was quietly disappearing each month.", name: "Paolo Reyes", role: "Software Engineer" },

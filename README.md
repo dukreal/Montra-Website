@@ -1,6 +1,6 @@
-# Montra
+# Motra
 
-Marketing landing page for **Montra**, a personal money tracker. Built with React, TypeScript and Tailwind CSS from a Figma Make design.
+Marketing landing page for **Motra**, a personal money tracker. Built with React, TypeScript and Tailwind CSS from a Figma Make design.
 
 ## Tech stack
 

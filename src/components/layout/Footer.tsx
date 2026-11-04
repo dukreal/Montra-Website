@@ -29,7 +29,7 @@ export default function Footer() {
       </div>
       <div className="border-t" style={{ borderColor: HAIR }}>
         <div className="mx-auto max-w-[1200px] px-6 py-6 flex flex-col md:flex-row items-center justify-between gap-3">
-          <p className="text-xs" style={{ color: MUTE }}>© 2026 Montra. All rights reserved.</p>
+          <p className="text-xs" style={{ color: MUTE }}>© 2026 Motra. All rights reserved.</p>
           <p className="text-xs" style={{ color: MUTE }}>Rent by clarity. Rewards in savings.</p>
         </div>
       </div>
