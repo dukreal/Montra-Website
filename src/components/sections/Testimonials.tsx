@@ -9,7 +9,7 @@ export default function Testimonials() {
   const [i, setI] = useState(0);
   const visible = 3;
   const maxIndex = Math.max(0, REVIEWS.length - visible);
-  const step = 100 / visible;
+  const GAP = 24; 
   const clamp = (v: number) => Math.min(maxIndex, Math.max(0, v));
 
   return (
@@ -35,9 +35,9 @@ export default function Testimonials() {
         </div>
 
         <div className="mt-12 overflow-hidden">
-          <div className="flex gap-6 transition-transform duration-500" style={{ transform: `translateX(-${i * step}%)` }}>
+          <div className="flex transition-transform duration-500" style={{ gap: GAP, transform: `translateX(calc(${-i} * (100% + ${GAP}px) / ${visible}))` }}>
             {REVIEWS.map((r) => (
-              <div key={r.name} className="shrink-0" style={{ width: `calc((100% - ${(visible - 1) * 24}px) / ${visible})` }}>
+              <div key={r.name} className="shrink-0" style={{ width: `calc((100% - ${(visible - 1) * GAP}px) / ${visible})` }}>
                 <div className="h-full rounded-3xl border p-7" style={{ background: PANEL, borderColor: HAIR }}>
                   <div className="flex gap-0.5 mb-4">
                     {Array.from({ length: r.stars }).map((_, s) => <Star key={s} size={16} color={ACCENT_SOFT} fill={ACCENT_SOFT} strokeWidth={0} />)}
