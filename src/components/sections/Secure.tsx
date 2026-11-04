@@ -13,7 +13,7 @@ export default function Secure() {
       <div className="mx-auto max-w-[1200px] px-6 py-24 lg:py-32 grid gap-14 lg:grid-cols-2 items-center">
         <Reveal className="flex justify-center order-2 lg:order-1">
           <div className="relative">
-            <PhoneMock src={shotSettings} alt="Motra settings" width={280} />
+            <PhoneMock src={shotSettings} alt="Montra settings" width={280} />
             <FloatCard className="absolute -right-6 top-10 flex items-center gap-2.5 px-4 py-3">
               <span className="grid place-items-center rounded-full" style={{ width: 30, height: 30, background: ACCENT + "22" }}>
                 <ShieldCheck size={16} color={ACCENT} />
@@ -26,7 +26,7 @@ export default function Secure() {
           </div>
         </Reveal>
         <Reveal delay={120} className="order-1 lg:order-2">
-          <Duo a="Your money data is" b="safe with Motra" className="text-[32px] md:text-[46px]" />
+          <Duo a="Your money data is" b="safe with Montra" className="text-[32px] md:text-[46px]" />
           <p className="mt-6 text-lg leading-relaxed max-w-md" style={{ color: SUB }}>
             Everything is stored locally on your device first. No account is required to get started, and your
             records never leave your phone unless you choose to back them up.

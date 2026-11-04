@@ -31,7 +31,7 @@ export default function Hero() {
             <span style={{ color: MUTE }}>Spend with clarity.</span>
           </h1>
           <p className="mx-auto mt-7 max-w-xl text-lg lg:text-xl leading-relaxed" style={{ color: SUB }}>
-            Motra makes it effortless to log income and expenses — with analytics, receipt photos and
+            Montra makes it effortless to log income and expenses — with analytics, receipt photos and
             location tagging, all in your pocket.
           </p>
           <div className="mt-9 flex flex-wrap justify-center gap-4">
@@ -73,7 +73,7 @@ export default function Hero() {
               >
                 <img
                   src={phone3d}
-                  alt="Motra app on phone"
+                  alt="Montra app on phone"
                   style={{
                     position: "absolute",
                     width: 2000,
