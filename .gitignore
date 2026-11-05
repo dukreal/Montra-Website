@@ -22,8 +22,7 @@ dist-ssr
 *.njsproj
 *.sln
 *.sw?
-montra-current.zip
-montra-current-2.zip
+*.zip
 
 # environment variables (never commit real values)
 .env
