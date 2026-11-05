@@ -2523,10 +2523,6 @@ function AppShell({ user, onSignOut }: { user: User | null; onSignOut: () => voi
         sub_category: tx.sub_category || null,
         notes: tx.notes || null,
         created_at: tx.created_at,
-        image_urls: null,
-        latitude: null,
-        longitude: null,
-        is_local: false,
         is_edited: false,
       }]);
       if (error) {
