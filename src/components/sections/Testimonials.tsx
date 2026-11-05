@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import Duo from '@/components/ui/Duo'
 import Reveal from '@/components/ui/Reveal'
 import RoundBtn from '@/components/ui/RoundBtn'
@@ -7,9 +7,16 @@ import { ACCENT, ACCENT_SOFT, INK, MUTE, PANEL, HAIR } from '@/constants/theme'
 
 export default function Testimonials() {
   const [i, setI] = useState(0);
-  const visible = 3;
+  const [visible, setVisible] = useState(3); // cards shown at once: 1 on phones, 2 on tablets, 3 on desktop
+  useEffect(() => {
+    const update = () => setVisible(window.innerWidth < 640 ? 1 : window.innerWidth < 1024 ? 2 : 3);
+    update();
+    window.addEventListener('resize', update);
+    return () => window.removeEventListener('resize', update);
+  }, []);
   const maxIndex = Math.max(0, REVIEWS.length - visible);
-  const GAP = 24; 
+  const pos = Math.min(i, maxIndex); // keeps the position valid when the number of visible cards changes
+  const GAP = 24; // px gap between cards
   const clamp = (v: number) => Math.min(maxIndex, Math.max(0, v));
 
   return (
@@ -29,13 +36,13 @@ export default function Testimonials() {
             </div>
           </Reveal>
           <div className="flex gap-3">
-            <RoundBtn disabled={i === 0} onClick={() => setI(clamp(i - 1))} dir="left" />
-            <RoundBtn disabled={i === maxIndex} onClick={() => setI(clamp(i + 1))} dir="right" />
+            <RoundBtn disabled={pos === 0} onClick={() => setI(clamp(pos - 1))} dir="left" />
+            <RoundBtn disabled={pos === maxIndex} onClick={() => setI(clamp(pos + 1))} dir="right" />
           </div>
         </div>
 
         <div className="mt-12 overflow-hidden">
-          <div className="flex transition-transform duration-500" style={{ gap: GAP, transform: `translateX(calc(${-i} * (100% + ${GAP}px) / ${visible}))` }}>
+          <div className="flex transition-transform duration-500" style={{ gap: GAP, transform: `translateX(calc(${-pos} * (100% + ${GAP}px) / ${visible}))` }}>
             {REVIEWS.map((r) => (
               <div key={r.name} className="shrink-0" style={{ width: `calc((100% - ${(visible - 1) * GAP}px) / ${visible})` }}>
                 <div className="h-full rounded-3xl border p-7" style={{ background: PANEL, borderColor: HAIR }}>
@@ -62,7 +69,7 @@ export default function Testimonials() {
         <div className="mt-10 h-1 rounded-full overflow-hidden" style={{ background: HAIR }}>
           <div
             className="h-full rounded-full transition-all duration-500"
-            style={{ width: `${((i + visible) / REVIEWS.length) * 100}%`, background: ACCENT }}
+            style={{ width: `${((pos + visible) / REVIEWS.length) * 100}%`, background: ACCENT }}
           />
         </div>
       </div>
