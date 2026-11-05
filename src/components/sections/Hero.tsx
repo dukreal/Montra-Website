@@ -58,7 +58,7 @@ export default function Hero() {
                 Positioned with negative left/right offsets so they hug the phone edge.
                 Reference container has no overflow clip, so cards are always visible.
             */}
-            <div style={{ position: "relative", width: 494, height: 780 }}>
+            <div className="[--s:0.55] sm:[--s:0.8] md:[--s:1]" style={{ position: "relative", width: 494, height: 780, zoom: "var(--s)" }}>
               {/* Image clip layer — must not contain the cards */}
               <div
                 style={{
@@ -66,7 +66,7 @@ export default function Hero() {
                   top: 0,
                   left: 0,
                   width: 494,
-                  height: "calc(780px + 2rem)",
+                  height: "calc(780px + 2rem / var(--s))", // ends where the stat strip begins
                   overflow: "hidden",
                   pointerEvents: "none",
                 }}
