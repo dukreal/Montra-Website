@@ -157,6 +157,15 @@ export function AnalyticsTab({ txs, currency }: { txs: Tx[]; currency: string })
   const [month, setMonth] = useState(today.getMonth());
   const [selectedSeg, setSelectedSeg] = useState<Segment | null>(null);
 
+  // The donut is 280px, but shrinks to fit the card on narrow phones.
+  const [viewportW, setViewportW] = useState(window.innerWidth);
+  useEffect(() => {
+    const onResize = () => setViewportW(window.innerWidth);
+    window.addEventListener("resize", onResize);
+    return () => window.removeEventListener("resize", onResize);
+  }, []);
+  const donutSize = Math.max(200, Math.min(280, viewportW - 76 - 32 - 40 - 2));
+
   // Smoothly animate the breakdown card's height as its content changes size
   const cardInnerRef = useRef<HTMLDivElement>(null);
   const [cardH, setCardH] = useState<number | null>(null);
@@ -266,9 +275,9 @@ export function AnalyticsTab({ txs, currency }: { txs: Tx[]; currency: string })
         <button onClick={prevPeriod} style={{ ...btnReset, ...navBtnStyle }}>
           <IcoChevLeft size={15} color={TEXT} />
         </button>
-        <button onClick={togglePicker} aria-expanded={pickerOpen} style={{
+        <button className="montra-period" onClick={togglePicker} aria-expanded={pickerOpen} style={{
           background: aTint(12), border: `1px solid ${aTint(35)}`,
-          borderRadius: 100, padding: "8px 0", width: 320, flexShrink: 0, textAlign: "center",
+          borderRadius: 100, padding: "8px 0", width: 320, minWidth: 0, textAlign: "center",
           whiteSpace: "nowrap", color: ACCENT, fontWeight: 700, fontSize: 17, letterSpacing: 0.2, cursor: "pointer",
           display: "flex", alignItems: "center", justifyContent: "center", gap: 8,
         }}>
@@ -281,7 +290,7 @@ export function AnalyticsTab({ txs, currency }: { txs: Tx[]; currency: string })
 
         {pickerOpen && <div onClick={() => setPickerOpen(false)} style={{ position: "fixed", inset: 0, zIndex: 20 }} />}
         <div className="montra-tab" style={{
-          position: "absolute", top: "calc(100% + 10px)", left: "50%", marginLeft: -170, width: 340, zIndex: 21,
+          position: "absolute", top: "calc(100% + 10px)", left: 0, right: 0, marginLeft: "auto", marginRight: "auto", width: "min(340px, 100%)", zIndex: 21,
           background: CARD, border: `1px solid ${BORDER}`, borderRadius: 16, padding: 16,
           boxShadow: "0 18px 40px rgba(0,0,0,0.35)",
           opacity: pickerOpen ? 1 : 0, visibility: pickerOpen ? "visible" : "hidden",
@@ -356,7 +365,7 @@ export function AnalyticsTab({ txs, currency }: { txs: Tx[]; currency: string })
 
       {/* Income / Expense / Balance summary */}
       <div style={{ background: CARD, borderRadius: 16, padding: "18px 12px", border: `1px solid ${BORDER}` }}>
-        <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr 1fr" }}>
+        <div className="montra-sum" style={{ display: "grid", gridTemplateColumns: "1fr 1fr 1fr" }}>
           <div style={{ textAlign: "center" }}>
             <div style={{ color: SUB, fontSize: 15, marginBottom: 6 }}>Income</div>
             <div style={{ color: GREEN, fontWeight: 700, fontSize: 16 }}>+{fmtAmt(totalIncome, currency)}</div>
@@ -381,7 +390,7 @@ export function AnalyticsTab({ txs, currency }: { txs: Tx[]; currency: string })
       }}>
        <div ref={cardInnerRef} style={{ padding: 20 }}>
         {/* Header row: title + internal Expense/Income toggle */}
-        <div style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-start", marginBottom: 20 }}>
+        <div style={{ display: "flex", flexWrap: "wrap", gap: 12, justifyContent: "space-between", alignItems: "flex-start", marginBottom: 20 }}>
           <div>
             <div style={{ fontWeight: 700, fontSize: 16, color: TEXT }}>
               {txType === "expense" ? "Expense" : "Income"} Breakdown
@@ -415,7 +424,7 @@ export function AnalyticsTab({ txs, currency }: { txs: Tx[]; currency: string })
         ) : (
           <div>
             <div style={{ display: "flex", justifyContent: "center", marginBottom: 24 }}>
-              <DonutChart segments={segments} size={280} hole={170} currency={currency} activeName={selectedSeg?.name ?? null} onSelect={setSelectedSeg} />
+              <DonutChart segments={segments} size={donutSize} hole={Math.round(donutSize * 170 / 280)} currency={currency} activeName={selectedSeg?.name ?? null} onSelect={setSelectedSeg} />
             </div>
             <div style={{ display: "flex", flexDirection: "column", gap: 12 }}>
               {segments.map((seg, i) => {
@@ -430,9 +439,9 @@ export function AnalyticsTab({ txs, currency }: { txs: Tx[]; currency: string })
                       <CatIcon name={seg.icon} color={seg.color} size={18} />
                     </div>
                     <div style={{ flex: 1, minWidth: 0 }}>
-                      <div style={{ display: "flex", justifyContent: "space-between", alignItems: "baseline", marginBottom: 5 }}>
-                        <span style={{ fontSize: 16, fontWeight: 600, color: TEXT, overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap" }}>{seg.name}</span>
-                        <span style={{ fontSize: 16, fontWeight: 700, color: seg.color, marginLeft: 8, flexShrink: 0 }}>{fmtAmt(seg.value, currency)}</span>
+                      <div style={{ display: "flex", flexWrap: "wrap", columnGap: 8, justifyContent: "space-between", alignItems: "baseline", marginBottom: 5 }}>
+                        <span className="montra-segname" style={{ fontSize: 16, fontWeight: 600, color: TEXT, overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap" }}>{seg.name}</span>
+                        <span style={{ fontSize: 16, fontWeight: 700, color: seg.color, marginLeft: "auto", flexShrink: 0 }}>{fmtAmt(seg.value, currency)}</span>
                       </div>
                       <div style={{ height: 5, background: BORDER, borderRadius: 100, overflow: "hidden" }}>
                         <div style={{ height: "100%", width: `${pct}%`, background: seg.color, borderRadius: 100, transition: "width 0.5s ease" }} />

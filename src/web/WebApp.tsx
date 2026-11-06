@@ -56,7 +56,14 @@ export default function WebApp() {
         @media (max-width: 560px) {
           .montra-main { padding: 24px 16px 40px !important; }
           .montra-cats { grid-template-columns: repeat(2, 1fr) !important; }
+          .montra-period { font-size: 15px !important; }
+          .montra-sum { grid-template-columns: 1fr !important; }
+          .montra-sum > div { display: flex !important; justify-content: space-between !important; align-items: center !important; text-align: left !important; border: none !important; padding: 8px 4px !important; }
+          .montra-sum > div + div { border-top: 1px solid var(--border) !important; }
+          .montra-sum > div > div { margin: 0 !important; }
+          .montra-segname { white-space: normal !important; overflow: visible !important; }
         }
+        @media (max-width: 400px) { .montra-period { font-size: 13px !important; gap: 4px !important; } }
         @keyframes donutIn { from { opacity: 0; transform: rotate(-25deg) scale(0.92); } to { opacity: 1; transform: none; } }
         @keyframes popIn { from { opacity: 0; transform: translateY(12px) scale(0.97); } to { opacity: 1; transform: none; } }
         .montra-opt { background: transparent; } .montra-opt:hover { background: var(--card2); }
