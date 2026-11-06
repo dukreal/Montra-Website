@@ -2534,9 +2534,10 @@ export default function WebApp() {
   const handleSignOut = async () => {
     if (session && session !== "loading") {
       await supabase.auth.signOut();
+      /* Remove the signed-in user's cached transactions so the next guest cannot see them. */
+      saveTx([]);
     }
-    setGuestMode(false);
-    setSession(null);
+    setGuestMode(false);    setSession(null);
   };
 
   return (
