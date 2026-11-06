@@ -1,14 +1,16 @@
-import { useState, useMemo, useEffect, useCallback, useRef } from "react";
-import { AnimatePresence, motion, useReducedMotion } from "motion/react";
-import type { Session, User } from "@supabase/supabase-js";
+import { useState, useRef, useEffect, useMemo, useCallback } from "react";
+import { useReducedMotion, AnimatePresence, motion } from "motion/react";
+import type { User, Session } from "@supabase/supabase-js";
 import { supabase } from "@/lib/supabaseClient";
 import logoUrl from "@/assets/images/logo.png";
-import {
-  IoHome, IoRestaurant, IoBus, IoCart, IoGameController, IoMedical,
-  IoSchool, IoCard, IoPeople, IoAirplane, IoWifi, IoWarning,
-  IoBriefcase, IoLaptop, IoStorefront, IoTrendingUp, IoCash,
-  IoArrowDownCircle, IoArrowUpCircle,
-} from "react-icons/io5";
+import { IoHome, IoRestaurant, IoBus, IoCart, IoGameController, IoMedical, IoSchool, IoCard, IoPeople, IoAirplane, IoWifi, IoWarning, IoBriefcase, IoLaptop, IoStorefront, IoTrendingUp, IoCash, IoArrowDownCircle, IoArrowUpCircle } from "react-icons/io5";
+import { CATS } from "@/web/categories";
+import { MONTHS, fmtDate, fmtDateSel, fmtShort, fmtTime, inDateSel, isRange, isoWeekNum, mondayOf, sameDay } from "@/web/dates";
+import { fmtAmt, getCat } from "@/web/helpers";
+import { loadSet, loadTx, saveSet, saveTx } from "@/web/storage";
+import { btnReset, dangerBtn, fieldLabel, inputStyle, modalBox, navBtnStyle, outlineBtn, overlay, primaryBtn, profileRow } from "@/web/styles";
+import { ACCENT, ACCENT_THEMES, BG, BORDER, CARD, CARD2, GREEN, PALETTES, RED, SUB, SURFACE, TEXT, TEXT_SCALE, aTint } from "@/web/theme";
+import type { DateMode, DateSel, Settings, Tab, TextSize, ThemeMode, Tx, TxType } from "@/web/types";
 
 /* ─── Ionicons map ───────────────────────────────────────────────────────── */
 const ICON_MAP: Record<string, React.ElementType> = {
@@ -35,134 +37,6 @@ function CatIcon({ name, color, size = 20 }: { name: string; color: string; size
   const Icon = ICON_MAP[name];
   if (!Icon) return null;
   return <Icon size={size} color={color} />;
-}
-
-/* ─── Tokens ─────────────────────────────────────────────────────────────── */
-/* Theme tokens resolve to CSS variables so the Settings screen can retint the
-   whole app live (dark/light mode + accent color). RED / GREEN are semantic and
-   stay fixed. Accent tints use color-mix since the accent is a runtime variable. */
-const BG = "var(--bg)";
-const SURFACE = "var(--surface)";
-const CARD = "var(--card)";
-const CARD2 = "var(--card2)";
-const BORDER = "var(--border)";
-const TEXT = "var(--text)";
-const SUB = "var(--sub)";
-const ACCENT = "var(--accent)";
-const RED = "#FF6B6B";
-const GREEN = "#2ECC71";
-const aTint = (pct: number) => `color-mix(in srgb, var(--accent) ${pct}%, transparent)`;
-
-/* Accent themes — mirrors the mobile Settings "Color Theme" swatches */
-const ACCENT_THEMES = [
-  { key: "#27AE60", name: "Green" },
-  { key: "#3B7DD8", name: "Blue" },
-  { key: "#E67E22", name: "Orange" },
-  { key: "#E05282", name: "Rose" },
-];
-const PALETTES: Record<"dark" | "light", Record<string, string>> = {
-  dark: { "--bg": "#0d0d0d", "--surface": "#141414", "--card": "#1c1c1c", "--card2": "#222222", "--border": "#282828", "--text": "#f8f8f8", "--sub": "#b0b0b0" },
-  light: { "--bg": "#f3f5f9", "--surface": "#ffffff", "--card": "#ffffff", "--card2": "#eceff5", "--border": "#d3d8e2", "--text": "#10141c", "--sub": "#4a5365" },
-};
-const TEXT_SCALE: Record<string, number> = { small: 0.92, medium: 1, large: 1.1 };
-
-/* ─── Types ──────────────────────────────────────────────────────────────── */
-type TxType = "expense" | "income";
-interface Tx {
-  id: string;
-  amount: number;
-  type: TxType;
-  parent_category: string;
-  sub_category: string;
-  notes: string;
-  created_at: string;
-  is_edited?: boolean;
-  last_edited_at?: string | null;
-  original_amount?: number | null;
-  original_notes?: string | null;
-}
-type ThemeMode = "dark" | "light";
-type TextSize = "small" | "medium" | "large";
-type Language = "english" | "filipino";
-interface Settings {
-  currency: string;
-  theme: ThemeMode;
-  accent: string;
-  textSize: TextSize;
-  language: Language;
-}
-
-/* ─── Storage ─────────────────────────────────────────────────────────────── */
-const TX_KEY = "montra-transactions";
-const SET_KEY = "montra-settings";
-const loadTx = (): Tx[] => {
-  try {
-    return JSON.parse(localStorage.getItem(TX_KEY) || "[]");
-  } catch {
-    return [];
-  }
-};
-const saveTx = (t: Tx[]) => localStorage.setItem(TX_KEY, JSON.stringify(t));
-const SET_DEFAULTS: Settings = { currency: "₱", theme: "dark", accent: "#27AE60", textSize: "medium", language: "english" };
-const loadSet = (): Settings => {
-  try {
-    return { ...SET_DEFAULTS, ...JSON.parse(localStorage.getItem(SET_KEY) || "{}") };
-  } catch {
-    return { ...SET_DEFAULTS };
-  }
-};
-const saveSet = (s: Settings) => localStorage.setItem(SET_KEY, JSON.stringify(s));
-
-/* ─── Categories ──────────────────────────────────────────────────────────── */
-const CATS = {
-  expense: [
-    { name: "Housing & Living", color: "#4a90e2", icon: "home", subs: ["Rent", "Electricity", "Water", "Gas", "Internet", "House Maintenance"] },
-    { name: "Food & Dining", color: "#ff9500", icon: "restaurant", subs: ["Groceries", "Dining Out", "Fast Food", "Food Delivery", "Drinks / Snacks"] },
-    { name: "Transportation", color: "#5856d6", icon: "bus", subs: ["Fuel / Gas", "Public Transport", "Ride-hailing", "Parking Fees", "Car Maintenance", "Car Insurance"] },
-    { name: "Shopping & Personal", color: "#ff2d55", icon: "cart", subs: ["Clothes", "Online Shopping", "Electronics", "Personal Care", "Accessories"] },
-    { name: "Entertainment & Lifestyle", color: "#af52de", icon: "game-controller", subs: ["Movies", "Games", "Hobbies", "Events"] },
-    { name: "Health & Wellness", color: "#34c759", icon: "medical", subs: ["Medicine", "Hospital Bills", "Health Insurance", "Gym / Fitness"] },
-    { name: "Education", color: "#007aff", icon: "school", subs: ["Tuition Fees", "School Supplies", "Books", "Online Courses", "Misc School Fee"] },
-    { name: "Financial & Obligations", color: "#ff3b30", icon: "card", subs: ["Loan Payments", "Credit Card Bills", "Taxes", "Insurance", "Savings"] },
-    { name: "Family & Social", color: "#ffcc00", icon: "people", subs: ["Allowance", "Gifts", "Social", "Childcare"] },
-    { name: "Travel & Leisure", color: "#5ac8fa", icon: "airplane", subs: ["Flights", "Hotel", "Tours", "Travel Food & Transport"] },
-    { name: "Utilities & Subscriptions", color: "#8e8e93", icon: "wifi", subs: ["Mobile Load", "Netflix / Spotify", "Cloud Storage", "Software Subscriptions"] },
-    { name: "Emergency & Misc", color: "#ff6b6b", icon: "warning", subs: ["Emergency Expenses", "Unexpected Repairs", "Miscellaneous", "Replacement Costs"] },
-  ],
-  income: [
-    { name: "Employment Income", color: "#4cd964", icon: "briefcase", subs: ["Salary / Wages", "Overtime Pay", "Bonuses", "Commissions"] },
-    { name: "Freelance & Side Hustle", color: "#5ac8fa", icon: "laptop", subs: ["Freelance Work", "Side Jobs / Gigs", "Online Selling", "Content Creation"] },
-    { name: "Business Income", color: "#ff9500", icon: "storefront", subs: ["Business Profits", "Sales Revenue", "Service Income"] },
-    { name: "Investments & Passive Income", color: "#34c759", icon: "trending-up", subs: ["Dividends", "Interest", "Rental Income", "Crypto / Investment Gains"] },
-    { name: "Allowance & Support", color: "#af52de", icon: "people", subs: ["Allowance", "Family Support", "Remittances"] },
-    { name: "Other Income", color: "#ffcc00", icon: "cash", subs: ["Gifts", "Refunds", "Scholarships / Grants", "Cashback / Rewards"] },
-  ],
-};
-
-/* ─── Date Helpers ────────────────────────────────────────────────────────── */
-const MONTHS = ["January","February","March","April","May","June","July","August","September","October","November","December"];
-const M3 = ["Jan","Feb","Mar","Apr","May","Jun","Jul","Aug","Sep","Oct","Nov","Dec"];
-
-function sameDay(a: Date, b: Date) {
-  return a.getFullYear() === b.getFullYear() && a.getMonth() === b.getMonth() && a.getDate() === b.getDate();
-}
-
-function fmtDate(d: string | Date) {
-  const dt = typeof d === "string" ? new Date(d) : d;
-  return `${M3[dt.getMonth()]} ${dt.getDate()}, ${dt.getFullYear()}`;
-}
-
-function fmtTime(d: string | Date) {
-  const dt = typeof d === "string" ? new Date(d) : d;
-  return dt.toLocaleTimeString("en-US", { hour: "numeric", minute: "2-digit", hour12: true });
-}
-
-function fmtAmt(n: number, cur: string) {
-  return `${cur}${Math.abs(n).toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`;
-}
-
-function getCat(type: TxType, name: string) {
-  return CATS[type].find((c) => c.name === name);
 }
 
 /* ─── SVG Icons ──────────────────────────────────────────────────────────── */
@@ -304,23 +178,6 @@ function DonutChart({ segments, size = 220, hole = 110, currency, activeName, on
       </div>
     </div>
   );
-}
-
-/* ─── Date selection (single day or range) ───────────────────────────────── */
-type DateSel = { start: Date; end: Date };
-type DateMode = "day" | "range";
-const isRange = (s: DateSel | null) => !!s && !sameDay(s.start, s.end);
-function inDateSel(iso: string, s: DateSel) {
-  const t = new Date(iso);
-  const from = new Date(s.start.getFullYear(), s.start.getMonth(), s.start.getDate());
-  const to = new Date(s.end.getFullYear(), s.end.getMonth(), s.end.getDate() + 1);
-  return t >= from && t < to;
-}
-function fmtDateSel(s: DateSel) {
-  if (!isRange(s)) return fmtDate(s.start);
-  const a = s.start, b = s.end;
-  if (a.getFullYear() === b.getFullYear()) return `${M3[a.getMonth()]} ${a.getDate()} – ${M3[b.getMonth()]} ${b.getDate()}, ${b.getFullYear()}`;
-  return `${fmtDate(a)} – ${fmtDate(b)}`;
 }
 /* Click logic shared by Home and Search. Day mode picks one day (click it again to clear);
    range mode takes a start click, then an end click. */
@@ -1118,20 +975,6 @@ function GhostPie({ size = 64 }: { size?: number }) {
     </svg>
   );
 }
-
-function mondayOf(src: Date) {
-  const d = new Date(src.getFullYear(), src.getMonth(), src.getDate());
-  const day = d.getDay();
-  d.setDate(d.getDate() - (day === 0 ? 6 : day - 1));
-  return d;
-}
-function isoWeekNum(d: Date) {
-  const t = new Date(Date.UTC(d.getFullYear(), d.getMonth(), d.getDate()));
-  t.setUTCDate(t.getUTCDate() + 4 - (t.getUTCDay() || 7));
-  const y0 = new Date(Date.UTC(t.getUTCFullYear(), 0, 1));
-  return Math.ceil(((+t - +y0) / 864e5 + 1) / 7);
-}
-const fmtShort = (d: Date) => d.toLocaleDateString("en-US", { month: "short", day: "numeric" });
 
 /* Wraps content in a card whose height animates smoothly as the content changes */
 function AnimatedCard({ children, style, padding = 20 }: { children: React.ReactNode; style?: React.CSSProperties; padding?: number }) {
@@ -2226,51 +2069,6 @@ function ProfileTab({ txs, settings, onSave, user, isGuest, onSignOut, onOpenSet
     </div>
   );
 }
-const profileRow: React.CSSProperties = {
-  display: "flex", alignItems: "center", gap: 12, width: "100%",
-  padding: "14px 16px", background: "none", border: "none",
-  borderBottom: `1px solid ${BORDER}`, cursor: "pointer",
-};
-
-/* ─── Shared style helpers ────────────────────────────────────────────────── */
-const btnReset: React.CSSProperties = {
-  background: "none", border: "none", cursor: "pointer", padding: 4,
-  display: "flex", alignItems: "center", justifyContent: "center",
-};
-const navBtnStyle: React.CSSProperties = {
-  background: CARD, border: `1px solid ${BORDER}`, borderRadius: 8,
-  padding: "7px 10px",
-};
-const overlay: React.CSSProperties = {
-  position: "fixed", inset: 0, background: "rgba(0,0,0,0.72)",
-  display: "flex", alignItems: "center", justifyContent: "center",
-  zIndex: 1000, backdropFilter: "blur(6px)",
-};
-const modalBox: React.CSSProperties = {
-  background: CARD, borderRadius: 24, padding: 32, maxWidth: "90vw",
-  border: `1px solid ${BORDER}`, position: "relative",
-};
-const fieldLabel: React.CSSProperties = {
-  fontSize: 14, color: SUB, fontWeight: 700, letterSpacing: "0.07em",
-  display: "block", marginBottom: 8,
-};
-const inputStyle: React.CSSProperties = {
-  width: "100%", background: CARD, border: `1px solid ${BORDER}`, borderRadius: 12,
-  padding: "12px 14px", color: TEXT, fontSize: 16, outline: "none",
-  boxSizing: "border-box",
-};
-const primaryBtn: React.CSSProperties = {
-  background: ACCENT, color: "#fff", border: "none", borderRadius: 12,
-  padding: "12px 20px", fontWeight: 700, fontSize: 16, cursor: "pointer",
-};
-const outlineBtn: React.CSSProperties = {
-  flex: 1, padding: "12px", borderRadius: 12, border: `1px solid ${BORDER}`,
-  background: SURFACE, color: TEXT, cursor: "pointer", fontWeight: 600, fontSize: 16,
-};
-const dangerBtn: React.CSSProperties = {
-  flex: 1, padding: "12px", borderRadius: 12, border: `1px solid ${RED}55`,
-  background: "#FF6B6B14", color: RED, cursor: "pointer", fontWeight: 600, fontSize: 16,
-};
 
 /* ─── DatePickerModal ────────────────────────────────────────────────────── */
 function DatePickerModal({ value, onClose, onSelect }: { value: string; onClose: () => void; onSelect: (iso: string) => void }) {
@@ -2352,9 +2150,6 @@ function Toast({ message }: { message: string }) {
     </div>
   );
 }
-
-/* ─── Main ───────────────────────────────────────────────────────────────── */
-type Tab = "home" | "add" | "analytics" | "search" | "profile" | "settings";
 
 /* ─── LoginScreen ────────────────────────────────────────────────────────── */
 function LoginScreen({ onGuest }: { onGuest: () => void }) {
