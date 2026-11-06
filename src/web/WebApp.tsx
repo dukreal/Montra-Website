@@ -58,7 +58,7 @@ export default function WebApp() {
         .montra-opt { background: transparent; } .montra-opt:hover { background: var(--card2); }
         .montra-pop { animation: popIn 0.22s cubic-bezier(.2,.8,.2,1) both; max-height: 92vh; overflow-y: auto; }
         @keyframes fadeIn { from { opacity: 0; transform: translateY(6px); } to { opacity: 1; transform: translateY(0); } }
-        .montra-tab { animation: fadeIn 0.28s ease both; }
+        .montra-tab { animation: fadeIn 0.28s ease backwards; }
         button { transition: background-color 0.15s ease, color 0.15s ease, border-color 0.15s ease, opacity 0.15s ease, transform 0.12s ease; }
         button:not(:disabled):active { transform: scale(0.97); }
         @media (prefers-reduced-motion: reduce) { .montra-tab, button { animation: none !important; transition: none !important; } }

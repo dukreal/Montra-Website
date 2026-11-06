@@ -44,8 +44,8 @@ export function TxDetailModal({ tx, currency, onClose, onDelete, onEdit }: {
         </div>
 
         {/* Amount */}
-        <div style={{ padding: "26px 24px 24px", display: "flex", alignItems: "center", justifyContent: "space-between", gap: 12 }}>
-          <div style={{ fontSize: 40, fontWeight: 800, color: tone, lineHeight: 1.1, letterSpacing: "-0.02em", minWidth: 0, overflow: "hidden", textOverflow: "ellipsis" }}>
+        <div style={{ padding: "26px 24px 24px", display: "flex", flexWrap: "wrap", alignItems: "center", justifyContent: "space-between", gap: 12 }}>
+          <div style={{ fontSize: 40, fontWeight: 800, color: tone, lineHeight: 1.1, letterSpacing: "-0.02em", minWidth: 0, overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap" }}>
             {isExp ? "-" : "+"}{fmtAmt(tx.amount, currency)}
           </div>
           <span style={{ display: "inline-flex", alignItems: "center", gap: 7, padding: "6px 14px", borderRadius: 100, border: `1px solid ${tone}55`, color: tone, fontWeight: 700, fontSize: 14, flexShrink: 0 }}>
