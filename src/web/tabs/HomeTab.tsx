@@ -61,7 +61,7 @@ export function HomeTab({ txs, currency, onTxClick, cal }: { txs: Tx[]; currency
             {balance < 0 ? "-" : ""}{fmtAmt(Math.abs(balance), currency)}
           </div>
           <div style={{ fontSize: 15, color: SUB, marginBottom: 16 }}>Net balance</div>
-          <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 10 }}>
+          <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(120px, 1fr))", gap: 10 }}>
             {[
               { label: "Income", value: mIncome, color: GREEN, bg: "#2ECC7110" },
               { label: "Expenses", value: mExpense, color: RED, bg: "#FF6B6B10" },
@@ -85,7 +85,7 @@ export function HomeTab({ txs, currency, onTxClick, cal }: { txs: Tx[]; currency
 
       {/* Right column */}
       <div style={{ flex: 1, minWidth: 0, display: "flex", flexDirection: "column" }}>
-        <div style={{ display: "flex", alignItems: "center", gap: 12, marginBottom: 16 }}>
+        <div style={{ display: "flex", flexWrap: "wrap", alignItems: "center", gap: 12, marginBottom: 16 }}>
           <h2 style={{ margin: 0, color: TEXT, fontSize: 18, fontWeight: 700 }}>
             {dates.sel ? fmtDateSel(dates.sel) : `All of ${MONTHS[month]}`}
           </h2>

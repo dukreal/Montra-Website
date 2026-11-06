@@ -56,9 +56,9 @@ export function ProfileTab({ txs, settings, onSave, user, isGuest, onSignOut, on
       </div>
 
       {/* Stat pills */}
-      <div style={{ display: "flex", gap: 10, marginBottom: 22 }}>
+      <div style={{ display: "flex", flexWrap: "wrap", gap: 10, marginBottom: 22 }}>
         {stats.map(({ label, value, color, Icon }) => (
-          <div key={label} style={{ flex: 1, background: CARD, border: `1px solid ${BORDER}`, borderRadius: 16, padding: "14px 12px" }}>
+          <div key={label} style={{ flex: "1 1 130px", background: CARD, border: `1px solid ${BORDER}`, borderRadius: 16, padding: "14px 12px" }}>
             <span style={{ width: 28, height: 28, borderRadius: 8, background: `${color === ACCENT ? aTint(15) : color + "22"}`, display: "flex", alignItems: "center", justifyContent: "center", marginBottom: 10 }}>
               <Icon size={15} color={color} />
             </span>
