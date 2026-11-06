@@ -103,7 +103,7 @@ export function AddTab({ onAdd }: { onAdd: (tx: Tx) => void }) {
       {/* Parent Category */}
       <div style={{ marginBottom: 20 }}>
         <label style={fieldLabel}>CATEGORY <span style={{ color: RED }}>*</span></label>
-        <div style={{ display: "grid", gridTemplateColumns: "repeat(4, 1fr)", gap: 8 }}>
+        <div className="montra-cats" style={{ display: "grid", gridTemplateColumns: "repeat(4, 1fr)", gap: 8 }}>
           {cats.map((cat) => (
             <button
               key={cat.name}

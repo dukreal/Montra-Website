@@ -52,7 +52,11 @@ export default function WebApp() {
           .montra-settings { flex-direction: column !important; gap: 20px !important; }
           .montra-settings-nav { width: 100% !important; }
         }
-        @media (max-width: 560px) { .montra-main { padding: 24px 16px 40px !important; } }
+        @media (max-width: 720px) { .montra-cats { grid-template-columns: repeat(3, 1fr) !important; } }
+        @media (max-width: 560px) {
+          .montra-main { padding: 24px 16px 40px !important; }
+          .montra-cats { grid-template-columns: repeat(2, 1fr) !important; }
+        }
         @keyframes donutIn { from { opacity: 0; transform: rotate(-25deg) scale(0.92); } to { opacity: 1; transform: none; } }
         @keyframes popIn { from { opacity: 0; transform: translateY(12px) scale(0.97); } to { opacity: 1; transform: none; } }
         .montra-opt { background: transparent; } .montra-opt:hover { background: var(--card2); }
