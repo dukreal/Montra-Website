@@ -3,10 +3,11 @@ import type { User } from "@supabase/supabase-js";
 import { supabase } from "@/lib/supabaseClient";
 import logoUrl from "@/assets/images/logo.png";
 import { loadSet, saveSet, saveTx, loadTx } from "@/web/storage";
-import { btnReset } from "@/web/styles";
+import { btnReset, outlineBtn } from "@/web/styles";
 import { PALETTES, BG, SURFACE, BORDER, TEXT, SUB, aTint, ACCENT, CARD, RED, TEXT_SCALE } from "@/web/theme";
 import type { Tx, Settings, Tab, TxType } from "@/web/types";
 import { EditModal } from "@/web/components/EditModal";
+import { LoadErrorModal } from "@/web/components/LoadErrorModal";
 import { Toast } from "@/web/components/Toast";
 import { TxDetailModal } from "@/web/components/TxDetailModal";
 import { useHomeCalendar } from "@/web/hooks";
@@ -30,6 +31,8 @@ export function AppShell({ user, onSignOut }: { user: User | null; onSignOut: ()
   const [toast, setToast] = useState<{ msg: string; error: boolean } | null>(null);
   const toastTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
   const [loadingTx, setLoadingTx] = useState(!!user);
+  const [loadError, setLoadError] = useState<string | null>(null);
+  const [showLoadError, setShowLoadError] = useState(false);
 
   const isGuest = !user;
 
@@ -47,31 +50,42 @@ export function AppShell({ user, onSignOut }: { user: User | null; onSignOut: ()
   const fetchFromSupabase = useCallback(async () => {
     if (!user) return;
     setLoadingTx(true);
-    const { data, error } = await supabase
-      .from("transactions")
-      .select("*")
-      .eq("user_id", user.id)
-      .order("created_at", { ascending: false });
-
-    if (!error && data) {
-      const mapped: Tx[] = data.map((r: Record<string, unknown>) => ({
-        id: r.id as string,
-        amount: r.amount as number,
-        type: r.type as TxType,
-        parent_category: (r.parent_category as string) || "",
-        sub_category: (r.sub_category as string) || "",
-        notes: (r.notes as string) || "",
-        created_at: r.created_at as string,
-        is_edited: Boolean(r.is_edited),
-        last_edited_at: r.last_edited_at as string | null,
-        original_amount: r.original_amount as number | null,
-        original_notes: r.original_notes as string | null,
-      }));
-      setTransactions(mapped);
-      saveTx(mapped);
-    } else {
-      /* Fall back to localStorage cache */
-      setTransactions(loadTx());
+    setLoadError(null);
+    setShowLoadError(false);
+    let failure: string | null = null;
+    try {
+      const { data, error } = await supabase
+        .from("transactions")
+        .select("*")
+        .eq("user_id", user.id)
+        .order("created_at", { ascending: false });
+      if (error || !data) {
+        failure = error?.message || "Unknown error";
+      } else {
+        const mapped: Tx[] = data.map((r: Record<string, unknown>) => ({
+          id: r.id as string,
+          amount: r.amount as number,
+          type: r.type as TxType,
+          parent_category: (r.parent_category as string) || "",
+          sub_category: (r.sub_category as string) || "",
+          notes: (r.notes as string) || "",
+          created_at: r.created_at as string,
+          is_edited: Boolean(r.is_edited),
+          last_edited_at: r.last_edited_at as string | null,
+          original_amount: r.original_amount as number | null,
+          original_notes: r.original_notes as string | null,
+        }));
+        setTransactions(mapped);
+        saveTx(mapped);
+      }
+    } catch (e) {
+      failure = e instanceof Error ? e.message : "Unknown error";
+    }
+    if (failure) {
+      /* No silent fallback to old cached data: tell the user and let them retry */
+      console.error("[Supabase fetch error]", failure);
+      setLoadError(failure);
+      setShowLoadError(true);
     }
     setLoadingTx(false);
   }, [user]);
@@ -269,6 +283,12 @@ export function AppShell({ user, onSignOut }: { user: User | null; onSignOut: ()
           </div>
         ) : (
           <div key={tab} className="montra-tab" style={{ maxWidth: 1360, margin: "0 auto", width: "100%" }}>
+             {loadError && !showLoadError && (
+              <div role="alert" style={{ display: "flex", alignItems: "center", gap: 14, flexWrap: "wrap", marginBottom: 20, padding: "12px 16px", borderRadius: 14, background: "#FF6B6B14", border: "1px solid #FF6B6B40" }}>
+                <span style={{ flex: 1, minWidth: 200, color: TEXT, fontSize: 16, lineHeight: 1.4 }}>Your transactions couldn't be loaded, so the lists below may be empty.</span>
+                <button onClick={fetchFromSupabase} style={{ ...outlineBtn, flex: "none", padding: "8px 18px" }}>Retry</button>
+              </div>
+            )}
             {tab === "home" && <HomeTab txs={transactions} currency={settings.currency} onTxClick={setDetailTx} cal={homeCal} />}
             {tab === "add" && <AddTab onAdd={addTx} />}
             {tab === "analytics" && <AnalyticsTab txs={transactions} currency={settings.currency} />}
@@ -300,6 +320,9 @@ export function AppShell({ user, onSignOut }: { user: User | null; onSignOut: ()
         )}
       </main>
 
+      {showLoadError && (
+        <LoadErrorModal detail={loadError} onRetry={fetchFromSupabase} onClose={() => setShowLoadError(false)} />
+      )}
       {detailTx && (
         <TxDetailModal
           tx={detailTx} currency={settings.currency}
