@@ -3,11 +3,13 @@ import { supabase } from "@/lib/supabaseClient";
 import logoUrl from "@/assets/images/logo.png";
 import { BG, CARD, BORDER, TEXT, SUB, RED } from "@/web/theme";
 import { IcoArrowLeft } from "@/web/icons";
+import { loadTx } from "@/web/storage";
 
 /* ─── LoginScreen ────────────────────────────────────────────────────────── */
 export function LoginScreen({ onGuest }: { onGuest: () => void }) {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
+  const [savedCount] = useState(() => loadTx().length);
 
   /* Returning with the browser Back button restores this page frozen on "Redirecting…" */
   useEffect(() => {
@@ -82,6 +84,12 @@ export function LoginScreen({ onGuest }: { onGuest: () => void }) {
         </button>
 
         {error && <p style={{ color: RED, fontSize: 15, marginTop: 14 }}>{error}</p>}
+
+        {savedCount > 0 && (
+          <p style={{ color: TEXT, fontSize: 14, margin: "20px 0 0", padding: "10px 12px", borderRadius: 10, lineHeight: 1.5, background: "#FF6B6B14", border: "1px solid #FF6B6B40" }}>
+            This browser has {savedCount} saved transaction{savedCount !== 1 ? "s" : ""}. Signing in replaces them with the transactions from your account, so any guest transactions would be lost.
+          </p>
+        )}
 
         <p style={{ color: SUB, fontSize: 14, marginTop: 24, lineHeight: 1.6 }}>
           Signed-in data is saved to your Montra account.
