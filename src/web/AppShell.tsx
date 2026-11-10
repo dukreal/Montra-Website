@@ -1,4 +1,4 @@
-import { useState, useEffect, useCallback } from "react";
+import { useState, useEffect, useCallback, useRef } from "react";
 import type { User } from "@supabase/supabase-js";
 import { supabase } from "@/lib/supabaseClient";
 import logoUrl from "@/assets/images/logo.png";
@@ -27,7 +27,8 @@ export function AppShell({ user, onSignOut }: { user: User | null; onSignOut: ()
   const homeCal = useHomeCalendar();
   const [detailTx, setDetailTx] = useState<Tx | null>(null);
   const [editTx, setEditTx] = useState<Tx | null>(null);
-  const [toast, setToast] = useState<string | null>(null);
+  const [toast, setToast] = useState<{ msg: string; error: boolean } | null>(null);
+  const toastTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
   const [loadingTx, setLoadingTx] = useState(!!user);
 
   const isGuest = !user;
@@ -36,9 +37,10 @@ export function AppShell({ user, onSignOut }: { user: User | null; onSignOut: ()
   useEffect(() => { saveSet(settings); }, [settings]);
 
   /* Show toast helper */
-  const showToast = useCallback((msg: string) => {
-    setToast(msg);
-    setTimeout(() => setToast(null), 2500);
+  const showToast = useCallback((msg: string, error = false) => {
+    if (toastTimer.current) clearTimeout(toastTimer.current);
+    setToast({ msg, error });
+    toastTimer.current = setTimeout(() => setToast(null), error ? 5000 : 2500);
   }, []);
 
   /* ── Fetch transactions from Supabase (authenticated users) ── */
@@ -102,8 +104,9 @@ export function AppShell({ user, onSignOut }: { user: User | null; onSignOut: ()
       }]);
       if (error) {
         console.error("[Supabase insert error]", error);
-        showToast(`Error: ${error.message}`);
-        saveTx([tx, ...loadTx()]);
+        /* Not saved: take the row back out so the list never shows something that will vanish on reload */
+        setTransactions((p) => p.filter((t) => t.id !== tx.id));
+        showToast("Couldn't save this transaction, so it was not added. Check your connection and try again.", true);
       } else {
         showToast("Transaction saved!");
       }
@@ -115,19 +118,29 @@ export function AppShell({ user, onSignOut }: { user: User | null; onSignOut: ()
 
   /* ── Delete ── */
   const deleteTx = useCallback(async (id: string) => {
+    const index = transactions.findIndex((t) => t.id === id);
+    const removed = transactions[index];
     setTransactions((p) => p.filter((t) => t.id !== id));
     setDetailTx(null);
     if (user) {
       const { error } = await supabase.from("transactions").delete().eq("id", id);
-      showToast(error ? "Deleted locally — sync failed." : "Transaction deleted.");
+      if (error) {
+        console.error("[Supabase delete error]", error);
+        /* Not deleted on the server: put the row back where it was */
+        if (removed) setTransactions((p) => (p.some((t) => t.id === id) ? p : [...p.slice(0, index), removed, ...p.slice(index)]));
+        showToast("Couldn't delete this transaction. It has been restored.", true);
+      } else {
+        showToast("Transaction deleted.");
+      }
     } else {
       saveTx(loadTx().filter((t) => t.id !== id));
       showToast("Transaction deleted.");
     }
-  }, [user, showToast]);
+  }, [user, showToast, transactions]);
 
   /* ── Update ── */
   const updateTx = useCallback(async (updated: Tx) => {
+    const previous = transactions.find((t) => t.id === updated.id);
     setTransactions((p) => p.map((t) => (t.id === updated.id ? updated : t)));
     setEditTx(null);
     if (user) {
@@ -139,11 +152,18 @@ export function AppShell({ user, onSignOut }: { user: User | null; onSignOut: ()
         original_amount: updated.original_amount,
         original_notes: updated.original_notes,
       }).eq("id", updated.id);
-      showToast(error ? "Updated locally — sync failed." : "Changes saved.");
+      if (error) {
+        console.error("[Supabase update error]", error);
+        /* Not saved on the server: go back to the previous values */
+        if (previous) setTransactions((p) => p.map((t) => (t.id === updated.id ? previous : t)));
+        showToast("Couldn't save your changes. The previous values were restored.", true);
+      } else {
+        showToast("Changes saved.");
+      }
     } else {
       showToast("Changes saved.");
     }
-  }, [user, showToast]);
+  }, [user, showToast, transactions]);
 
   const navItems: { id: Tab; label: string; Icon: React.FC<IP> }[] = [
     { id: "home", label: "Home", Icon: IcoHome },
@@ -295,7 +315,7 @@ export function AppShell({ user, onSignOut }: { user: User | null; onSignOut: ()
           onSave={updateTx}
         />
       )}
-      {toast && <Toast message={toast} />}
+      {toast && <Toast message={toast.msg} error={toast.error} />}
     </div>
   );
 }
