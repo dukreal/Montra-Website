@@ -3,10 +3,10 @@ import { INK, MUTE, BG, HAIR } from '@/constants/theme'
 /* ─────────────────────── STAT STRIP ─────────────────────── */
 export default function StatStrip() {
   const stats = [
-    ["100%", "Offline-first"],
     ["₱", "Peso native"],
-    ["12", "Categories"],
-    ["2", "Languages"],
+    ["18", "Categories"],
+    ["4", "Accent colors"],
+    ["2", "Light & dark themes"],
   ];
   return (
     <section className="border-y" style={{ borderColor: HAIR, position: "relative", zIndex: 10, background: BG }}>

@@ -25,7 +25,7 @@ export default function Cta() {
                   Start tracking smarter today.
                 </h2>
                 <p className="mt-4 text-lg max-w-md" style={{ color: "#053b1c" }}>
-                  Free, offline-first, and built for the way you actually spend.
+                  Free to use, and built for the way you actually spend.
                 </p>
                 <div className="mt-8 flex flex-col items-start gap-2">
                   <div className="flex flex-wrap gap-3">

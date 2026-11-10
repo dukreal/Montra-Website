@@ -19,22 +19,22 @@ export default function Secure() {
                 <ShieldCheck size={16} color={ACCENT} />
               </span>
               <div>
-                <p className="text-[12px] font-bold" style={{ color: INK }}>Encrypted</p>
-                <p className="text-[10px]" style={{ color: MUTE }}>On-device storage</p>
+                <p className="text-[12px] font-bold" style={{ color: INK }}>Private</p>
+                <p className="text-[10px]" style={{ color: MUTE }}>Per-account access</p>
               </div>
             </FloatCard>
           </div>
         </Reveal>
         <Reveal delay={120} className="order-1 lg:order-2">
-          <Duo a="Your money data is" b="safe with Montra" className="text-[32px] md:text-[46px]" />
+          <Duo a="Your data" b="stays yours" className="text-[32px] md:text-[46px]" />
           <p className="mt-6 text-lg leading-relaxed max-w-md" style={{ color: SUB }}>
-            Everything is stored locally on your device first. No account is required to get started, and your
-            records never leave your phone unless you choose to back them up.
+            ESign in with Google and your records are stored under your own account, where only you can read
+            them. Prefer not to sign in? Guest mode on the web keeps everything in your browser.
           </p>
           <ul className="mt-8 space-y-4">
             {[
-              [ShieldCheck, "Offline-first, on-device storage"],
-              [Globe, "Available in English and Filipino"],
+              [ShieldCheck, "Records protected per account"],
+              [Globe, "English now, Filipino coming soon"],
               [Gift, "Completely free to use"],
             ].map(([Icon, label], idx) => (
               <li key={idx} className="flex items-center gap-3">
