@@ -10,13 +10,6 @@ import phone3d from '@/assets/images/phone-3d.png'
 export default function Hero() {
   return (
     <section id="top" className="relative">
-      {/* Glow confined to its own clip container so removing overflow-hidden from section is safe */}
-      <div className="pointer-events-none absolute inset-0 overflow-hidden">
-        <div
-          className="absolute left-1/2 -translate-x-1/2 -top-32 h-[560px] w-[900px] rounded-full blur-[140px] opacity-25"
-          style={{ background: ACCENT }}
-        />
-      </div>
       <div className="mx-auto max-w-[1200px] px-6 pt-20 pb-8 lg:pt-28 text-center relative">
         <Reveal>
           <span
