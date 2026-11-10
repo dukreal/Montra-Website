@@ -6,7 +6,7 @@ export default function StatStrip() {
     ["₱", "Peso native"],
     ["18", "Categories"],
     ["4", "Accent colors"],
-    ["2", "Light & dark themes"],
+    ["2", "Languages"],
   ];
   return (
     <section className="border-y" style={{ borderColor: HAIR, position: "relative", zIndex: 10, background: BG }}>

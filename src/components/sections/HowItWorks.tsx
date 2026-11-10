@@ -34,9 +34,9 @@ export default function HowItWorks() {
             <Reveal delay={220} className="w-full lg:max-w-xs">
               <div className="rounded-2xl border p-6" style={{ background: PANEL2, borderColor: HAIR }}>
                 <ShieldCheck size={26} color={ACCENT} />
-                <p className="mt-3 font-bold" style={{ color: INK }}>Private to you</p>
+                <p className="mt-3 font-bold" style={{ color: INK }}>Works offline</p>
                 <p className="mt-1.5 text-sm leading-relaxed" style={{ color: SUB }}>
-                  Sign in with Google to sync across devices, or use guest mode and keep data in your browser.
+                  Log expenses without a connection. Sign in with Google and everything syncs across your devices.
                 </p>
               </div>
             </Reveal>

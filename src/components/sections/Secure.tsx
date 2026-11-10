@@ -28,13 +28,13 @@ export default function Secure() {
         <Reveal delay={120} className="order-1 lg:order-2">
           <Duo a="Your data" b="stays yours" className="text-[32px] md:text-[46px]" />
           <p className="mt-6 text-lg leading-relaxed max-w-md" style={{ color: SUB }}>
-            ESign in with Google and your records are stored under your own account, where only you can read
-            them. Prefer not to sign in? Guest mode on the web keeps everything in your browser.
+            The mobile app works fully offline. Sign in and your records sync to your own account, where only you can read
+            them. On the web, guest mode keeps everything in your browser.
           </p>
           <ul className="mt-8 space-y-4">
             {[
-              [ShieldCheck, "Records protected per account"],
-              [Globe, "English now, Filipino coming soon"],
+              [ShieldCheck, "Works offline, syncs when you sign in"],
+              [Globe, "Available in English and Filipino"],
               [Gift, "Completely free to use"],
             ].map(([Icon, label], idx) => (
               <li key={idx} className="flex items-center gap-3">

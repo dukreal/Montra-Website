@@ -62,7 +62,7 @@ export default function Benefits() {
             <div className="h-full rounded-3xl border p-7 flex flex-col" style={{ background: `radial-gradient(120% 120% at 100% 0%, ${ACCENT}22 0%, ${PANEL} 55%)`, borderColor: ACCENT + "33" }}>
               <IconTile icon={<Palette size={24} color={ACCENT_SOFT} />} tint={ACCENT_SOFT} />
               <h3 className="mt-5 text-xl font-bold" style={{ color: INK }}>Make it yours</h3>
-              <p className="mt-2 text-[15px] leading-relaxed" style={{ color: SUB }}>Dark mode, four accent themes and text sizing. Filipino is coming soon.</p>
+              <p className="mt-2 text-[15px] leading-relaxed" style={{ color: SUB }}>Dark mode, four accent themes, text sizing, and English or Filipino.</p>
               <div className="mt-5 flex gap-2.5">
                 {["#27AE60", "#3B7DD8", "#E67E22", "#E05282"].map((c) => (
                   <span key={c} className="rounded-full" style={{ width: 26, height: 26, background: c, border: "2px solid rgba(255,255,255,0.15)" }} />
