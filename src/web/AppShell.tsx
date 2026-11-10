@@ -4,7 +4,7 @@ import { supabase } from "@/lib/supabaseClient";
 import logoUrl from "@/assets/images/logo.png";
 import { loadSet, saveSet, saveTx, loadTx } from "@/web/storage";
 import { btnReset, outlineBtn } from "@/web/styles";
-import { PALETTES, BG, SURFACE, BORDER, TEXT, SUB, aTint, ACCENT, CARD, RED, TEXT_SCALE } from "@/web/theme";
+import { PALETTES, BG, SURFACE, BORDER, TEXT, SUB, aTint, ACCENT, ACCENT_TEXT, CARD, RED, TEXT_SCALE, accentTextFor } from "@/web/theme";
 import type { Tx, Settings, Tab, TxType } from "@/web/types";
 import { EditModal } from "@/web/components/EditModal";
 import { LoadErrorModal } from "@/web/components/LoadErrorModal";
@@ -207,7 +207,7 @@ export function AppShell({ user, onSignOut }: { user: User | null; onSignOut: ()
   const name = (user?.user_metadata?.full_name as string) || user?.email || "Guest";
   const initials = name.split(" ").map((n: string) => n[0]).join("").slice(0, 2).toUpperCase();
 
-  const themeVars = { ...PALETTES[settings.theme], "--accent": settings.accent } as React.CSSProperties;
+  const themeVars = { ...PALETTES[settings.theme], "--accent": settings.accent, "--accent-text": accentTextFor(settings.accent, settings.theme) } as React.CSSProperties;
 
   return (
     <div style={{ ...themeVars, display: "flex", height: "100vh", background: BG, fontFamily: "Inter, sans-serif", overflow: "hidden" }}>
@@ -235,13 +235,13 @@ export function AppShell({ user, onSignOut }: { user: User | null; onSignOut: ()
                   padding: "13px 16px", borderRadius: 12,
                   background: active ? aTint(14) : "transparent",
                   border: "none", cursor: "pointer", width: "100%", textAlign: "left",
-                  color: active ? ACCENT : SUB,
+                  color: active ? ACCENT_TEXT : SUB,
                   fontWeight: active ? 700 : 500, fontSize: 16, transition: "all 0.15s",
                 }}
                 onMouseEnter={(e) => { if (!active) e.currentTarget.style.background = "#ffffff08"; }}
                 onMouseLeave={(e) => { if (!active) e.currentTarget.style.background = "transparent"; }}
               >
-                <Icon size={20} color={active ? ACCENT : SUB} />
+                <Icon size={20} color={active ? ACCENT_TEXT : SUB} />
                 <span className="montra-nav-label">{label}</span>
               </button>
             );
@@ -256,18 +256,18 @@ export function AppShell({ user, onSignOut }: { user: User | null; onSignOut: ()
               <img src={avatar} alt={name} style={{ width: 30, height: 30, borderRadius: "50%", objectFit: "cover", flexShrink: 0 }} />
             ) : (
               <div style={{ width: 30, height: 30, borderRadius: "50%", background: aTint(19), display: "flex", alignItems: "center", justifyContent: "center", flexShrink: 0 }}>
-                <span style={{ fontSize: 14, fontWeight: 800, color: ACCENT }}>{isGuest ? "G" : initials}</span>
+                <span style={{ fontSize: 14, fontWeight: 800, color: ACCENT_TEXT }}>{isGuest ? "G" : initials}</span>
               </div>
             )}
             <div style={{ minWidth: 0, flex: 1 }}>
               <div style={{ fontSize: 15, fontWeight: 700, color: TEXT, whiteSpace: "nowrap", overflow: "hidden", textOverflow: "ellipsis" }}>{isGuest ? "Guest" : name.split(" ")[0]}</div>
-              <div style={{ fontSize: 14, color: isGuest ? RED : ACCENT }}>{isGuest ? "Not signed in" : "Synced to your account"}</div>
+              <div style={{ fontSize: 14, color: isGuest ? RED : ACCENT_TEXT }}>{isGuest ? "Not signed in" : "Synced to your account"}</div>
             </div>
           </div>
 
           {/* Sign out / Sign in */}
           {isGuest ? (
-            <button onClick={onSignOut} style={{ ...btnReset, width: "100%", padding: "9px 12px", borderRadius: 10, fontSize: 16, color: ACCENT, fontWeight: 600, gap: 8, justifyContent: "flex-start" }}>
+            <button onClick={onSignOut} style={{ ...btnReset, width: "100%", padding: "9px 12px", borderRadius: 10, fontSize: 16, color: ACCENT_TEXT, fontWeight: 600, gap: 8, justifyContent: "flex-start" }}>
               Sign in
             </button>
           ) : (

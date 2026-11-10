@@ -2,7 +2,7 @@ import { useMemo } from "react";
 import type { User } from "@supabase/supabase-js";
 import { fmtAmt } from "@/web/helpers";
 import { profileRow } from "@/web/styles";
-import { GREEN, RED, ACCENT, TEXT, CARD, BORDER, aTint, SUB, CARD2, SURFACE } from "@/web/theme";
+import { GREEN, RED, ACCENT, ACCENT_TEXT, TEXT, CARD, BORDER, aTint, SUB, CARD2, SURFACE } from "@/web/theme";
 import type { Tx, Settings } from "@/web/types";
 import { IcoTrendUp, IcoTrendDown, IcoWallet, IcoChevR, IcoHelp, IcoLogout } from "@/web/icons";
 
@@ -39,7 +39,7 @@ export function ProfileTab({ txs, settings, onSave, user, isGuest, onSignOut, on
           <img src={avatar} alt={name} style={{ width: 54, height: 54, borderRadius: 27, objectFit: "cover", flexShrink: 0 }} />
         ) : (
           <div style={{ width: 54, height: 54, borderRadius: 27, background: aTint(15), display: "flex", alignItems: "center", justifyContent: "center", flexShrink: 0 }}>
-            <span style={{ fontSize: 28, fontWeight: 800, color: ACCENT }}>{initials}</span>
+            <span style={{ fontSize: 28, fontWeight: 800, color: ACCENT_TEXT }}>{initials}</span>
           </div>
         )}
         <div style={{ flex: 1, minWidth: 0 }}>
@@ -84,7 +84,7 @@ export function ProfileTab({ txs, settings, onSave, user, isGuest, onSignOut, on
                   style={{
                     minWidth: 30, padding: "5px 10px", borderRadius: 7, cursor: enabled ? "pointer" : "not-allowed",
                     background: on ? SURFACE : "transparent", border: "none",
-                    color: on ? ACCENT : SUB, fontWeight: 700, fontSize: 16,
+                    color: on ? ACCENT_TEXT : SUB, fontWeight: 700, fontSize: 16,
                     opacity: enabled ? 1 : 0.3,
                   }}>
                   {c}

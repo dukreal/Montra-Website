@@ -2,7 +2,7 @@ import { useState, useRef, useEffect, useCallback, useMemo } from "react";
 import { mondayOf, MONTHS, isoWeekNum, fmtShort, fmtDate } from "@/web/dates";
 import { fmtAmt, getCat } from "@/web/helpers";
 import { btnReset, navBtnStyle } from "@/web/styles";
-import { SUB, BORDER, TEXT, CARD, ACCENT, CARD2, aTint, GREEN, RED, ON_ACCENT, ON_RED } from "@/web/theme";
+import { SUB, BORDER, TEXT, CARD, ACCENT, ACCENT_TEXT, CARD2, aTint, GREEN, RED, ON_ACCENT, ON_RED } from "@/web/theme";
 import type { Tx, TxType } from "@/web/types";
 import { IcoChevLeft, IcoChevRight, CatIcon } from "@/web/icons";
 
@@ -278,7 +278,7 @@ export function AnalyticsTab({ txs, currency }: { txs: Tx[]; currency: string })
         <button className="montra-period" onClick={togglePicker} aria-expanded={pickerOpen} style={{
           background: aTint(12), border: `1px solid ${aTint(35)}`,
           borderRadius: 100, padding: "8px 0", width: 320, minWidth: 0, textAlign: "center",
-          whiteSpace: "nowrap", color: ACCENT, fontWeight: 700, fontSize: 17, letterSpacing: 0.2, cursor: "pointer",
+          whiteSpace: "nowrap", color: ACCENT_TEXT, fontWeight: 700, fontSize: 17, letterSpacing: 0.2, cursor: "pointer",
           display: "flex", alignItems: "center", justifyContent: "center", gap: 8,
         }}>
           {periodLabel}

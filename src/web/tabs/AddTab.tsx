@@ -3,7 +3,7 @@ import { IoArrowDownCircle, IoArrowUpCircle } from "react-icons/io5";
 import { CATS } from "@/web/categories";
 import { MONTHS, sameDay, todayISO } from "@/web/dates";
 import { fieldLabel, inputStyle, primaryBtn, overlay, modalBox, btnReset, outlineBtn } from "@/web/styles";
-import { TEXT, CARD, BORDER, RED, GREEN, SUB, ACCENT, aTint, ON_ACCENT } from "@/web/theme";
+import { TEXT, CARD, BORDER, RED, GREEN, SUB, ACCENT, ACCENT_TEXT, aTint, ON_ACCENT } from "@/web/theme";
 import type { Tx, TxType } from "@/web/types";
 import { CatIcon, IcoPlus, IcoChevLeft, IcoChevRight } from "@/web/icons";
 
@@ -251,7 +251,7 @@ function DatePickerModal({ value, onClose, onSelect }: { value: string; onClose:
                 fontWeight: isSel || isToday ? 700 : 500,
                 background: isSel ? ACCENT : isToday ? aTint(9) : "transparent",
                 border: isToday && !isSel ? `1px solid ${aTint(33)}` : "none",
-                color: isSel ? ON_ACCENT : isToday ? ACCENT : TEXT,
+                color: isSel ? ON_ACCENT : isToday ? ACCENT_TEXT : TEXT,
                 opacity: future ? 0.25 : 1, cursor: future ? "not-allowed" : "pointer",
               }}>{day}</button>
             );
