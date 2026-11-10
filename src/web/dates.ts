@@ -4,6 +4,12 @@ import type { DateSel } from "@/web/types";
 export const MONTHS = ["January","February","March","April","May","June","July","August","September","October","November","December"];
 export const M3 = ["Jan","Feb","Mar","Apr","May","Jun","Jul","Aug","Sep","Oct","Nov","Dec"];
 
+/** Today as YYYY-MM-DD in the user's own time zone (toISOString() would give the UTC date, which is yesterday in the Philippines before 8 AM). */
+export function todayISO() {
+  const d = new Date();
+  return `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, "0")}-${String(d.getDate()).padStart(2, "0")}`;
+}
+
 export function sameDay(a: Date, b: Date) {
   return a.getFullYear() === b.getFullYear() && a.getMonth() === b.getMonth() && a.getDate() === b.getDate();
 }

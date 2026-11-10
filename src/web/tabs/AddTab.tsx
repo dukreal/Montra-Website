@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { IoArrowDownCircle, IoArrowUpCircle } from "react-icons/io5";
 import { CATS } from "@/web/categories";
-import { MONTHS, sameDay } from "@/web/dates";
+import { MONTHS, sameDay, todayISO } from "@/web/dates";
 import { fieldLabel, inputStyle, primaryBtn, overlay, modalBox, btnReset, outlineBtn } from "@/web/styles";
 import { TEXT, CARD, BORDER, RED, GREEN, SUB, ACCENT, aTint } from "@/web/theme";
 import type { Tx, TxType } from "@/web/types";
@@ -14,7 +14,7 @@ export function AddTab({ onAdd }: { onAdd: (tx: Tx) => void }) {
   const [parentCat, setParentCat] = useState("");
   const [subCat, setSubCat] = useState("");
   const [notes, setNotes] = useState("");
-  const [date, setDate] = useState(() => new Date().toISOString().slice(0, 10));
+  const [date, setDate] = useState(todayISO);
   const [showCal, setShowCal] = useState(false);
   const [error, setError] = useState("");
 
@@ -24,7 +24,7 @@ export function AddTab({ onAdd }: { onAdd: (tx: Tx) => void }) {
 
   const reset = () => {
     setAmount(""); setParentCat(""); setSubCat(""); setNotes("");
-    setDate(new Date().toISOString().slice(0, 10)); setError("");
+    setDate(todayISO()); setError("");
   };
 
   const handleSubmit = () => {
