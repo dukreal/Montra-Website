@@ -10,11 +10,12 @@ import type { IP } from "@/web/icons";
 type SettingsSection = "appearance" | "language" | "currency" | "account" | "data" | "about";
 
 export function SettingsTab({ settings, onSave, onClear, txCount, user, onRefresh }: {
-  settings: Settings; onSave: (s: Settings) => void; onClear: () => void; txCount: number;
+  settings: Settings; onSave: (s: Settings) => void; onClear: () => void | Promise<void>; txCount: number;
   user: User | null; onRefresh?: () => void;
 }) {
   const [section, setSection] = useState<SettingsSection>("appearance");
   const [confirmClear, setConfirmClear] = useState(false);
+  const [clearing, setClearing] = useState(false);
 
   const currencies = [
     { code: "₱", name: "Philippine Peso (PHP)", enabled: true },
@@ -257,21 +258,27 @@ export function SettingsTab({ settings, onSave, onClear, txCount, user, onRefres
                 </div>
               </div>
               <div style={{ fontSize: 15, color: SUB, marginTop: 14, paddingTop: 14, borderTop: `1px solid ${BORDER}` }}>
-                {user ? "Synced to your account. A copy is cached in this browser for faster loading." : "Guest data lives in this browser only. Nothing is sent to any server."}
+                {user ? "Synced to your account. A copy is also kept in this browser." : "Guest data lives in this browser only. Nothing is sent to any server."}
               </div>
             </div>
             <div style={{ background: "#FF6B6B0d", border: "1px solid #FF6B6B30", borderRadius: 16, padding: 20 }}>
               <div style={{ fontSize: 16, fontWeight: 800, color: RED, marginBottom: 6, letterSpacing: "0.04em" }}>DANGER ZONE</div>
               <div style={{ fontSize: 16, color: SUB, marginBottom: 16, lineHeight: 1.6 }}>
-                Permanently delete all {txCount} transaction{txCount !== 1 ? "s" : ""}. This cannot be undone.
+                {user
+                  ? `This permanently deletes all ${txCount} transaction${txCount !== 1 ? "s" : ""} from your Montra account. If you also use the Montra mobile app, they will be deleted there too. This cannot be undone.`
+                  : `This permanently deletes all ${txCount} transaction${txCount !== 1 ? "s" : ""} stored in this browser. This cannot be undone.`}
               </div>
               {!confirmClear ? (
                 <button onClick={() => setConfirmClear(true)} style={{ ...dangerBtn, flex: "none" }}>Clear All Data</button>
               ) : (
                 <div style={{ display: "flex", gap: 10 }}>
-                  <button onClick={() => setConfirmClear(false)} style={{ ...outlineBtn, flex: "none", padding: "10px 20px" }}>Cancel</button>
-                  <button onClick={() => { onClear(); setConfirmClear(false); }} style={{ ...dangerBtn, flex: "none", background: RED, color: "#fff", border: "none" }}>
-                    Delete All
+                  <button disabled={clearing} onClick={() => setConfirmClear(false)} style={{ ...outlineBtn, flex: "none", padding: "10px 20px", opacity: clearing ? 0.5 : 1 }}>Cancel</button>
+                  <button
+                    disabled={clearing}
+                    onClick={async () => { setClearing(true); await onClear(); setClearing(false); setConfirmClear(false); }}
+                    style={{ ...dangerBtn, flex: "none", background: RED, color: "#fff", border: "none", opacity: clearing ? 0.7 : 1 }}
+                  >
+                    {clearing ? "Deleting…" : user ? "Yes, delete everything" : "Yes, delete all"}
                   </button>
                 </div>
               )}

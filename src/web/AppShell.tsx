@@ -179,6 +179,21 @@ export function AppShell({ user, onSignOut }: { user: User | null; onSignOut: ()
     }
   }, [user, showToast, transactions]);
 
+  /* ── Clear all ── */
+  const clearAll = useCallback(async () => {
+    if (user) {
+      const { error } = await supabase.from("transactions").delete().eq("user_id", user.id);
+      if (error) {
+        console.error("[Supabase clear error]", error);
+        showToast("Couldn't delete your data, so nothing was changed. Check your connection and try again.", true);
+        return;
+      }
+    }
+    setTransactions([]);
+    saveTx([]);
+    showToast("All data cleared.");
+  }, [user, showToast]);
+
   const navItems: { id: Tab; label: string; Icon: React.FC<IP> }[] = [
     { id: "home", label: "Home", Icon: IcoHome },
     { id: "add", label: "Add", Icon: IcoPlus },
@@ -303,14 +318,7 @@ export function AppShell({ user, onSignOut }: { user: User | null; onSignOut: ()
             {tab === "settings" && (
               <SettingsTab
                 settings={settings} onSave={setSettings}
-                onClear={async () => {
-                  if (user) {
-                    await supabase.from("transactions").delete().eq("user_id", user.id);
-                  }
-                  setTransactions([]);
-                  saveTx([]);
-                  showToast("All data cleared.");
-                }}
+                onClear={clearAll}
                 txCount={transactions.length}
                 user={user}
                 onRefresh={fetchFromSupabase}
