@@ -245,7 +245,7 @@ export function SettingsTab({ settings, onSave, onClear, txCount, user, onRefres
         {/* DATA */}
         {section === "data" && (
           <div>
-            {sectionHead("Data", "Your transactions are stored locally in this browser.")}
+            {sectionHead("Data", user ? "Your transactions are saved to your Montra account." : "Your transactions are stored in this browser only.")}
             <div style={{ background: CARD, border: `1px solid ${BORDER}`, borderRadius: 16, padding: 24, marginBottom: 20 }}>
               <div style={{ display: "flex", alignItems: "center", gap: 16 }}>
                 <div style={{ flex: 1 }}>
@@ -257,7 +257,7 @@ export function SettingsTab({ settings, onSave, onClear, txCount, user, onRefres
                 </div>
               </div>
               <div style={{ fontSize: 15, color: SUB, marginTop: 14, paddingTop: 14, borderTop: `1px solid ${BORDER}` }}>
-                All data lives in your browser only. Nothing is sent to any server.
+                {user ? "Synced to your account. A copy is cached in this browser for faster loading." : "Guest data lives in this browser only. Nothing is sent to any server."}
               </div>
             </div>
             <div style={{ background: "#FF6B6B0d", border: "1px solid #FF6B6B30", borderRadius: 16, padding: 20 }}>
@@ -288,9 +288,9 @@ export function SettingsTab({ settings, onSave, onClear, txCount, user, onRefres
                 <IcoWallet size={28} color={ACCENT} />
               </div>
               <div style={{ fontWeight: 800, fontSize: 24, color: TEXT, marginBottom: 4 }}>Montra Web</div>
-              <div style={{ fontSize: 15, color: SUB, marginBottom: 20 }}>Version 1.0 · Built with React + Supabase</div>
+              <div style={{ fontSize: 15, color: SUB, marginBottom: 20 }}>Version 2.1.0 · Built with React + Supabase</div>
               <div style={{ fontSize: 16, color: SUB, lineHeight: 1.8, maxWidth: 320, margin: "0 auto" }}>
-                Track your income and expenses with a clean, fast interface. All data is stored locally in your browser by default.
+                Track your income and expenses with a clean, fast interface. Guest mode keeps data in your browser; when you sign in, it syncs to your account.
               </div>
             </div>
           </div>
