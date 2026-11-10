@@ -4,7 +4,7 @@ import { SUB, MUTE, HAIR } from '@/constants/theme'
 /* ─────────────────────── FOOTER ─────────────────────── */
 export default function Footer() {
   const cols = [
-    ["Product", ["Features", "How it works", "Benefits", "Reviews"]],
+    ["Product", ["Features", "How it works", "Benefits"]],
     ["Company", ["About", "Privacy Policy", "Terms", "Contact"]],
   ] as const;
   return (

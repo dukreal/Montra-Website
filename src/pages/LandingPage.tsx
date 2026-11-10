@@ -4,7 +4,6 @@ import Hero from '@/components/sections/Hero'
 import StatStrip from '@/components/sections/StatStrip'
 import HowItWorks from '@/components/sections/HowItWorks'
 import Benefits from '@/components/sections/Benefits'
-import Testimonials from '@/components/sections/Testimonials'
 import Secure from '@/components/sections/Secure'
 import Cta from '@/components/sections/Cta'
 import { BG } from '@/constants/theme'
@@ -18,7 +17,6 @@ export default function LandingPage() {
         <StatStrip />
         <HowItWorks />
         <Benefits />
-        <Testimonials />
         <Secure />
         <Cta />
       </main>

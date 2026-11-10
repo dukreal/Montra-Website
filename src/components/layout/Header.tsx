@@ -8,7 +8,6 @@ const LINKS = [
   { label: 'Home', href: '#top' },
   { label: 'How it works', href: '#how' },
   { label: 'Benefits', href: '#benefits' },
-  { label: 'Reviews', href: '#reviews' },
 ]
 
 /* ─────────────────────── NAV ─────────────────────── */
