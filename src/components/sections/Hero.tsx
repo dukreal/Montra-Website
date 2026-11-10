@@ -10,7 +10,7 @@ import phone3d from '@/assets/images/phone-3d.png'
 export default function Hero() {
   return (
     <section id="top" className="relative">
-      <div className="mx-auto max-w-[1200px] px-6 pt-20 pb-8 lg:pt-28 text-center relative">
+      <div className="mx-auto max-w-[1200px] px-6 pt-10 pb-8 sm:pt-20 lg:pt-28 text-center relative">
         <Reveal>
           <span
             className="inline-flex items-center gap-2 rounded-full px-4 py-1.5 text-sm font-semibold mb-8"
@@ -36,7 +36,7 @@ export default function Hero() {
 
         {/* Phone with floating cards */}
         <Reveal delay={140}>
-          <div className="relative mt-16 flex justify-center">
+          <div className="relative mt-10 flex justify-center sm:mt-16">
             {/*
               Two-layer phone mount.
               Source image: 2000×1500, phone body measured at x=763–1257, y=158–1286.
