@@ -1,7 +1,7 @@
 import { useState, useRef, useEffect, useMemo } from "react";
 import { isRange, MONTHS, sameDay, fmtDateSel } from "@/web/dates";
 import { btnReset } from "@/web/styles";
-import { CARD, BORDER, SUB, aTint, ACCENT, TEXT, CARD2, SURFACE } from "@/web/theme";
+import { CARD, BORDER, SUB, aTint, ACCENT, TEXT, CARD2, SURFACE, ON_ACCENT } from "@/web/theme";
 import type { Tx, DateSel, DateMode } from "@/web/types";
 import { IcoChevLeft, IcoChevRight } from "@/web/icons";
 
@@ -110,7 +110,7 @@ export function MiniCalendar({ year, month, transactions, selection, pending = n
               return (
                 <button key={m} disabled={future} onClick={() => { onJump(pickYear, mi); setPicking(false); }} style={{
                   padding: "12px 0", borderRadius: 10, fontSize: 15, fontWeight: cur ? 700 : 500,
-                  background: cur ? ACCENT : CARD2, color: cur ? "#fff" : TEXT,
+                  background: cur ? ACCENT : CARD2, color: cur ? ON_ACCENT : TEXT,
                   border: "none", cursor: future ? "not-allowed" : "pointer", opacity: future ? 0.3 : 1,
                 }}>{m.slice(0, 3)}</button>
               );
@@ -163,7 +163,7 @@ export function MiniCalendar({ year, month, transactions, selection, pending = n
                 <span style={{
                   fontSize: 15,
                   fontWeight: isSel || isToday ? 700 : 400,
-                  color: isSel ? "#fff" : isToday ? ACCENT : TEXT,
+                  color: isSel ? ON_ACCENT : isToday ? ACCENT : TEXT,
                 }}>
                   {day}
                 </span>

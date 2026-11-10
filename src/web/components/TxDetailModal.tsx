@@ -3,7 +3,7 @@ import { IoCash } from "react-icons/io5";
 import { fmtDate, fmtTime } from "@/web/dates";
 import { getCat, fmtAmt } from "@/web/helpers";
 import { overlay, modalBox, btnReset, outlineBtn, dangerBtn, primaryBtn } from "@/web/styles";
-import { RED, GREEN, TEXT, SUB, CARD2, BORDER, SURFACE } from "@/web/theme";
+import { RED, GREEN, TEXT, SUB, CARD2, BORDER, SURFACE, ON_RED } from "@/web/theme";
 import type { Tx } from "@/web/types";
 import { CatIcon, IcoX } from "@/web/icons";
 
@@ -82,7 +82,7 @@ export function TxDetailModal({ tx, currency, onClose, onDelete, onEdit }: {
           {confirmDel ? (
             <>
               <button onClick={() => setConfirmDel(false)} style={outlineBtn}>Keep</button>
-              <button onClick={() => { onDelete(tx.id); onClose(); }} style={{ ...dangerBtn, background: RED, color: "#fff", border: "none" }}>Confirm delete</button>
+              <button onClick={() => { onDelete(tx.id); onClose(); }} style={{ ...dangerBtn, background: RED, color: ON_RED, border: "none" }}>Confirm delete</button>
             </>
           ) : (
             <>

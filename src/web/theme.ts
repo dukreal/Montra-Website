@@ -12,6 +12,10 @@ export const SUB = "var(--sub)";
 export const ACCENT = "var(--accent)";
 export const RED = "#FF6B6B";
 export const GREEN = "#2ECC71";
+/* Text drawn on a solid accent / green / red fill. White fails contrast on all of these (2.1 to 4.1:1),
+   so the text is near-black (4.7 to 9.2:1). */
+export const ON_ACCENT = "#0b0f0c";
+export const ON_RED = "#2b0a0a";
 export const aTint = (pct: number) => `color-mix(in srgb, var(--accent) ${pct}%, transparent)`;
 
 /* Accent themes — mirrors the mobile Settings "Color Theme" swatches */

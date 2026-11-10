@@ -1,9 +1,9 @@
-import { ACCENT, RED } from "@/web/theme";
+import { ACCENT, ON_ACCENT, ON_RED, RED } from "@/web/theme";
 import { IcoCheck, IcoX } from "@/web/icons";
 
 /* ─── Toast ──────────────────────────────────────────────────────────────── */
 export function Toast({ message, error = false }: { message: string; error?: boolean }) {
-  const ink = error ? "#2b0a0a" : "#fff";
+  const ink = error ? ON_RED : ON_ACCENT;
   return (
     <div style={{
       position: "fixed", bottom: 28, right: 28, zIndex: 2000,

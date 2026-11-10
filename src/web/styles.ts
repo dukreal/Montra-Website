@@ -1,4 +1,4 @@
-import { ACCENT, BORDER, CARD, RED, SUB, SURFACE, TEXT } from "@/web/theme";
+import { ACCENT, BORDER, CARD, ON_ACCENT, RED, SUB, SURFACE, TEXT } from "@/web/theme";
 
 export const profileRow: React.CSSProperties = {
   display: "flex", alignItems: "center", gap: 12, width: "100%",
@@ -34,7 +34,7 @@ export const inputStyle: React.CSSProperties = {
   boxSizing: "border-box",
 };
 export const primaryBtn: React.CSSProperties = {
-  background: ACCENT, color: "#fff", border: "none", borderRadius: 12,
+  background: ACCENT, color: ON_ACCENT, border: "none", borderRadius: 12,
   padding: "12px 20px", fontWeight: 700, fontSize: 16, cursor: "pointer",
 };
 export const outlineBtn: React.CSSProperties = {

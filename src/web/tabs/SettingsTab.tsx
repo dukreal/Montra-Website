@@ -1,7 +1,7 @@
 import { useState } from "react";
 import type { User } from "@supabase/supabase-js";
 import { dangerBtn, outlineBtn } from "@/web/styles";
-import { BORDER, TEXT, SUB, aTint, ACCENT, CARD, ACCENT_THEMES, CARD2, RED } from "@/web/theme";
+import { BORDER, TEXT, SUB, aTint, ACCENT, CARD, ACCENT_THEMES, CARD2, RED, ON_ACCENT, ON_RED } from "@/web/theme";
 import type { Settings, ThemeMode, TextSize } from "@/web/types";
 import { IcoPalette, IcoGlobe, IcoWallet, IcoUser, IcoDoc, IcoHelp, IcoSun, IcoMoon, IcoCheck } from "@/web/icons";
 import type { IP } from "@/web/icons";
@@ -174,7 +174,7 @@ export function SettingsTab({ settings, onSave, onClear, txCount, user, onRefres
                       display: "flex", alignItems: "center", justifyContent: "center",
                       flexShrink: 0, transition: "all 0.15s",
                     }}>
-                      {on && <IcoCheck size={10} color="#fff" />}
+                      {on && <IcoCheck size={10} color={ON_ACCENT} />}
                     </div>
                   </div>
                 );
@@ -209,7 +209,7 @@ export function SettingsTab({ settings, onSave, onClear, txCount, user, onRefres
                     {!c.enabled && <span style={{ fontSize: 14, fontWeight: 600, color: SUB }}>Coming soon</span>}
                     {on && (
                       <div style={{ width: 20, height: 20, borderRadius: "50%", background: ACCENT, display: "flex", alignItems: "center", justifyContent: "center", flexShrink: 0 }}>
-                        <IcoCheck size={10} color="#fff" />
+                        <IcoCheck size={10} color={ON_ACCENT} />
                       </div>
                     )}
                   </div>
@@ -276,7 +276,7 @@ export function SettingsTab({ settings, onSave, onClear, txCount, user, onRefres
                   <button
                     disabled={clearing}
                     onClick={async () => { setClearing(true); await onClear(); setClearing(false); setConfirmClear(false); }}
-                    style={{ ...dangerBtn, flex: "none", background: RED, color: "#fff", border: "none", opacity: clearing ? 0.7 : 1 }}
+                    style={{ ...dangerBtn, flex: "none", background: RED, color: ON_RED, border: "none", opacity: clearing ? 0.7 : 1 }}
                   >
                     {clearing ? "Deleting…" : user ? "Yes, delete everything" : "Yes, delete all"}
                   </button>

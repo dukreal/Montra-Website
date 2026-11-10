@@ -2,7 +2,7 @@ import { useState, useRef, useEffect, useCallback, useMemo } from "react";
 import { mondayOf, MONTHS, isoWeekNum, fmtShort, fmtDate } from "@/web/dates";
 import { fmtAmt, getCat } from "@/web/helpers";
 import { btnReset, navBtnStyle } from "@/web/styles";
-import { SUB, BORDER, TEXT, CARD, ACCENT, CARD2, aTint, GREEN, RED } from "@/web/theme";
+import { SUB, BORDER, TEXT, CARD, ACCENT, CARD2, aTint, GREEN, RED, ON_ACCENT, ON_RED } from "@/web/theme";
 import type { Tx, TxType } from "@/web/types";
 import { IcoChevLeft, IcoChevRight, CatIcon } from "@/web/icons";
 
@@ -263,7 +263,7 @@ export function AnalyticsTab({ txs, currency }: { txs: Tx[]; currency: string })
   const yearOptions = Array.from({ length: 12 }, (_, i) => today.getFullYear() - 11 + i);
   const pickBtn = (on: boolean, disabled = false): React.CSSProperties => ({
     padding: "11px 0", borderRadius: 10, fontSize: 15, fontWeight: on ? 700 : 500,
-    background: on ? ACCENT : CARD2, color: on ? "#fff" : TEXT, border: "none",
+    background: on ? ACCENT : CARD2, color: on ? ON_ACCENT : TEXT, border: "none",
     cursor: disabled ? "not-allowed" : "pointer", opacity: disabled ? 0.3 : 1,
   });
 
@@ -401,13 +401,13 @@ export function AnalyticsTab({ txs, currency }: { txs: Tx[]; currency: string })
             <button onClick={() => { setTxType("expense"); setSelectedSeg(null); }} style={{
               padding: "6px 13px", borderRadius: 8,
               background: txType === "expense" ? RED : "transparent",
-              color: txType === "expense" ? "#fff" : SUB,
+              color: txType === "expense" ? ON_RED : SUB,
               border: "none", fontWeight: 600, fontSize: 15, cursor: "pointer", transition: "all 0.2s",
             }}>Expense</button>
             <button onClick={() => { setTxType("income"); setSelectedSeg(null); }} style={{
               padding: "6px 13px", borderRadius: 8,
               background: txType === "income" ? GREEN : "transparent",
-              color: txType === "income" ? "#fff" : SUB,
+              color: txType === "income" ? ON_ACCENT : SUB,
               border: "none", fontWeight: 600, fontSize: 15, cursor: "pointer", transition: "all 0.2s",
             }}>Income</button>
           </div>
