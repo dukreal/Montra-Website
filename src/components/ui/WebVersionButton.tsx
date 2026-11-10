@@ -7,8 +7,8 @@ export default function WebVersionButton({ size = "md" }: { size?: "md" | "lg" }
     <a
       href="#/app"
       title="Open the web version"
-      className={`inline-flex items-center gap-2.5 rounded-full font-bold cursor-pointer transition active:scale-[0.98] hover:brightness-110 ${
-        lg ? "px-8 py-4 text-base" : "px-5 py-2.5 text-sm"
+      className={`inline-flex items-center justify-center gap-2.5 whitespace-nowrap rounded-full font-bold cursor-pointer transition active:scale-[0.98] hover:brightness-110 ${
+        lg ? "w-full max-w-xs sm:w-auto sm:max-w-none px-8 py-4 text-base" : "px-5 py-2.5 text-sm"
       }`}
       style={{ background: ACCENT, color: "#03130a", boxShadow: `0 12px 34px ${ACCENT}44` }}
     >
