@@ -45,6 +45,7 @@ export default function Cta() {
                       className="inline-flex w-full items-center justify-center gap-2.5 whitespace-nowrap rounded-full px-6 py-4 text-base font-bold cursor-not-allowed sm:w-auto"
                       style={{ color: "#03130a", background: "transparent", border: "1.5px dashed rgba(3,19,10,0.5)" }}
                     >
+                      <Download size={20} color="#03130a" strokeWidth={2.4} />
                       <span className="sm:hidden">App coming soon</span>
                       <span className="hidden sm:inline">Download App</span>
                       <span className="hidden sm:inline rounded-full px-2.5 py-0.5 text-xs font-semibold" style={{ background: "rgba(3,19,10,0.14)" }}>Coming soon</span>
