@@ -1,5 +1,5 @@
 import { overlay, modalBox, outlineBtn, primaryBtn } from "@/web/styles";
-import { RED, SUB, TEXT } from "@/web/theme";
+import { RED, SUB, TEXT, RED_TEXT } from "@/web/theme";
 import { IcoX } from "@/web/icons";
 
 /* ─── LoadErrorModal ─────────────────────────────────────────────────────── */
@@ -12,7 +12,7 @@ export function LoadErrorModal({ detail, onRetry, onClose }: {
       <div className="montra-pop" role="dialog" aria-modal="true" aria-labelledby="load-error-title" style={{ ...modalBox, width: 440, padding: 28 }}>
         <div style={{ display: "flex", alignItems: "center", gap: 14, marginBottom: 14 }}>
           <div style={{ width: 44, height: 44, borderRadius: 12, background: "#FF6B6B1e", border: `1px solid ${RED}`, display: "flex", alignItems: "center", justifyContent: "center", flexShrink: 0 }}>
-            <IcoX size={20} color={RED} />
+            <IcoX size={20} color={RED_TEXT} />
           </div>
           <h3 id="load-error-title" style={{ margin: 0, color: TEXT, fontSize: 20, fontWeight: 800, lineHeight: 1.25 }}>Couldn't load your transactions</h3>
         </div>

@@ -1,7 +1,7 @@
 import { useState } from "react";
 import type { User } from "@supabase/supabase-js";
 import { dangerBtn, outlineBtn } from "@/web/styles";
-import { BORDER, TEXT, SUB, aTint, ACCENT, ACCENT_TEXT, CARD, ACCENT_THEMES, CARD2, RED, ON_ACCENT, ON_RED } from "@/web/theme";
+import { BORDER, TEXT, SUB, aTint, ACCENT, ACCENT_TEXT, CARD, ACCENT_THEMES, CARD2, RED, ON_ACCENT, ON_RED, RED_TEXT } from "@/web/theme";
 import type { Settings, ThemeMode, TextSize } from "@/web/types";
 import { IcoPalette, IcoGlobe, IcoWallet, IcoUser, IcoDoc, IcoHelp, IcoSun, IcoMoon, IcoCheck } from "@/web/icons";
 import type { IP } from "@/web/icons";
@@ -262,7 +262,7 @@ export function SettingsTab({ settings, onSave, onClear, txCount, user, onRefres
               </div>
             </div>
             <div style={{ background: "#FF6B6B0d", border: "1px solid #FF6B6B30", borderRadius: 16, padding: 20 }}>
-              <div style={{ fontSize: 16, fontWeight: 800, color: RED, marginBottom: 6, letterSpacing: "0.04em" }}>DANGER ZONE</div>
+              <div style={{ fontSize: 16, fontWeight: 800, color: RED_TEXT, marginBottom: 6, letterSpacing: "0.04em" }}>DANGER ZONE</div>
               <div style={{ fontSize: 16, color: SUB, marginBottom: 16, lineHeight: 1.6 }}>
                 {user
                   ? `This permanently deletes all ${txCount} transaction${txCount !== 1 ? "s" : ""} from your Montra account. If you also use the Montra mobile app, they will be deleted there too. This cannot be undone.`

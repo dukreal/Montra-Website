@@ -2,7 +2,7 @@ import { useState, useRef, useEffect, useCallback, useMemo } from "react";
 import { mondayOf, MONTHS, isoWeekNum, fmtShort, fmtDate } from "@/web/dates";
 import { fmtAmt, getCat } from "@/web/helpers";
 import { btnReset, navBtnStyle } from "@/web/styles";
-import { SUB, BORDER, TEXT, CARD, ACCENT, ACCENT_TEXT, CARD2, aTint, GREEN, RED, ON_ACCENT, ON_RED } from "@/web/theme";
+import { SUB, BORDER, TEXT, CARD, ACCENT, ACCENT_TEXT, CARD2, aTint, GREEN, RED, ON_ACCENT, ON_RED, RED_TEXT, GREEN_TEXT } from "@/web/theme";
 import type { Tx, TxType } from "@/web/types";
 import { IcoChevLeft, IcoChevRight, CatIcon } from "@/web/icons";
 
@@ -368,15 +368,15 @@ export function AnalyticsTab({ txs, currency }: { txs: Tx[]; currency: string })
         <div className="montra-sum" style={{ display: "grid", gridTemplateColumns: "1fr 1fr 1fr" }}>
           <div style={{ textAlign: "center" }}>
             <div style={{ color: SUB, fontSize: 15, marginBottom: 6 }}>Income</div>
-            <div style={{ color: GREEN, fontWeight: 700, fontSize: 16 }}>+{fmtAmt(totalIncome, currency)}</div>
+            <div style={{ color: GREEN_TEXT, fontWeight: 700, fontSize: 16 }}>+{fmtAmt(totalIncome, currency)}</div>
           </div>
           <div style={{ textAlign: "center", borderLeft: `1px solid ${BORDER}`, borderRight: `1px solid ${BORDER}` }}>
             <div style={{ color: SUB, fontSize: 15, marginBottom: 6 }}>Expense</div>
-            <div style={{ color: RED, fontWeight: 700, fontSize: 16 }}>-{fmtAmt(totalExpense, currency)}</div>
+            <div style={{ color: RED_TEXT, fontWeight: 700, fontSize: 16 }}>-{fmtAmt(totalExpense, currency)}</div>
           </div>
           <div style={{ textAlign: "center" }}>
             <div style={{ color: SUB, fontSize: 15, marginBottom: 6 }}>Balance</div>
-            <div style={{ color: balance >= 0 ? TEXT : RED, fontWeight: 700, fontSize: 16 }}>
+            <div style={{ color: balance >= 0 ? TEXT : RED_TEXT, fontWeight: 700, fontSize: 16 }}>
               {balance >= 0 ? "+" : "-"}{fmtAmt(Math.abs(balance), currency)}
             </div>
           </div>
@@ -476,7 +476,7 @@ export function AnalyticsTab({ txs, currency }: { txs: Tx[]; currency: string })
                     {tx.notes ? <div style={{ fontSize: 14, color: SUB, marginTop: 2 }}>{tx.notes}</div> : null}
                     <div style={{ fontSize: 14, color: SUB, marginTop: 2 }}>{fmtDate(tx.created_at)}</div>
                   </div>
-                  <div style={{ fontSize: 16, fontWeight: 700, color: tx.type === "expense" ? RED : GREEN }}>
+                  <div style={{ fontSize: 16, fontWeight: 700, color: tx.type === "expense" ? RED_TEXT : GREEN_TEXT }}>
                     {tx.type === "expense" ? "-" : "+"}{fmtAmt(tx.amount, currency)}
                   </div>
                 </div>

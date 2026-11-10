@@ -3,7 +3,7 @@ import { IoArrowDownCircle, IoArrowUpCircle } from "react-icons/io5";
 import { CATS } from "@/web/categories";
 import { MONTHS, sameDay, todayISO } from "@/web/dates";
 import { fieldLabel, inputStyle, primaryBtn, overlay, modalBox, btnReset, outlineBtn } from "@/web/styles";
-import { TEXT, CARD, BORDER, RED, GREEN, SUB, ACCENT, ACCENT_TEXT, aTint, ON_ACCENT } from "@/web/theme";
+import { TEXT, CARD, BORDER, RED, GREEN, SUB, ACCENT, ACCENT_TEXT, aTint, ON_ACCENT, RED_TEXT, GREEN_TEXT } from "@/web/theme";
 import type { Tx, TxType } from "@/web/types";
 import { CatIcon, IcoPlus, IcoChevLeft, IcoChevRight } from "@/web/icons";
 
@@ -55,20 +55,21 @@ export function AddTab({ onAdd }: { onAdd: (tx: Tx) => void }) {
         {(["expense", "income"] as TxType[]).map((t) => {
           const active = type === t;
           const clr = t === "expense" ? RED : GREEN;
+          const clrText = t === "expense" ? RED_TEXT : GREEN_TEXT;
           return (
             <button key={t} onClick={() => { setType(t); setParentCat(""); setSubCat(""); setError(""); }}
               style={{
                 flex: 1, padding: "11px", borderRadius: 10,
                 background: active ? `${clr}1a` : "transparent",
                 border: active ? `1px solid ${clr}55` : "1px solid transparent",
-                color: active ? clr : SUB,
+                color: active ? clrText : SUB,
                 fontWeight: 700, fontSize: 16, cursor: "pointer", transition: "all 0.18s",
                 display: "flex", alignItems: "center", justifyContent: "center", gap: 7,
               }}
             >
               {t === "expense"
-                ? <IoArrowDownCircle size={17} color={active ? RED : SUB} />
-                : <IoArrowUpCircle size={17} color={active ? GREEN : SUB} />}
+                ? <IoArrowDownCircle size={17} color={active ? RED_TEXT : SUB} />
+                : <IoArrowUpCircle size={17} color={active ? GREEN_TEXT : SUB} />}
               {t === "expense" ? "Expense" : "Income"}
             </button>
           );
@@ -77,9 +78,9 @@ export function AddTab({ onAdd }: { onAdd: (tx: Tx) => void }) {
 
       {/* Amount */}
       <div style={{ marginBottom: 22 }}>
-        <label style={fieldLabel}>AMOUNT <span style={{ color: RED }}>*</span></label>
+        <label style={fieldLabel}>AMOUNT <span style={{ color: RED_TEXT }}>*</span></label>
         <div style={{ position: "relative" }}>
-          <span style={{ position: "absolute", left: 16, top: "50%", transform: "translateY(-50%)", color: amount ? (isExp ? RED : GREEN) : SUB, fontSize: 28, fontWeight: 700, pointerEvents: "none" }}>
+          <span style={{ position: "absolute", left: 16, top: "50%", transform: "translateY(-50%)", color: amount ? (isExp ? RED_TEXT : GREEN_TEXT) : SUB, fontSize: 28, fontWeight: 700, pointerEvents: "none" }}>
             {/* We'll rely on the select for currency - show ₱ as default indicator */}
             ₱
           </span>
@@ -93,7 +94,7 @@ export function AddTab({ onAdd }: { onAdd: (tx: Tx) => void }) {
               width: "100%", background: CARD, borderRadius: 14,
               border: `2px solid ${amount ? (isExp ? `${RED}88` : `${GREEN}88`) : BORDER}`,
               padding: "18px 18px 18px 44px",
-              color: isExp ? RED : GREEN, caretColor: isExp ? RED : GREEN, fontSize: 34, fontWeight: 800,
+              color: isExp ? RED_TEXT : GREEN_TEXT, caretColor: isExp ? RED : GREEN, fontSize: 34, fontWeight: 800,
               outline: "none", boxSizing: "border-box" as const, transition: "border-color 0.2s",
             }}
           />
@@ -102,7 +103,7 @@ export function AddTab({ onAdd }: { onAdd: (tx: Tx) => void }) {
 
       {/* Parent Category */}
       <div style={{ marginBottom: 20 }}>
-        <label style={fieldLabel}>CATEGORY <span style={{ color: RED }}>*</span></label>
+        <label style={fieldLabel}>CATEGORY <span style={{ color: RED_TEXT }}>*</span></label>
         <div className="montra-cats" style={{ display: "grid", gridTemplateColumns: "repeat(4, 1fr)", gap: 8 }}>
           {cats.map((cat) => (
             <button
@@ -142,7 +143,7 @@ export function AddTab({ onAdd }: { onAdd: (tx: Tx) => void }) {
       {/* Sub Category */}
       {parentObj && (
         <div style={{ marginBottom: 20 }}>
-          <label style={fieldLabel}>SUBCATEGORY <span style={{ color: RED }}>*</span></label>
+          <label style={fieldLabel}>SUBCATEGORY <span style={{ color: RED_TEXT }}>*</span></label>
           <div style={{ display: "flex", flexWrap: "wrap" as const, gap: 8 }}>
             {parentObj.subs.map((sub) => (
               <button key={sub} onClick={() => { setSubCat(sub); setError(""); }}
@@ -175,7 +176,7 @@ export function AddTab({ onAdd }: { onAdd: (tx: Tx) => void }) {
       <div style={{ marginBottom: 18 }}>
         <div style={{ display: "flex", justifyContent: "space-between", alignItems: "baseline" }}>
           <label style={fieldLabel}>NOTES (optional)</label>
-          <span style={{ fontSize: 14, color: notes.length >= 150 ? RED : SUB, fontWeight: 600 }}>{notes.length}/150</span>
+          <span style={{ fontSize: 14, color: notes.length >= 150 ? RED_TEXT : SUB, fontWeight: 600 }}>{notes.length}/150</span>
         </div>
         <textarea placeholder="Add a note..." value={notes} maxLength={150} onChange={(e) => setNotes(e.target.value.slice(0, 150))} rows={2}
           style={{ ...inputStyle, resize: "none" as const, fontFamily: "inherit" }}
@@ -192,7 +193,7 @@ export function AddTab({ onAdd }: { onAdd: (tx: Tx) => void }) {
         {showCal && <DatePickerModal value={date} onClose={() => setShowCal(false)} onSelect={setDate} />}
       </div>
 
-      {error && <div style={{ color: RED, fontSize: 16, marginBottom: 14 }}>{error}</div>}
+      {error && <div style={{ color: RED_TEXT, fontSize: 16, marginBottom: 14 }}>{error}</div>}
 
       <button onClick={handleSubmit} style={{ ...primaryBtn, width: "100%", fontSize: 16, padding: "16px" }}>
         Save Transaction

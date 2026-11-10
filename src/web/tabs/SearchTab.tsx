@@ -4,7 +4,7 @@ import { IoCash } from "react-icons/io5";
 import { fmtDate, fmtTime, inDateSel, fmtDateSel, isRange } from "@/web/dates";
 import { getCat, fmtAmt } from "@/web/helpers";
 import { inputStyle, btnReset } from "@/web/styles";
-import { RED, GREEN, CARD2, CARD, BORDER, SUB, TEXT, aTint, ACCENT, ACCENT_TEXT } from "@/web/theme";
+import { RED, GREEN, CARD2, CARD, BORDER, SUB, TEXT, aTint, ACCENT, ACCENT_TEXT, RED_TEXT, GREEN_TEXT } from "@/web/theme";
 import type { Tx } from "@/web/types";
 import { MiniCalendar } from "@/web/components/MiniCalendar";
 import { TxRow } from "@/web/components/TxRow";
@@ -17,6 +17,7 @@ function TxCard({ tx, currency, onClick }: { tx: Tx; currency: string; onClick: 
   const [hov, setHov] = useState(false);
   const isExp = tx.type === "expense";
   const tone = isExp ? RED : GREEN;
+  const toneText = isExp ? RED_TEXT : GREEN_TEXT;
   const cat = getCat(tx.type, tx.parent_category);
   const clip: React.CSSProperties = { whiteSpace: "nowrap", overflow: "hidden", textOverflow: "ellipsis" };
   return (
@@ -37,7 +38,7 @@ function TxCard({ tx, currency, onClick }: { tx: Tx; currency: string; onClick: 
           width: 44, height: 44, borderRadius: 12, flexShrink: 0,
           background: `${cat?.color ?? tone}20`, display: "flex", alignItems: "center", justifyContent: "center",
         }}>
-          {cat ? <CatIcon name={cat.icon} color={cat.color} size={22} /> : <IoCash size={22} color={tone} />}
+          {cat ? <CatIcon name={cat.icon} color={cat.color} size={22} /> : <IoCash size={22} color={toneText} />}
         </div>
         <span style={{ fontSize: 13, color: SUB, fontWeight: 600, whiteSpace: "nowrap" }}>{fmtDate(tx.created_at)}</span>
       </div>
@@ -46,7 +47,7 @@ function TxCard({ tx, currency, onClick }: { tx: Tx; currency: string; onClick: 
         <div style={{ fontSize: 14, color: SUB, marginTop: 2, ...clip }}>{tx.sub_category ? tx.parent_category : fmtTime(tx.created_at)}</div>
         {tx.notes && <div style={{ fontSize: 14, color: SUB, marginTop: 6, ...clip }}>{tx.notes}</div>}
       </div>
-      <div style={{ width: "100%", fontSize: 20, fontWeight: 800, color: tone, ...clip }}>
+      <div style={{ width: "100%", fontSize: 20, fontWeight: 800, color: toneText, ...clip }}>
         {isExp ? "-" : "+"}{fmtAmt(tx.amount, currency)}
       </div>
     </button>

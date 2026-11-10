@@ -1,4 +1,4 @@
-import { ACCENT, BORDER, CARD, ON_ACCENT, RED, SUB, SURFACE, TEXT } from "@/web/theme";
+import { ACCENT, BORDER, CARD, ON_ACCENT, RED, SUB, SURFACE, TEXT, RED_TEXT } from "@/web/theme";
 
 export const profileRow: React.CSSProperties = {
   display: "flex", alignItems: "center", gap: 12, width: "100%",
@@ -43,5 +43,5 @@ export const outlineBtn: React.CSSProperties = {
 };
 export const dangerBtn: React.CSSProperties = {
   flex: 1, padding: "12px", borderRadius: 12, border: `1px solid ${RED}55`,
-  background: "#FF6B6B14", color: RED, cursor: "pointer", fontWeight: 600, fontSize: 16,
+  background: "#FF6B6B14", color: RED_TEXT, cursor: "pointer", fontWeight: 600, fontSize: 16,
 };

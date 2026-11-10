@@ -4,7 +4,7 @@ import { supabase } from "@/lib/supabaseClient";
 import logoUrl from "@/assets/images/logo.png";
 import { loadSet, saveSet, saveTx, loadTx } from "@/web/storage";
 import { btnReset, outlineBtn } from "@/web/styles";
-import { PALETTES, BG, SURFACE, BORDER, TEXT, SUB, aTint, ACCENT, ACCENT_TEXT, CARD, RED, TEXT_SCALE, accentTextFor } from "@/web/theme";
+import { PALETTES, BG, SURFACE, BORDER, TEXT, SUB, aTint, ACCENT, ACCENT_TEXT, CARD, TEXT_SCALE, accentTextFor, RED_TEXT } from "@/web/theme";
 import type { Tx, Settings, Tab, TxType } from "@/web/types";
 import { EditModal } from "@/web/components/EditModal";
 import { LoadErrorModal } from "@/web/components/LoadErrorModal";
@@ -261,7 +261,7 @@ export function AppShell({ user, onSignOut }: { user: User | null; onSignOut: ()
             )}
             <div style={{ minWidth: 0, flex: 1 }}>
               <div style={{ fontSize: 15, fontWeight: 700, color: TEXT, whiteSpace: "nowrap", overflow: "hidden", textOverflow: "ellipsis" }}>{isGuest ? "Guest" : name.split(" ")[0]}</div>
-              <div style={{ fontSize: 14, color: isGuest ? RED : ACCENT_TEXT }}>{isGuest ? "Not signed in" : "Synced to your account"}</div>
+              <div style={{ fontSize: 14, color: isGuest ? RED_TEXT : ACCENT_TEXT }}>{isGuest ? "Not signed in" : "Synced to your account"}</div>
             </div>
           </div>
 
@@ -272,7 +272,7 @@ export function AppShell({ user, onSignOut }: { user: User | null; onSignOut: ()
             </button>
           ) : (
             <button onClick={onSignOut} style={{ ...btnReset, width: "100%", padding: "9px 12px", borderRadius: 10, fontSize: 16, color: SUB, fontWeight: 500, gap: 8, justifyContent: "flex-start" }}
-              onMouseEnter={(e) => { (e.currentTarget as HTMLElement).style.color = RED; }}
+              onMouseEnter={(e) => { (e.currentTarget as HTMLElement).style.color = RED_TEXT; }}
               onMouseLeave={(e) => { (e.currentTarget as HTMLElement).style.color = SUB; }}
             >
               Sign out

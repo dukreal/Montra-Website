@@ -2,7 +2,7 @@ import { useMemo } from "react";
 import type { User } from "@supabase/supabase-js";
 import { fmtAmt } from "@/web/helpers";
 import { profileRow } from "@/web/styles";
-import { GREEN, RED, ACCENT, ACCENT_TEXT, TEXT, CARD, BORDER, aTint, SUB, CARD2, SURFACE } from "@/web/theme";
+import { GREEN, RED, ACCENT_TEXT, TEXT, CARD, BORDER, aTint, SUB, CARD2, SURFACE, RED_TEXT, GREEN_TEXT } from "@/web/theme";
 import type { Tx, Settings } from "@/web/types";
 import { IcoTrendUp, IcoTrendDown, IcoWallet, IcoChevR, IcoHelp, IcoLogout } from "@/web/icons";
 
@@ -24,9 +24,9 @@ export function ProfileTab({ txs, settings, onSave, user, isGuest, onSignOut, on
   const initials = isGuest ? "G" : name.charAt(0).toUpperCase();
 
   const stats = [
-    { label: "Income", value: income, color: GREEN, Icon: IcoTrendUp },
-    { label: "Spent", value: spent, color: RED, Icon: IcoTrendDown },
-    { label: "Balance", value: balance, color: ACCENT, Icon: IcoWallet },
+    { label: "Income", value: income, color: GREEN_TEXT, tint: "#2ECC7122", Icon: IcoTrendUp },
+    { label: "Spent", value: spent, color: RED_TEXT, tint: "#FF6B6B22", Icon: IcoTrendDown },
+    { label: "Balance", value: balance, color: ACCENT_TEXT, tint: aTint(15), Icon: IcoWallet },
   ];
 
   return (
@@ -47,7 +47,7 @@ export function ProfileTab({ txs, settings, onSave, user, isGuest, onSignOut, on
           <span style={{
             display: "inline-flex", alignItems: "center", gap: 6, marginTop: 6,
             padding: "4px 10px", borderRadius: 100, fontSize: 14, fontWeight: 700,
-            background: isGuest ? "#FF6B6B12" : "#2ECC7115", color: isGuest ? RED : GREEN,
+            background: isGuest ? "#FF6B6B12" : "#2ECC7115", color: isGuest ? RED_TEXT : GREEN_TEXT,
           }}>
             <span style={{ width: 5, height: 5, borderRadius: "50%", background: isGuest ? RED : GREEN }} />
             {isGuest ? "Local only" : "Cloud synced"}
@@ -57,9 +57,9 @@ export function ProfileTab({ txs, settings, onSave, user, isGuest, onSignOut, on
 
       {/* Stat pills */}
       <div style={{ display: "flex", flexWrap: "wrap", gap: 10, marginBottom: 22 }}>
-        {stats.map(({ label, value, color, Icon }) => (
+        {stats.map(({ label, value, color, tint, Icon }) => (
           <div key={label} style={{ flex: "1 1 130px", background: CARD, border: `1px solid ${BORDER}`, borderRadius: 16, padding: "14px 12px" }}>
-            <span style={{ width: 28, height: 28, borderRadius: 8, background: `${color === ACCENT ? aTint(15) : color + "22"}`, display: "flex", alignItems: "center", justifyContent: "center", marginBottom: 10 }}>
+            <span style={{ width: 28, height: 28, borderRadius: 8, background: tint, display: "flex", alignItems: "center", justifyContent: "center", marginBottom: 10 }}>
               <Icon size={15} color={color} />
             </span>
             <div style={{ fontSize: 16, fontWeight: 800, color, whiteSpace: "nowrap", overflow: "hidden", textOverflow: "ellipsis" }}>{fmtAmt(value, cur)}</div>
@@ -125,10 +125,10 @@ export function ProfileTab({ txs, settings, onSave, user, isGuest, onSignOut, on
       <button onClick={onSignOut} style={{
         display: "flex", alignItems: "center", justifyContent: "center", gap: 10,
         width: "100%", padding: "14px", borderRadius: 14, marginTop: 4,
-        background: "#FF6B6B0d", border: `1px solid ${RED}25`, color: RED,
+        background: "#FF6B6B0d", border: `1px solid ${RED}25`, color: RED_TEXT,
         fontWeight: 700, fontSize: 16, cursor: "pointer",
       }}>
-        <IcoLogout size={17} color={RED} /> {isGuest ? "Sign in" : "Sign out"}
+        <IcoLogout size={17} color={RED_TEXT} /> {isGuest ? "Sign in" : "Sign out"}
       </button>
 
       <div style={{ textAlign: "center", fontSize: 14, color: SUB, marginTop: 20 }}>Montra · v2.1.0</div>
