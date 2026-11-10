@@ -35,10 +35,10 @@ export default function Hero() {
             location tagging, all in your pocket.
           </p>
           <div className="mt-9 flex flex-wrap justify-center gap-4">
-            <DownloadButton size="lg" />
             <WebVersionButton size="lg" />
+            <DownloadButton size="lg" />
           </div>
-          <p className="mt-3 text-[13px]" style={{ color: MUTE }}>Coming soon to Android, iOS &amp; web</p>
+          <p className="mt-3 text-[13px]" style={{ color: SUB }}>Web version available now · Android and iOS coming soon</p>
         </Reveal>
 
         {/* Phone with floating cards */}
