@@ -19,8 +19,8 @@ export default function Secure() {
                 <ShieldCheck size={16} color={ACCENT} />
               </span>
               <div>
-                <p className="text-[12px] font-bold" style={{ color: INK }}>Private</p>
-                <p className="text-[10px]" style={{ color: MUTE_TEXT }}>Per-account access</p>
+                <p className="text-[14px] font-bold" style={{ color: INK }}>Private</p>
+                <p className="text-[14px]" style={{ color: MUTE_TEXT }}>Per-account access</p>
               </div>
             </FloatCard>
           </div>

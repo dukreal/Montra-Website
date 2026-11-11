@@ -48,10 +48,10 @@ export default function Cta() {
                       <Download size={20} color="#03130a" strokeWidth={2.4} />
                       <span className="sm:hidden">App coming soon</span>
                       <span className="hidden sm:inline">Download App</span>
-                      <span className="hidden sm:inline rounded-full px-2.5 py-0.5 text-xs font-semibold" style={{ background: "rgba(3,19,10,0.14)" }}>Coming soon</span>
+                      <span className="hidden sm:inline rounded-full px-2.5 py-0.5 text-sm font-semibold" style={{ background: "rgba(3,19,10,0.14)" }}>Coming soon</span>
                     </button>
                   </div>
-                  <span className="text-[13px] font-medium" style={{ color: "#03130a" }}>Web version available now · Android and iOS coming soon</span>
+                  <span className="text-[14px] font-medium" style={{ color: "#03130a" }}>Web version available now · Android and iOS coming soon</span>
                 </div>
               </div>
               <div className="hidden lg:flex justify-end">

@@ -31,7 +31,7 @@ export default function Hero() {
             <WebVersionButton size="lg" />
             <DownloadButton size="lg" />
           </div>
-          <p className="mt-3 text-[13px]" style={{ color: SUB }}>Web version available now · Android and iOS coming soon</p>
+          <p className="mt-3 text-[14px]" style={{ color: SUB }}>Web version available now · Android and iOS coming soon</p>
         </Reveal>
 
         {/* Phone with floating cards */}

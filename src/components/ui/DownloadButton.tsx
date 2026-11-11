@@ -19,7 +19,7 @@ export default function DownloadButton({ size = "md" }: { size?: "md" | "lg" }) 
         <>
           <span className="sm:hidden">App coming soon</span>
           <span className="hidden sm:inline">Download App</span>
-          <span className="hidden sm:inline rounded-full px-2.5 py-0.5 text-xs font-semibold" style={{ background: "#2a2a2a", color: SUB }}>
+          <span className="hidden sm:inline rounded-full px-2.5 py-0.5 text-sm font-semibold" style={{ background: "#2a2a2a", color: SUB }}>
             Coming soon
           </span>
         </>
