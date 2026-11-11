@@ -10,7 +10,7 @@ import { ACCENT, BG } from '@/constants/theme'
 
 export default function LandingPage() {
   return (
-    <div className="relative min-h-screen w-full" style={{ background: BG }}>
+    <div className="montra-landing relative min-h-screen w-full" style={{ background: BG }}>
       {/* Hero glow lives at page level so it also sits behind the sticky header (no dark band above the hero) */}
       <div className="pointer-events-none absolute inset-x-0 top-0 h-[760px] overflow-hidden">
         <div

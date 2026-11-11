@@ -11,7 +11,7 @@ export default function Cta() {
       <div className="mx-auto max-w-[1200px]">
         <Reveal>
           <div
-            className="relative overflow-hidden rounded-[32px] px-8 py-16 lg:px-16 lg:py-20"
+            className="montra-cta relative overflow-hidden rounded-[32px] px-8 py-16 lg:px-16 lg:py-20"
             style={{ background: `linear-gradient(120deg, ${ACCENT} 0%, #228f50 100%)` }}
           >
             {/* watermark */}
