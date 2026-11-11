@@ -14,6 +14,8 @@ export const SUB = "#a3a3a3";
 
 export const MUTE = "#6f6f6f";
 
+export const MUTE_TEXT = "#8c8c8c";
+
 export const BG = "#0b0b0b";
 
 export const PANEL = "#141414";

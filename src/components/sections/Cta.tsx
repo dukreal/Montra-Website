@@ -12,7 +12,7 @@ export default function Cta() {
         <Reveal>
           <div
             className="relative overflow-hidden rounded-[32px] px-8 py-16 lg:px-16 lg:py-20"
-            style={{ background: `linear-gradient(120deg, ${ACCENT} 0%, #1e7a44 100%)` }}
+            style={{ background: `linear-gradient(120deg, ${ACCENT} 0%, #228f50 100%)` }}
           >
             {/* watermark */}
             <span className="pointer-events-none absolute -bottom-10 -right-4 font-black opacity-10 select-none" style={{ fontSize: 220, color: "#03130a", lineHeight: 1 }}>
@@ -20,11 +20,11 @@ export default function Cta() {
             </span>
             <div className="relative grid lg:grid-cols-2 gap-10 items-center">
               <div>
-                <p className="text-sm font-semibold mb-3" style={{ color: "#04220f" }}>Join the money-clarity movement</p>
+                <p className="text-sm font-semibold mb-3" style={{ color: "#03130a" }}>Join the money-clarity movement</p>
                 <h2 className="text-[34px] md:text-[48px] font-black leading-[1.05]" style={{ color: "#03130a" }}>
                   Start tracking smarter today.
                 </h2>
-                <p className="mt-4 text-lg max-w-md" style={{ color: "#053b1c" }}>
+                <p className="mt-4 text-lg max-w-md" style={{ color: "#03130a" }}>
                   Free, works offline, and built for the way you actually spend.
                 </p>
                 <div className="mt-8 flex flex-col items-start gap-2">
@@ -51,7 +51,7 @@ export default function Cta() {
                       <span className="hidden sm:inline rounded-full px-2.5 py-0.5 text-xs font-semibold" style={{ background: "rgba(3,19,10,0.14)" }}>Coming soon</span>
                     </button>
                   </div>
-                  <span className="text-[13px] font-medium" style={{ color: "#04220f" }}>Web version available now · Android and iOS coming soon</span>
+                  <span className="text-[13px] font-medium" style={{ color: "#03130a" }}>Web version available now · Android and iOS coming soon</span>
                 </div>
               </div>
               <div className="hidden lg:flex justify-end">

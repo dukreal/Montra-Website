@@ -3,7 +3,7 @@ import Reveal from '@/components/ui/Reveal'
 import PhoneMock from '@/components/ui/PhoneMock'
 import FloatCard from '@/components/ui/FloatCard'
 import { ShieldCheck, Gift, Globe } from '@/components/ui/icons'
-import { ACCENT, INK, SUB, MUTE, HAIR } from '@/constants/theme'
+import { ACCENT, INK, SUB, MUTE_TEXT, HAIR } from '@/constants/theme'
 import shotSettings from '@/assets/images/screenshot-settings.png'
 
 /* ─────────────────────── SECURE SECTION ─────────────────────── */
@@ -20,7 +20,7 @@ export default function Secure() {
               </span>
               <div>
                 <p className="text-[12px] font-bold" style={{ color: INK }}>Private</p>
-                <p className="text-[10px]" style={{ color: MUTE }}>Per-account access</p>
+                <p className="text-[10px]" style={{ color: MUTE_TEXT }}>Per-account access</p>
               </div>
             </FloatCard>
           </div>

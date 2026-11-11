@@ -1,5 +1,5 @@
 import Logo from '@/components/ui/Logo'
-import { SUB, MUTE, HAIR } from '@/constants/theme'
+import { SUB, MUTE_TEXT, HAIR } from '@/constants/theme'
 
 /* ─────────────────────── FOOTER ─────────────────────── */
 const PRODUCT_LINKS = [
@@ -19,7 +19,7 @@ export default function Footer() {
           </p>
         </div>
         <div>
-          <p className="text-xs font-bold uppercase tracking-[0.18em] mb-4" style={{ color: MUTE }}>Product</p>
+          <p className="text-xs font-bold uppercase tracking-[0.18em] mb-4" style={{ color: MUTE_TEXT }}>Product</p>
           <ul className="space-y-3">
             {PRODUCT_LINKS.map((l) => (
               <li key={l.href}>
@@ -31,8 +31,8 @@ export default function Footer() {
       </div>
       <div className="border-t" style={{ borderColor: HAIR }}>
         <div className="mx-auto max-w-[1200px] px-6 py-6 flex flex-col md:flex-row items-center justify-between gap-3">
-          <p className="text-xs" style={{ color: MUTE }}>© 2026 Montra. All rights reserved.</p>
-          <p className="text-xs" style={{ color: MUTE }}>Track every peso. Spend with clarity.</p>
+          <p className="text-xs" style={{ color: MUTE_TEXT }}>© 2026 Montra. All rights reserved.</p>
+          <p className="text-xs" style={{ color: MUTE_TEXT }}>Track every peso. Spend with clarity.</p>
         </div>
       </div>
     </footer>

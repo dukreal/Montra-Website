@@ -3,7 +3,7 @@ import DownloadButton from '@/components/ui/DownloadButton'
 import WebVersionButton from '@/components/ui/WebVersionButton'
 import FloatCard from '@/components/ui/FloatCard'
 import { Utensils, MapPin, Check } from '@/components/ui/icons'
-import { ACCENT, ACCENT_SOFT, INK, SUB, MUTE } from '@/constants/theme'
+import { ACCENT, ACCENT_SOFT, INK, SUB, MUTE, MUTE_TEXT } from '@/constants/theme'
 import phone3d from '@/assets/images/phone-3d.png'
 
 /* ─────────────────────── HERO ─────────────────────── */
@@ -92,7 +92,7 @@ export default function Hero() {
                 </span>
                 <div className="flex-1 text-center">
                   <p className="font-bold" style={{ fontSize: 20, lineHeight: "24px", color: INK }}>Saved!</p>
-                  <p style={{ fontSize: 16, lineHeight: "22px", color: MUTE }}>Transaction added</p>
+                  <p style={{ fontSize: 16, lineHeight: "22px", color: MUTE_TEXT }}>Transaction added</p>
                 </div>
               </FloatCard>
 
@@ -106,7 +106,7 @@ export default function Hero() {
                 </span>
                 <div className="flex-1 min-w-0 text-left">
                   <p className="font-bold" style={{ fontSize: 18, lineHeight: "22px", color: INK }}>Food &amp; Dining</p>
-                  <p style={{ fontSize: 15, lineHeight: "20px", marginTop: 4, color: MUTE }}>12:40 PM</p>
+                  <p style={{ fontSize: 15, lineHeight: "20px", marginTop: 4, color: MUTE_TEXT }}>12:40 PM</p>
                 </div>
                 <span className="font-bold" style={{ fontSize: 22, lineHeight: "28px", color: "#E05252" }}>-₱340</span>
               </FloatCard>
@@ -116,7 +116,7 @@ export default function Hero() {
                 className="hidden lg:block absolute text-left"
                 style={{ left: 391, top: 145, width: 342, height: 132, padding: 24, borderRadius: 18 }}
               >
-                <p className="font-semibold" style={{ fontSize: 14, lineHeight: "20px", marginBottom: 16, color: MUTE }}>Summary this month</p>
+                <p className="font-semibold" style={{ fontSize: 14, lineHeight: "20px", marginBottom: 16, color: MUTE_TEXT }}>Summary this month</p>
                 <div className="grid grid-cols-3" style={{ columnGap: 12 }}>
                   {[
                     { label: "Income", value: "+₱3,000", color: "#2ECC71" },
@@ -124,7 +124,7 @@ export default function Hero() {
                     { label: "Balance", value: "₱2,787", color: INK },
                   ].map(({ label, value, color }) => (
                     <div key={label}>
-                      <p className="font-medium" style={{ fontSize: 13, lineHeight: "18px", color: MUTE }}>{label}</p>
+                      <p className="font-medium" style={{ fontSize: 13, lineHeight: "18px", color: MUTE_TEXT }}>{label}</p>
                       <p className="font-bold" style={{ fontSize: 17, lineHeight: "24px", marginTop: 5, color }}>{value}</p>
                     </div>
                   ))}
