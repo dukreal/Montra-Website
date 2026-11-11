@@ -94,7 +94,7 @@ function DonutChart({ segments, size = 220, hole = 110, currency, activeName, on
         <div style={{ fontSize: 13, color: SUB, marginBottom: 4, fontWeight: 700, letterSpacing: "0.08em", whiteSpace: "nowrap", overflow: "hidden", textOverflow: "ellipsis" }}>
           {focusSeg ? focusSeg.name.split(" & ")[0].toUpperCase() : "TOTAL"}
         </div>
-        <div style={{ fontSize: amtSize, fontWeight: 800, color: focusSeg ? focusSeg.color : TEXT, lineHeight: 1.1, whiteSpace: "nowrap" }}>
+        <div style={{ fontSize: amtSize, fontWeight: 800, color: TEXT, lineHeight: 1.1, whiteSpace: "nowrap" }}>
           {amtStr}
         </div>
         {focusSeg && (
@@ -441,7 +441,7 @@ export function AnalyticsTab({ txs, currency }: { txs: Tx[]; currency: string })
                     <div style={{ flex: 1, minWidth: 0 }}>
                       <div style={{ display: "flex", flexWrap: "wrap", columnGap: 8, justifyContent: "space-between", alignItems: "baseline", marginBottom: 5 }}>
                         <span className="montra-segname" style={{ fontSize: 16, fontWeight: 600, color: TEXT, overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap" }}>{seg.name}</span>
-                        <span style={{ fontSize: 16, fontWeight: 700, color: seg.color, marginLeft: "auto", flexShrink: 0 }}>{fmtAmt(seg.value, currency)}</span>
+                        <span style={{ fontSize: 16, fontWeight: 700, color: TEXT, marginLeft: "auto", flexShrink: 0 }}>{fmtAmt(seg.value, currency)}</span>
                       </div>
                       <div style={{ height: 5, background: BORDER, borderRadius: 100, overflow: "hidden" }}>
                         <div style={{ height: "100%", width: `${pct}%`, background: seg.color, borderRadius: 100, transition: "width 0.5s ease" }} />
@@ -466,7 +466,7 @@ export function AnalyticsTab({ txs, currency }: { txs: Tx[]; currency: string })
                 <CatIcon name={selectedSeg.icon} color={selectedSeg.color} size={16} />
               </div>
               <span style={{ fontWeight: 700, color: TEXT, fontSize: 18 }}>{selectedSeg.name}</span>
-              <span style={{ marginLeft: "auto", fontWeight: 700, color: selectedSeg.color }}>{fmtAmt(selectedSeg.value, currency)}</span>
+              <span style={{ marginLeft: "auto", fontWeight: 700, color: TEXT }}>{fmtAmt(selectedSeg.value, currency)}</span>
             </div>
             <div style={{ display: "flex", flexDirection: "column", gap: 8 }}>
               {segTxs.map(tx => (

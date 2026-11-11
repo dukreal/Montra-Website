@@ -201,7 +201,7 @@ export function SettingsTab({ settings, onSave, onClear, txCount, user, onRefres
                   }}>
                     <div style={{
                       width: 42, height: 42, borderRadius: 10, flexShrink: 0,
-                      background: on ? aTint(18) : CARD2,
+                      background: on ? aTint(12) : CARD2,
                       display: "flex", alignItems: "center", justifyContent: "center",
                       fontSize: c.code.length > 1 ? 11 : 16, fontWeight: 800, color: on ? ACCENT_TEXT : SUB,
                     }}>{c.code}</div>

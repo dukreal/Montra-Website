@@ -118,7 +118,7 @@ export function AddTab({ onAdd }: { onAdd: (tx: Tx) => void }) {
               }}
             >
               <CatIcon name={cat.icon} color={cat.color} size={22} />
-              <span style={{ flex: 1, display: "flex", alignItems: "center", justifyContent: "center", fontSize: 14, color: parentCat === cat.name ? cat.color : TEXT, fontWeight: 600, textAlign: "center", lineHeight: 1.3 }}>
+              <span style={{ flex: 1, display: "flex", alignItems: "center", justifyContent: "center", fontSize: 14, color: TEXT, fontWeight: 600, textAlign: "center", lineHeight: 1.3 }}>
                 {cat.name.split(" & ")[0]}
               </span>
             </button>
@@ -151,7 +151,7 @@ export function AddTab({ onAdd }: { onAdd: (tx: Tx) => void }) {
                   padding: "7px 14px", borderRadius: 100,
                   background: subCat === sub ? `${parentObj.color}20` : CARD,
                   border: `1px solid ${subCat === sub ? parentObj.color : BORDER}`,
-                  color: subCat === sub ? parentObj.color : SUB,
+                  color: subCat === sub ? TEXT : SUB,
                   fontSize: 16, fontWeight: 600, cursor: "pointer", transition: "all 0.15s",
                 }}
               >{sub}</button>
