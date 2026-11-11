@@ -91,7 +91,7 @@ function DonutChart({ segments, size = 220, hole = 110, currency, activeName, on
         position: "absolute", top: "50%", left: "50%", transform: "translate(-50%, -50%)",
         textAlign: "center", pointerEvents: "none", width: hole - 16,
       }}>
-        <div style={{ fontSize: 13, color: SUB, marginBottom: 4, fontWeight: 700, letterSpacing: "0.08em", whiteSpace: "nowrap", overflow: "hidden", textOverflow: "ellipsis" }}>
+        <div style={{ fontSize: 14, color: SUB, marginBottom: 4, fontWeight: 700, letterSpacing: "0.08em", whiteSpace: "nowrap", overflow: "hidden", textOverflow: "ellipsis" }}>
           {focusSeg ? focusSeg.name.split(" & ")[0].toUpperCase() : "TOTAL"}
         </div>
         <div style={{ fontSize: amtSize, fontWeight: 800, color: TEXT, lineHeight: 1.1, whiteSpace: "nowrap" }}>

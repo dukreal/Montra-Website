@@ -134,7 +134,7 @@ export function AddTab({ onAdd }: { onAdd: (tx: Tx) => void }) {
             <IcoPlus size={22} color={SUB} />
             <span style={{ flex: 1, display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center", fontSize: 14, color: SUB, fontWeight: 600, textAlign: "center", lineHeight: 1.3 }}>
               New category
-              <span style={{ fontSize: 12 }}>Soon</span>
+              <span style={{ fontSize: 14 }}>Soon</span>
             </span>
           </button>
         </div>
@@ -166,7 +166,7 @@ export function AddTab({ onAdd }: { onAdd: (tx: Tx) => void }) {
               }}
             >
               <IcoPlus size={14} /> Add
-              <span style={{ fontSize: 12, fontWeight: 600 }}>Soon</span>
+              <span style={{ fontSize: 14, fontWeight: 600 }}>Soon</span>
             </button>
           </div>
         </div>
@@ -236,7 +236,7 @@ function DatePickerModal({ value, onClose, onSelect }: { value: string; onClose:
         </div>
         <div style={{ display: "grid", gridTemplateColumns: "repeat(7, 1fr)", marginBottom: 10 }}>
           {["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"].map((d) => (
-            <div key={d} style={{ textAlign: "center", fontSize: 12, color: SUB, fontWeight: 700, paddingBottom: 4, letterSpacing: "0.04em" }}>{d}</div>
+            <div key={d} style={{ textAlign: "center", fontSize: 14, color: SUB, fontWeight: 700, paddingBottom: 4, letterSpacing: "0.04em" }}>{d}</div>
           ))}
         </div>
         <div style={{ display: "grid", gridTemplateColumns: "repeat(7, 1fr)", gap: 6 }}>

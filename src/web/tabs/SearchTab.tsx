@@ -40,7 +40,7 @@ function TxCard({ tx, currency, onClick }: { tx: Tx; currency: string; onClick: 
         }}>
           {cat ? <CatIcon name={cat.icon} color={cat.color} size={22} /> : <IoCash size={22} color={toneText} />}
         </div>
-        <span style={{ fontSize: 13, color: SUB, fontWeight: 600, whiteSpace: "nowrap" }}>{fmtDate(tx.created_at)}</span>
+        <span style={{ fontSize: 14, color: SUB, fontWeight: 600, whiteSpace: "nowrap" }}>{fmtDate(tx.created_at)}</span>
       </div>
       <div style={{ width: "100%", minWidth: 0 }}>
         <div style={{ fontSize: 16, fontWeight: 700, color: TEXT, ...clip }}>{tx.sub_category || tx.parent_category || "Uncategorized"}</div>

@@ -58,7 +58,7 @@ export function EditModal({ tx, currency, onClose, onSave }: {
           </div>
           <div style={{ display: "flex", justifyContent: "space-between", alignItems: "baseline" }}>
             <label style={fieldLabel}>NOTES</label>
-            <span style={{ fontSize: 13, color: notes.length >= 150 ? RED_TEXT : SUB, fontWeight: 600 }}>{notes.length}/150</span>
+            <span style={{ fontSize: 14, color: notes.length >= 150 ? RED_TEXT : SUB, fontWeight: 600 }}>{notes.length}/150</span>
           </div>
           <textarea value={notes} maxLength={150} placeholder="Add a note..." onChange={(e) => setNotes(e.target.value.slice(0, 150))} rows={3} style={{ ...inputStyle, marginBottom: 26, resize: "none", fontFamily: "inherit", lineHeight: 1.5 }} />
           <div style={{ display: "flex", gap: 12 }}>

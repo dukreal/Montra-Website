@@ -67,7 +67,7 @@ export function TxDetailModal({ tx, currency, onClose, onDelete, onEdit }: {
 
         {tx.notes && (
           <div style={{ margin: "18px 24px 0", background: SURFACE, borderRadius: 12, padding: "14px 16px", borderLeft: `3px solid ${tone}` }}>
-            <div style={{ fontSize: 13, color: SUB, fontWeight: 700, letterSpacing: "0.06em", marginBottom: 6 }}>NOTE</div>
+            <div style={{ fontSize: 14, color: SUB, fontWeight: 700, letterSpacing: "0.06em", marginBottom: 6 }}>NOTE</div>
             <div style={{ fontSize: 16, color: TEXT, lineHeight: 1.5, wordBreak: "break-word" }}>{tx.notes}</div>
           </div>
         )}
