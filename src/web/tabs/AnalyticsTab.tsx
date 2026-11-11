@@ -354,8 +354,8 @@ export function AnalyticsTab({ txs, currency }: { txs: Tx[]; currency: string })
           return (
             <button key={v} onClick={() => { setViewMode(key); setSelectedSeg(null); setPickerOpen(false); }} style={{
               flex: 1, padding: "9px 0", borderRadius: 9,
-              background: active ? CARD2 : "transparent",
-              color: active ? TEXT : SUB,
+              background: active ? ACCENT : "transparent",
+              color: active ? ON_ACCENT : SUB,
               border: "none", fontWeight: active ? 700 : 500, fontSize: 16, cursor: "pointer",
               transition: "background 0.2s, color 0.2s",
             }}>{v}</button>
