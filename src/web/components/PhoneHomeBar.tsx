@@ -4,7 +4,8 @@ import { fmtAmt } from "@/web/helpers";
 import { btnReset } from "@/web/styles";
 import { ACCENT, ACCENT_TEXT, BORDER, CARD, CARD2, GREEN_TEXT, ON_ACCENT, RED_TEXT, SUB, TEXT, aTint } from "@/web/theme";
 import type { Tx } from "@/web/types";
-import { IcoChevDown, IcoChevLeft, IcoChevRight, IcoSettings } from "@/web/icons";
+import { IoSettingsOutline } from "react-icons/io5";
+import { IcoChevDown, IcoChevLeft, IcoChevRight } from "@/web/icons";
 
 const WEEKDAYS = ["SUN", "MON", "TUE", "WED", "THU", "FRI", "SAT"];
 
@@ -63,7 +64,7 @@ export function PhoneHomeBar({ year, month, transactions, selectedDay, income, e
         <h1 style={{ margin: 0, lineHeight: "44px", color: TEXT, fontSize: 24, fontWeight: 800 }}>Montra</h1>
         <button type="button" onClick={onOpenSettings} aria-label="Settings"
           style={{ ...btnReset, position: "absolute", right: 0, top: 0, width: 44, height: 44, borderRadius: "50%", background: CARD, border: `1px solid ${BORDER}` }}>
-          <IcoSettings size={20} color={TEXT} />
+          <IoSettingsOutline size={22} color={TEXT} />
         </button>
       </div>
 

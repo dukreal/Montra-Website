@@ -43,6 +43,8 @@ export default function WebApp() {
         .montra-shell { height: 100vh; height: 100dvh; }
         .montra-tabbar { display: none; }
         .montra-phone-home { display: none; }
+        .montra-phone-only { display: none; }
+        .montra-cat-head { display: none; }
         .montra-daystrip::-webkit-scrollbar { display: none; }
         @media (max-width: 860px) {
           .montra-nav { display: none !important; }
@@ -67,6 +69,26 @@ export default function WebApp() {
           .montra-home { gap: 16px !important; }
           .montra-home-left { display: none !important; }
           .montra-phone-home { display: block; }
+          .montra-desk-only { display: none; }
+          .montra-phone-only { display: inline; }
+          .montra-add { display: flex; flex-direction: column; }
+          .montra-add-title { text-align: center; font-size: 24px !important; margin-bottom: 18px !important; }
+          .montra-amtcard { order: 1; margin-bottom: 20px; background: var(--card); border: 1px solid var(--border); border-radius: 20px; }
+          .montra-typebar { padding: 0 !important; margin-bottom: 0 !important; background: transparent !important; border: none !important; border-bottom: 1px solid var(--border) !important; border-radius: 0 !important; }
+          .montra-typebar button { padding: 14px !important; border: none !important; border-radius: 0 !important; }
+          .montra-typebar button:first-child { border-radius: 19px 0 0 0 !important; }
+          .montra-typebar button:last-child { border-radius: 0 19px 0 0 !important; }
+          .montra-amount { margin-bottom: 0 !important; }
+          .montra-amount label { display: none !important; }
+          .montra-amount input { background: transparent !important; border: none !important; border-radius: 0 0 19px 19px !important; }
+          .montra-add-notes { order: 2; }
+          .montra-add-cat { order: 3; }
+          .montra-add-sub { order: 4; }
+          .montra-add-date { order: 5; }
+          .montra-add-foot { order: 6; position: sticky; bottom: 0; }
+          .montra-cat-card { background: var(--card); border: 1px solid var(--border); border-radius: 20px; overflow: hidden; }
+          .montra-cat-head { display: flex; align-items: center; gap: 12px; padding: 14px 16px; border-bottom: 1px solid var(--border); }
+          .montra-cat-card .montra-cats { padding: 12px; }
           .montra-settings-nav { width: 100% !important; }
         }
         @media (max-width: 720px) { .montra-cats { grid-template-columns: repeat(3, 1fr) !important; } }
