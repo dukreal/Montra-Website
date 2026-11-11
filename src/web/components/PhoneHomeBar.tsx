@@ -119,7 +119,7 @@ export function PhoneHomeBar({ year, month, transactions, selectedDay, income, e
       </div>
 
       <div ref={stripRef} className="montra-daystrip" role="group" aria-label="Pick a day"
-        style={{ position: "relative", display: "flex", gap: 6, overflowX: "auto", padding: "4px 0 8px", marginBottom: 12 }}>
+        style={{ position: "relative", display: "flex", gap: 8, overflowX: "auto", padding: "4px 2px 8px", marginBottom: 12 }}>
         {days.map((d) => {
           const isSel = sameDay(d, selectedDay);
           const isToday = sameDay(d, today);
@@ -129,13 +129,13 @@ export function PhoneHomeBar({ year, month, transactions, selectedDay, income, e
             <button key={d.getDate()} type="button" disabled={future} data-selected={isSel} aria-pressed={isSel}
               aria-label={`${MONTHS[month]} ${d.getDate()}`} onClick={() => onSelectDay(d)}
               style={{
-                flex: "0 0 52px", height: 72, display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center", gap: 4,
-                padding: 0, borderRadius: 14, border: "none", background: isSel ? ACCENT : "transparent",
+                position: "relative", flex: "0 0 56px", height: 66, display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center", gap: 6,
+                padding: 0, borderRadius: 16, border: "none", background: isSel ? ACCENT : "transparent",
                 cursor: future ? "not-allowed" : "pointer", opacity: future ? 0.3 : 1,
               }}>
-              <span style={{ fontSize: 14, fontWeight: 600, color: isSel ? ON_ACCENT : SUB }}>{WEEKDAYS[d.getDay()]}</span>
-              <span style={{ fontSize: 20, fontWeight: 800, color: isSel ? ON_ACCENT : isToday ? ACCENT_TEXT : TEXT }}>{d.getDate()}</span>
-              <span style={{ width: 4, height: 4, borderRadius: "50%", background: hasTx ? (isSel ? ON_ACCENT : ACCENT) : "transparent" }} />
+              <span style={{ fontSize: 14, lineHeight: "14px", fontWeight: 600, color: isSel ? ON_ACCENT : SUB }}>{WEEKDAYS[d.getDay()]}</span>
+              <span style={{ fontSize: 20, lineHeight: "20px", fontWeight: 800, color: isSel ? ON_ACCENT : isToday ? ACCENT_TEXT : TEXT }}>{d.getDate()}</span>
+              <span style={{ position: "absolute", bottom: 4, left: "50%", marginLeft: -2, width: 4, height: 4, borderRadius: "50%", background: hasTx ? (isSel ? ON_ACCENT : ACCENT) : "transparent" }} />
             </button>
           );
         })}
