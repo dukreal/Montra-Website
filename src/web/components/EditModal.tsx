@@ -63,7 +63,7 @@ export function EditModal({ tx, currency, onClose, onSave }: {
           <textarea value={notes} maxLength={150} placeholder="Add a note..." onChange={(e) => setNotes(e.target.value.slice(0, 150))} rows={3} style={{ ...inputStyle, marginBottom: 26, resize: "none", fontFamily: "inherit", lineHeight: 1.5 }} />
           <div style={{ display: "flex", gap: 12 }}>
             <button onClick={onClose} style={outlineBtn}>Cancel</button>
-            <button onClick={handleSave} disabled={!valid} style={{ ...primaryBtn, flex: 1, opacity: valid ? 1 : 0.5, cursor: valid ? "pointer" : "not-allowed" }}>Save Changes</button>
+            <button onClick={handleSave} disabled={!valid} style={{ ...primaryBtn, flex: 1, padding: "12px 12px", whiteSpace: "nowrap", opacity: valid ? 1 : 0.5, cursor: valid ? "pointer" : "not-allowed" }}>Save Changes</button>
           </div>
         </div>
       </div>
