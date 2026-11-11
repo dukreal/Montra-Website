@@ -35,6 +35,8 @@ export function AppShell({ user, onSignOut }: { user: User | null; onSignOut: ()
   const [showLoadError, setShowLoadError] = useState(false);
 
   const isGuest = !user;
+  /* Stable id: the `user` object is a new copy each time the tab regains focus */
+  const userId = user?.id;
 
   /* Persist settings */
   useEffect(() => { saveSet(settings); }, [settings]);
@@ -48,7 +50,7 @@ export function AppShell({ user, onSignOut }: { user: User | null; onSignOut: ()
 
   /* ── Fetch transactions from Supabase (authenticated users) ── */
   const fetchFromSupabase = useCallback(async () => {
-    if (!user) return;
+    if (!userId) return;
     setLoadingTx(true);
     setLoadError(null);
     setShowLoadError(false);
@@ -57,7 +59,7 @@ export function AppShell({ user, onSignOut }: { user: User | null; onSignOut: ()
       const { data, error } = await supabase
         .from("transactions")
         .select("*")
-        .eq("user_id", user.id)
+        .eq("user_id", userId)
         .order("created_at", { ascending: false });
       if (error || !data) {
         failure = error?.message || "Unknown error";
@@ -88,15 +90,15 @@ export function AppShell({ user, onSignOut }: { user: User | null; onSignOut: ()
       setShowLoadError(true);
     }
     setLoadingTx(false);
-  }, [user]);
+  }, [userId]);
 
   useEffect(() => {
-    if (user) {
+    if (userId) {
       fetchFromSupabase();
     } else {
       setTransactions(loadTx());
     }
-  }, [user, fetchFromSupabase]);
+  }, [userId, fetchFromSupabase]);
 
   /* ── Add ── */
   const addTx = useCallback(async (tx: Tx) => {
