@@ -54,7 +54,7 @@ export function EditModal({ tx, currency, onClose, onSave }: {
           <div style={{ position: "relative", marginBottom: 22 }}>
             <span style={{ position: "absolute", left: 16, top: "50%", transform: "translateY(-50%)", color: toneText, fontSize: 24, fontWeight: 700, pointerEvents: "none" }}>{currency}</span>
             <input type="number" value={amount} onChange={(e) => setAmount(e.target.value)} autoFocus
-              style={{ ...inputStyle, paddingLeft: 46, fontSize: 28, fontWeight: 800, color: toneText, border: `2px solid ${valid ? `${tone}88` : BORDER}` }} />
+              style={{ ...inputStyle, paddingLeft: 46, fontSize: 28, fontWeight: 800, color: toneText, outlineColor: toneText, outlineOffset: 0, border: `2px solid ${valid ? `${tone}88` : BORDER}` }} />
           </div>
           <div style={{ display: "flex", justifyContent: "space-between", alignItems: "baseline" }}>
             <label style={fieldLabel}>NOTES</label>
