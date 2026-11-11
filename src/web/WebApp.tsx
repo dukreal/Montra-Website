@@ -42,6 +42,8 @@ export default function WebApp() {
         }
         .montra-shell { height: 100vh; height: 100dvh; }
         .montra-tabbar { display: none; }
+        .montra-phone-home { display: none; }
+        .montra-daystrip::-webkit-scrollbar { display: none; }
         @media (max-width: 860px) {
           .montra-nav { display: none !important; }
           .montra-tabbar {
@@ -62,6 +64,9 @@ export default function WebApp() {
           }
           .montra-toast { left: 16px !important; right: 16px !important; bottom: calc(100px + env(safe-area-inset-bottom)) !important; max-width: none !important; }
           .montra-settings { flex-direction: column !important; gap: 20px !important; }
+          .montra-home { gap: 16px !important; }
+          .montra-home-left { display: none !important; }
+          .montra-phone-home { display: block; }
           .montra-settings-nav { width: 100% !important; }
         }
         @media (max-width: 720px) { .montra-cats { grid-template-columns: repeat(3, 1fr) !important; } }

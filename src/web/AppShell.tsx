@@ -317,7 +317,7 @@ export function AppShell({ user, onSignOut }: { user: User | null; onSignOut: ()
                 <button onClick={fetchFromSupabase} style={{ ...outlineBtn, flex: "none", padding: "8px 18px" }}>Retry</button>
               </div>
             )}
-            {tab === "home" && <HomeTab txs={transactions} currency={settings.currency} onTxClick={setDetailTx} cal={homeCal} />}
+            {tab === "home" && <HomeTab txs={transactions} currency={settings.currency} onTxClick={setDetailTx} cal={homeCal} onOpenSettings={() => setTab("settings")} />}
             {tab === "add" && <AddTab onAdd={addTx} />}
             {tab === "analytics" && <AnalyticsTab txs={transactions} currency={settings.currency} />}
             {tab === "search" && <SearchTab txs={transactions} currency={settings.currency} onTxClick={setDetailTx} />}

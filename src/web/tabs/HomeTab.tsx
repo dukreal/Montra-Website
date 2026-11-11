@@ -1,15 +1,16 @@
 import { useMemo } from "react";
 import { IoArrowDownCircle } from "react-icons/io5";
-import { inDateSel, MONTHS, fmtDateSel } from "@/web/dates";
+import { inDateSel, isRange, MONTHS, fmtDateSel } from "@/web/dates";
 import { fmtAmt } from "@/web/helpers";
 import { btnReset } from "@/web/styles";
 import { CARD, BORDER, SUB, TEXT, RED_TEXT, GREEN_TEXT } from "@/web/theme";
 import type { Tx } from "@/web/types";
 import { MiniCalendar } from "@/web/components/MiniCalendar";
+import { PhoneHomeBar } from "@/web/components/PhoneHomeBar";
 import { TxRow } from "@/web/components/TxRow";
 import type { HomeCalendar } from "@/web/hooks";
 
-export function HomeTab({ txs, currency, onTxClick, cal }: { txs: Tx[]; currency: string; onTxClick: (tx: Tx) => void; cal: HomeCalendar }) {
+export function HomeTab({ txs, currency, onTxClick, cal, onOpenSettings }: { txs: Tx[]; currency: string; onTxClick: (tx: Tx) => void; cal: HomeCalendar; onOpenSettings: () => void }) {
   const { year, setYear, month, setMonth, dates } = cal;
 
   const { mIncome, mExpense } = useMemo(() => {
@@ -36,6 +37,14 @@ export function HomeTab({ txs, currency, onTxClick, cal }: { txs: Tx[]; currency
 
   const balance = mIncome - mExpense;
 
+  /* Phone header totals follow the list below: the picked day, or the whole month */
+  const { fInc, fExp } = useMemo(() => {
+    let inc = 0, exp = 0;
+    filtered.forEach((tx) => { if (tx.type === "income") inc += tx.amount; else exp += tx.amount; });
+    return { fInc: inc, fExp: exp };
+  }, [filtered]);
+  const selDay = dates.sel && !isRange(dates.sel) ? dates.sel.start : null;
+
   const prevMonth = () => {
     if (month === 0) { setYear((y) => y - 1); setMonth(11); }
     else setMonth((m) => m - 1);
@@ -50,6 +59,13 @@ export function HomeTab({ txs, currency, onTxClick, cal }: { txs: Tx[]; currency
 
   return (
     <div className="montra-home" style={{ display: "flex", gap: 32, minHeight: 0 }}>
+      <PhoneHomeBar
+        year={year} month={month} transactions={txs} selectedDay={selDay}
+        income={fInc} expense={fExp} currency={currency}
+        onSelectDay={(d) => { dates.pick(d, true); }}
+        onJump={(y, m) => { setYear(y); setMonth(m); dates.clear(); }}
+        onOpenSettings={onOpenSettings}
+      />
       {/* Left column */}
       <div className="montra-home-left" style={{ width: 340, flexShrink: 0, display: "flex", flexDirection: "column", gap: 14 }}>
         {/* Summary */}

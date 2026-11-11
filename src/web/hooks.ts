@@ -9,8 +9,9 @@ export function useDateSelection(initial: DateSel | null) {
   const [mode, setModeState] = useState<DateMode>("day");
   const [pending, setPending] = useState<Date | null>(null);
   /** Returns true once the selection is complete */
-  const pick = (d: Date) => {
-    if (mode === "day") {
+  const pick = (d: Date, asDay = false) => {
+    if (mode === "day" || asDay) {
+      if (mode !== "day") { setModeState("day"); setPending(null); }
       setSel(sel && !isRange(sel) && sameDay(sel.start, d) ? null : { start: d, end: d });
       return true;
     }
