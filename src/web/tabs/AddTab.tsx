@@ -95,7 +95,7 @@ export function AddTab({ onAdd }: { onAdd: (tx: Tx) => void }) {
               border: `2px solid ${amount ? (isExp ? `${RED}88` : `${GREEN}88`) : BORDER}`,
               padding: "18px 18px 18px 44px",
               color: isExp ? RED_TEXT : GREEN_TEXT, caretColor: isExp ? RED : GREEN, fontSize: 34, fontWeight: 800,
-              outline: "none", boxSizing: "border-box" as const, transition: "border-color 0.2s",
+              boxSizing: "border-box" as const, transition: "border-color 0.2s",
             }}
           />
         </div>

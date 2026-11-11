@@ -30,7 +30,7 @@ export const fieldLabel: React.CSSProperties = {
 };
 export const inputStyle: React.CSSProperties = {
   width: "100%", background: CARD, border: `1px solid ${BORDER}`, borderRadius: 12,
-  padding: "12px 14px", color: TEXT, fontSize: 16, outline: "none",
+  padding: "12px 14px", color: TEXT, fontSize: 16,
   boxSizing: "border-box",
 };
 export const primaryBtn: React.CSSProperties = {
