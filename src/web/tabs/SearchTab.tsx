@@ -8,7 +8,7 @@ import { RED, GREEN, CARD2, CARD, BORDER, SUB, TEXT, aTint, ACCENT, ACCENT_TEXT,
 import type { Tx } from "@/web/types";
 import { MiniCalendar } from "@/web/components/MiniCalendar";
 import { TxRow } from "@/web/components/TxRow";
-import { useDateSelection } from "@/web/hooks";
+import { useDateSelection, useIsPhone } from "@/web/hooks";
 import { CatIcon, IcoTag, IcoDoc, IcoCash, IcoSearch, IcoX, IcoFlash, IcoCalendar, IcoSort, IcoChevDown, IcoCheck, IcoList, IcoGrid } from "@/web/icons";
 import type { IP } from "@/web/icons";
 
@@ -82,6 +82,9 @@ export function SearchTab({ txs, currency, onTxClick }: { txs: Tx[]; currency: s
   const [fields, setFields] = useState<Set<SearchField>>(new Set());
   const [sort, setSort] = useState<SortKey>("newest");
   const [view, setView] = useState<"list" | "grid">("list");
+  /* Phones always use the list (the square grid cards are too big there) */
+  const isPhone = useIsPhone();
+  const shownView = isPhone ? "list" : view;
   const [sortOpen, setSortOpen] = useState(false);
   /* Optional single-day filter picked from the mini calendar */
   const dates = useDateSelection(null);
@@ -166,13 +169,13 @@ export function SearchTab({ txs, currency, onTxClick }: { txs: Tx[]; currency: s
 
   return (
     <div>
-      <h2 style={{ color: TEXT, margin: "0 0 20px", fontSize: 28, fontWeight: 800 }}>Search</h2>
+      <h2 className="montra-search-title" style={{ color: TEXT, margin: "0 0 20px", fontSize: 28, fontWeight: 800 }}>Search</h2>
       <div style={{ position: "relative", marginBottom: 14 }}>
         <div style={{ position: "absolute", left: 14, top: "50%", transform: "translateY(-50%)", color: SUB, pointerEvents: "none" }}>
           <IcoSearch size={17} />
         </div>
         <input
-          type="text" placeholder={placeholder} aria-label={placeholder} value={query} autoFocus
+          type="text" placeholder={placeholder} aria-label={placeholder} value={query} autoFocus={!isPhone}
           onChange={(e) => setQuery(e.target.value)}
           style={{ ...inputStyle, paddingLeft: 44 }}
         />
@@ -182,7 +185,8 @@ export function SearchTab({ txs, currency, onTxClick }: { txs: Tx[]; currency: s
           </button>
         )}
       </div>
-      <div style={{ display: "flex", gap: 8, marginBottom: 20, flexWrap: "wrap" }}>
+      <div className="montra-search-bar" style={{ display: "flex", gap: 8, marginBottom: 20, flexWrap: "wrap" }}>
+        <div className="montra-chips">
         <button onClick={() => setFields(new Set())} style={{
           display: "flex", alignItems: "center", gap: 6,
           padding: "7px 15px", borderRadius: 100, fontSize: 16, fontWeight: 600,
@@ -202,8 +206,9 @@ export function SearchTab({ txs, currency, onTxClick }: { txs: Tx[]; currency: s
             }}><c.Icon size={13} /> {c.label}</button>
           );
         })}
+        </div>
         {/* Date filter (mini calendar) */}
-        <div style={{ position: "relative", display: "flex" }}>
+        <div className="montra-datewrap" style={{ position: "relative", display: "flex" }}>
           {(() => {
             const on = !!dateFilter || calOpen;
             return (
@@ -251,12 +256,12 @@ export function SearchTab({ txs, currency, onTxClick }: { txs: Tx[]; currency: s
           </AnimatePresence>
         </div>
 
-        <div style={{ marginLeft: "auto", display: "flex", alignItems: "center", gap: 10, flexWrap: "wrap" }}>
-          <span style={{ color: SUB, fontSize: 15 }}>{results.length} result{results.length !== 1 ? "s" : ""}</span>
+        <div className="montra-search-tools" style={{ marginLeft: "auto", display: "flex", alignItems: "center", gap: 10, flexWrap: "wrap" }}>
+          <span className="montra-count" style={{ color: SUB, fontSize: 15 }}>{results.length} result{results.length !== 1 ? "s" : ""}</span>
 
           {/* Sort */}
-          <div style={{ position: "relative" }}>
-            <button onClick={() => { closeCal(); setSortOpen((o) => !o); }} aria-haspopup="listbox" aria-expanded={sortOpen} style={{
+          <div className="montra-sortwrap" style={{ position: "relative" }}>
+            <button onClick={() => { closeCal(); setSortOpen((o) => !o); }} aria-haspopup="listbox" aria-expanded={sortOpen} className="montra-sort-btn" style={{
               display: "flex", alignItems: "center", justifyContent: "space-between", gap: 10,
               minWidth: 226, height: 38, padding: "0 14px", borderRadius: 12,
               background: sortOpen ? aTint(10) : CARD, border: `1px solid ${sortOpen ? ACCENT : BORDER}`,
@@ -297,7 +302,7 @@ export function SearchTab({ txs, currency, onTxClick }: { txs: Tx[]; currency: s
           </div>
 
           {/* List / grid */}
-          <div role="group" aria-label="Layout" style={{ display: "flex", gap: 2, padding: 3, borderRadius: 12, background: CARD, border: `1px solid ${BORDER}` }}>
+          <div role="group" aria-label="Layout" className="montra-viewtoggle" style={{ display: "flex", gap: 2, padding: 3, borderRadius: 12, background: CARD, border: `1px solid ${BORDER}` }}>
             {([["list", "List view", IcoList], ["grid", "Grid view", IcoGrid]] as const).map(([id, label, Icon]) => {
               const on = view === id;
               return (
@@ -336,7 +341,7 @@ export function SearchTab({ txs, currency, onTxClick }: { txs: Tx[]; currency: s
         )}
       </AnimatePresence>
 
-      {view === "list" ? (
+      {shownView === "list" ? (
         <div key="list" className="montra-tab">
           <AnimatePresence initial={false}>
             {results.map((tx) => (

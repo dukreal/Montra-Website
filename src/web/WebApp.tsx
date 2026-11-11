@@ -45,6 +45,7 @@ export default function WebApp() {
         .montra-phone-home { display: none; }
         .montra-phone-only { display: none; }
         .montra-cat-head { display: none; }
+        .montra-chips { display: contents; }
         .montra-daystrip::-webkit-scrollbar { display: none; }
         @media (max-width: 860px) {
           .montra-nav { display: none !important; }
@@ -89,6 +90,17 @@ export default function WebApp() {
           .montra-cat-card { background: var(--card); border: 1px solid var(--border); border-radius: 20px; overflow: hidden; }
           .montra-cat-head { display: flex; align-items: center; gap: 12px; padding: 14px 16px; border-bottom: 1px solid var(--border); }
           .montra-cat-card .montra-cats { padding: 12px; }
+          .montra-search-title { display: none; }
+          .montra-chips { display: flex; flex: 0 0 100%; order: 1; gap: 8px; overflow-x: auto; padding: 4px; margin: -4px; scrollbar-width: none; }
+          .montra-chips::-webkit-scrollbar { display: none; }
+          .montra-chips > button { flex: 0 0 auto; min-height: 44px; }
+          .montra-datewrap { order: 2; }
+          .montra-datewrap > div:first-child { min-height: 44px; }
+          .montra-search-tools { display: contents !important; }
+          .montra-sortwrap { order: 3; flex: 1; min-width: 0; }
+          .montra-sort-btn { min-width: 0 !important; width: 100%; height: 44px !important; }
+          .montra-viewtoggle { display: none !important; }
+          .montra-count { order: 4; flex: 0 0 100%; }
           .montra-settings-nav { width: 100% !important; }
         }
         @media (max-width: 720px) { .montra-cats { grid-template-columns: repeat(3, 1fr) !important; } }
