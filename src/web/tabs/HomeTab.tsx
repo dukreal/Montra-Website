@@ -1,13 +1,14 @@
-import { useMemo } from "react";
+import { useMemo, useState } from "react";
 import { IoArrowDownCircle } from "react-icons/io5";
 import { inDateSel, isRange, MONTHS, fmtDateSel } from "@/web/dates";
 import { fmtAmt } from "@/web/helpers";
 import { btnReset } from "@/web/styles";
 import { CARD, BORDER, SUB, TEXT, RED_TEXT, GREEN_TEXT } from "@/web/theme";
-import type { Tx } from "@/web/types";
+import type { Tx, DateSel } from "@/web/types";
 import { MiniCalendar } from "@/web/components/MiniCalendar";
 import { PhoneHomeBar } from "@/web/components/PhoneHomeBar";
 import { TxRow } from "@/web/components/TxRow";
+import { useIsPhone } from "@/web/hooks";
 import type { HomeCalendar } from "@/web/hooks";
 
 export function HomeTab({ txs, currency, onTxClick, cal, onOpenSettings }: { txs: Tx[]; currency: string; onTxClick: (tx: Tx) => void; cal: HomeCalendar; onOpenSettings: () => void }) {
@@ -25,15 +26,25 @@ export function HomeTab({ txs, currency, onTxClick, cal, onOpenSettings }: { txs
     return { mIncome: inc, mExpense: exp };
   }, [txs, year, month]);
 
+/* Phone Home always shows ONE day: the picked day, or today's date number inside the shown month */
+  const [today] = useState(() => new Date());
+  const isPhone = useIsPhone();
+  const phoneDay = useMemo(() => {
+    if (dates.sel && !isRange(dates.sel)) return dates.sel.start;
+    const last = new Date(year, month + 1, 0).getDate();
+    return new Date(year, month, Math.min(today.getDate(), last));
+  }, [dates.sel, year, month, today]);
+  const listSel = useMemo<DateSel | null>(() => (isPhone ? { start: phoneDay, end: phoneDay } : dates.sel), [isPhone, phoneDay, dates.sel]);
+
   const filtered = useMemo(() => {
     return txs
       .filter((tx) => {
         const d = new Date(tx.created_at);
-        if (dates.sel) return inDateSel(tx.created_at, dates.sel);
+        if (listSel) return inDateSel(tx.created_at, listSel);
         return d.getFullYear() === year && d.getMonth() === month;
       })
       .sort((a, b) => new Date(b.created_at).getTime() - new Date(a.created_at).getTime());
-  }, [txs, dates.sel, year, month]);
+  }, [txs, listSel, year, month]);
 
   const balance = mIncome - mExpense;
 
@@ -43,7 +54,6 @@ export function HomeTab({ txs, currency, onTxClick, cal, onOpenSettings }: { txs
     filtered.forEach((tx) => { if (tx.type === "income") inc += tx.amount; else exp += tx.amount; });
     return { fInc: inc, fExp: exp };
   }, [filtered]);
-  const selDay = dates.sel && !isRange(dates.sel) ? dates.sel.start : null;
 
   const prevMonth = () => {
     if (month === 0) { setYear((y) => y - 1); setMonth(11); }
@@ -60,10 +70,13 @@ export function HomeTab({ txs, currency, onTxClick, cal, onOpenSettings }: { txs
   return (
     <div className="montra-home" style={{ display: "flex", gap: 32, minHeight: 0 }}>
       <PhoneHomeBar
-        year={year} month={month} transactions={txs} selectedDay={selDay}
+        year={year} month={month} transactions={txs} selectedDay={phoneDay}
         income={fInc} expense={fExp} currency={currency}
-        onSelectDay={(d) => { dates.pick(d, true); }}
-        onJump={(y, m) => { setYear(y); setMonth(m); dates.clear(); }}
+        onSelectDay={(d) => { setYear(d.getFullYear()); setMonth(d.getMonth()); dates.pick(d, true); }}
+        onJump={(y, m) => {
+          const cap = y === today.getFullYear() && m === today.getMonth() ? today.getDate() : new Date(y, m + 1, 0).getDate();
+          setYear(y); setMonth(m); dates.pick(new Date(y, m, Math.min(phoneDay.getDate(), cap)), true);
+        }}
         onOpenSettings={onOpenSettings}
       />
       {/* Left column */}
@@ -103,10 +116,10 @@ export function HomeTab({ txs, currency, onTxClick, cal, onOpenSettings }: { txs
       <div style={{ flex: 1, minWidth: 0, display: "flex", flexDirection: "column" }}>
         <div style={{ display: "flex", flexWrap: "wrap", alignItems: "center", gap: 12, marginBottom: 16 }}>
           <h2 style={{ margin: 0, color: TEXT, fontSize: 18, fontWeight: 700 }}>
-            {dates.sel ? fmtDateSel(dates.sel) : `All of ${MONTHS[month]}`}
+            {listSel ? fmtDateSel(listSel) : `All of ${MONTHS[month]}`}
           </h2>
           {dates.sel && (
-            <button onClick={dates.clear} style={{ ...btnReset, fontSize: 15, color: SUB }}>
+            <button className="montra-desk-only" onClick={dates.clear} style={{ ...btnReset, fontSize: 15, color: SUB }}>
               Show all ×
             </button>
           )}

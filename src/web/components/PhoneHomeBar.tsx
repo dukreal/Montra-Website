@@ -1,23 +1,25 @@
-import { useEffect, useMemo, useRef, useState } from "react";
+import { useMemo, useState } from "react";
+import { IoSettingsOutline } from "react-icons/io5";
 import { MONTHS, M3, sameDay } from "@/web/dates";
 import { fmtAmt } from "@/web/helpers";
 import { btnReset } from "@/web/styles";
 import { ACCENT, ACCENT_TEXT, BORDER, CARD, CARD2, GREEN_TEXT, ON_ACCENT, RED_TEXT, SUB, TEXT, aTint } from "@/web/theme";
 import type { Tx } from "@/web/types";
-import { IoSettingsOutline } from "react-icons/io5";
 import { IcoChevDown, IcoChevLeft, IcoChevRight } from "@/web/icons";
 
 const WEEKDAYS = ["SUN", "MON", "TUE", "WED", "THU", "FRI", "SAT"];
+const addDays = (d: Date, n: number) => new Date(d.getFullYear(), d.getMonth(), d.getDate() + n);
+const dayKey = (d: Date) => `${d.getFullYear()}-${d.getMonth()}-${d.getDate()}`;
 
 /* ─── PhoneHomeBar ───────────────────────────────────────────────────────── */
 /* Phone-only Home header (shown under 860px, hidden by CSS above that): title and settings,
-   month pill with a month/year picker, a scrolling day strip, and an Income / Expense / Balance card.
-   It reads and writes the same calendar state as the desktop calendar. */
+   a month pill with a month/year picker, week arrows, a fixed 7-day week (no scrolling),
+   and an Income / Expense / Balance card. It always has one picked day. */
 export function PhoneHomeBar({ year, month, transactions, selectedDay, income, expense, currency, onSelectDay, onJump, onOpenSettings }: {
   year: number;
   month: number;
   transactions: Tx[];
-  selectedDay: Date | null;
+  selectedDay: Date;
   income: number;
   expense: number;
   currency: string;
@@ -28,29 +30,18 @@ export function PhoneHomeBar({ year, month, transactions, selectedDay, income, e
   const [today] = useState(() => new Date());
   const [picking, setPicking] = useState(false);
   const [pickYear, setPickYear] = useState(year);
-  const stripRef = useRef<HTMLDivElement>(null);
 
   const todayStart = new Date(today.getFullYear(), today.getMonth(), today.getDate());
-  const daysInMonth = new Date(year, month + 1, 0).getDate();
-  const days = Array.from({ length: daysInMonth }, (_, i) => new Date(year, month, i + 1));
+  const weekStart = addDays(selectedDay, -selectedDay.getDay());
+  const week = Array.from({ length: 7 }, (_, i) => addDays(weekStart, i));
+  const canNextWeek = addDays(selectedDay, 7) <= todayStart;
   const balance = income - expense;
 
   const txDays = useMemo(() => {
-    const set = new Set<number>();
-    transactions.forEach((tx) => {
-      const d = new Date(tx.created_at);
-      if (d.getFullYear() === year && d.getMonth() === month) set.add(d.getDate());
-    });
+    const set = new Set<string>();
+    transactions.forEach((tx) => set.add(dayKey(new Date(tx.created_at))));
     return set;
-  }, [transactions, year, month]);
-
-  /* Keep the picked day (or today) centred in the strip */
-  useEffect(() => {
-    const el = stripRef.current;
-    if (!el) return;
-    const target = el.querySelector<HTMLElement>("[data-selected='true']") ?? el.querySelector<HTMLElement>("[data-today='true']");
-    el.scrollLeft = target ? target.offsetLeft - (el.clientWidth - target.offsetWidth) / 2 : 0;
-  }, [year, month, selectedDay]);
+  }, [transactions]);
 
   const summary: [string, string, string][] = [
     ["Income", `+${fmtAmt(income, currency)}`, GREEN_TEXT],
@@ -68,11 +59,18 @@ export function PhoneHomeBar({ year, month, transactions, selectedDay, income, e
         </button>
       </div>
 
-      <div style={{ display: "flex", justifyContent: "center", marginBottom: 12 }}>
+      <div style={{ display: "flex", alignItems: "center", justifyContent: "center", gap: 6, marginBottom: 12 }}>
+        <button type="button" aria-label="Previous week" onClick={() => onSelectDay(addDays(selectedDay, -7))} style={{ ...btnReset, width: 44, height: 44 }}>
+          <IcoChevLeft size={20} color={SUB} />
+        </button>
         <button type="button" aria-expanded={picking} onClick={() => { setPickYear(year); setPicking((v) => !v); }}
           style={{ ...btnReset, gap: 8, minHeight: 44, padding: "0 18px", borderRadius: 22, background: aTint(14), color: ACCENT_TEXT, fontWeight: 700, fontSize: 16 }}>
           {MONTHS[month]} {year}
           <IcoChevDown size={16} color={ACCENT_TEXT} />
+        </button>
+        <button type="button" aria-label="Next week" disabled={!canNextWeek} onClick={() => onSelectDay(addDays(selectedDay, 7))}
+          style={{ ...btnReset, width: 44, height: 44, opacity: canNextWeek ? 1 : 0.25, cursor: canNextWeek ? "pointer" : "not-allowed" }}>
+          <IcoChevRight size={20} color={SUB} />
         </button>
       </div>
 
@@ -103,18 +101,17 @@ export function PhoneHomeBar({ year, month, transactions, selectedDay, income, e
         </div>
       )}
 
-      <div ref={stripRef} className="montra-daystrip" role="group" aria-label="Pick a day"
-        style={{ position: "relative", display: "flex", gap: 6, overflowX: "auto", padding: "4px 0 8px", marginBottom: 12 }}>
-        {days.map((d) => {
-          const isSel = !!selectedDay && sameDay(d, selectedDay);
+      <div role="group" aria-label="Pick a day" style={{ display: "grid", gridTemplateColumns: "repeat(7, 1fr)", marginBottom: 12 }}>
+        {week.map((d) => {
+          const isSel = sameDay(d, selectedDay);
           const isToday = sameDay(d, today);
           const future = d > todayStart;
-          const hasTx = txDays.has(d.getDate());
+          const hasTx = txDays.has(dayKey(d));
           return (
-            <button key={d.getDate()} type="button" disabled={future} data-selected={isSel} data-today={isToday} aria-pressed={isSel}
-              aria-label={`${MONTHS[month]} ${d.getDate()}`} onClick={() => onSelectDay(d)}
+            <button key={dayKey(d)} type="button" disabled={future} aria-pressed={isSel}
+              aria-label={`${MONTHS[d.getMonth()]} ${d.getDate()}`} onClick={() => onSelectDay(d)}
               style={{
-                flex: "0 0 52px", height: 72, display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center", gap: 4,
+                height: 72, minWidth: 0, display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center", gap: 4,
                 padding: 0, borderRadius: 14, border: "none", background: isSel ? ACCENT : "transparent",
                 cursor: future ? "not-allowed" : "pointer", opacity: future ? 0.3 : 1,
               }}>

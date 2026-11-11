@@ -69,7 +69,7 @@ export default function WebApp() {
           .montra-home { gap: 16px !important; }
           .montra-home-left { display: none !important; }
           .montra-phone-home { display: block; }
-          .montra-desk-only { display: none; }
+          .montra-desk-only { display: none !important; }
           .montra-phone-only { display: inline; }
           .montra-add { display: flex; flex-direction: column; }
           .montra-add-title { text-align: center; font-size: 24px !important; margin-bottom: 18px !important; }
