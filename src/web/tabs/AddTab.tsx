@@ -87,7 +87,7 @@ export function AddTab({ onAdd }: { onAdd: (tx: Tx) => void }) {
           <input
             key={type}
             type="number"
-            placeholder="0.00"
+            placeholder="0.00" aria-label="Amount"
             value={amount}
             onChange={(e) => { setAmount(e.target.value); setError(""); }}
             style={{
@@ -178,7 +178,7 @@ export function AddTab({ onAdd }: { onAdd: (tx: Tx) => void }) {
           <label style={fieldLabel}>NOTES (optional)</label>
           <span style={{ fontSize: 14, color: notes.length >= 150 ? RED_TEXT : SUB, fontWeight: 600 }}>{notes.length}/150</span>
         </div>
-        <textarea placeholder="Add a note..." value={notes} maxLength={150} onChange={(e) => setNotes(e.target.value.slice(0, 150))} rows={2}
+        <textarea aria-label="Notes" placeholder="Add a note..." value={notes} maxLength={150} onChange={(e) => setNotes(e.target.value.slice(0, 150))} rows={2}
           style={{ ...inputStyle, resize: "none" as const, fontFamily: "inherit" }}
         />
       </div>
@@ -228,9 +228,9 @@ function DatePickerModal({ value, onClose, onSelect }: { value: string; onClose:
     <div style={overlay} onClick={onClose}>
       <div style={{ ...modalBox, width: 460, padding: 32 }} onClick={(e) => e.stopPropagation()}>
         <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", marginBottom: 24 }}>
-          <button onClick={() => shift(-1)} style={{ ...btnReset, padding: 8 }}><IcoChevLeft size={22} color={SUB} /></button>
+          <button onClick={() => shift(-1)} aria-label="Previous month" style={{ ...btnReset, padding: 8 }}><IcoChevLeft size={22} color={SUB} /></button>
           <span style={{ fontWeight: 800, color: TEXT, fontSize: 20 }}>{MONTHS[view.month]} {view.year}</span>
-          <button onClick={() => !atCurrentMonth && shift(1)} disabled={atCurrentMonth} style={{ ...btnReset, padding: 8, opacity: atCurrentMonth ? 0.25 : 1, cursor: atCurrentMonth ? "not-allowed" : "pointer" }}>
+          <button onClick={() => !atCurrentMonth && shift(1)} aria-label="Next month" disabled={atCurrentMonth} style={{ ...btnReset, padding: 8, opacity: atCurrentMonth ? 0.25 : 1, cursor: atCurrentMonth ? "not-allowed" : "pointer" }}>
             <IcoChevRight size={22} color={SUB} />
           </button>
         </div>

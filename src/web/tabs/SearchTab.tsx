@@ -177,7 +177,7 @@ export function SearchTab({ txs, currency, onTxClick }: { txs: Tx[]; currency: s
           style={{ ...inputStyle, paddingLeft: 44 }}
         />
         {query && (
-          <button onClick={() => setQuery("")} style={{ ...btnReset, position: "absolute", right: 12, top: "50%", transform: "translateY(-50%)" }}>
+          <button onClick={() => setQuery("")} aria-label="Clear search" style={{ ...btnReset, position: "absolute", right: 12, top: "50%", transform: "translateY(-50%)" }}>
             <IcoX size={16} color={SUB} />
           </button>
         )}

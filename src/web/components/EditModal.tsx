@@ -53,14 +53,14 @@ export function EditModal({ tx, currency, onClose, onSave }: {
           <label style={fieldLabel}>AMOUNT</label>
           <div style={{ position: "relative", marginBottom: 22 }}>
             <span style={{ position: "absolute", left: 16, top: "50%", transform: "translateY(-50%)", color: toneText, fontSize: 24, fontWeight: 700, pointerEvents: "none" }}>{currency}</span>
-            <input type="number" value={amount} onChange={(e) => setAmount(e.target.value)} autoFocus
+            <input type="number" aria-label="Amount" value={amount} onChange={(e) => setAmount(e.target.value)} autoFocus
               style={{ ...inputStyle, paddingLeft: 46, fontSize: 28, fontWeight: 800, color: toneText, outlineColor: toneText, outlineOffset: 0, border: `2px solid ${valid ? `${tone}88` : BORDER}` }} />
           </div>
           <div style={{ display: "flex", justifyContent: "space-between", alignItems: "baseline" }}>
             <label style={fieldLabel}>NOTES</label>
             <span style={{ fontSize: 14, color: notes.length >= 150 ? RED_TEXT : SUB, fontWeight: 600 }}>{notes.length}/150</span>
           </div>
-          <textarea value={notes} maxLength={150} placeholder="Add a note..." onChange={(e) => setNotes(e.target.value.slice(0, 150))} rows={3} style={{ ...inputStyle, marginBottom: 26, resize: "none", fontFamily: "inherit", lineHeight: 1.5 }} />
+          <textarea aria-label="Notes" value={notes} maxLength={150} placeholder="Add a note..." onChange={(e) => setNotes(e.target.value.slice(0, 150))} rows={3} style={{ ...inputStyle, marginBottom: 26, resize: "none", fontFamily: "inherit", lineHeight: 1.5 }} />
           <div style={{ display: "flex", gap: 12 }}>
             <button onClick={onClose} style={outlineBtn}>Cancel</button>
             <button onClick={handleSave} disabled={!valid} style={{ ...primaryBtn, flex: 1, padding: "12px 12px", whiteSpace: "nowrap", opacity: valid ? 1 : 0.5, cursor: valid ? "pointer" : "not-allowed" }}>Save Changes</button>

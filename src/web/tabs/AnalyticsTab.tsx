@@ -272,7 +272,7 @@ export function AnalyticsTab({ txs, currency }: { txs: Tx[]; currency: string })
 
       {/* Period pill with nav arrows */}
       <div style={{ display: "flex", justifyContent: "center", alignItems: "center", gap: 8, position: "relative" }}>
-        <button onClick={prevPeriod} style={{ ...btnReset, ...navBtnStyle }}>
+        <button onClick={prevPeriod} aria-label="Previous period" style={{ ...btnReset, ...navBtnStyle }}>
           <IcoChevLeft size={15} color={TEXT} />
         </button>
         <button className="montra-period" onClick={togglePicker} aria-expanded={pickerOpen} style={{
@@ -284,7 +284,7 @@ export function AnalyticsTab({ txs, currency }: { txs: Tx[]; currency: string })
           {periodLabel}
           <span style={{ fontSize: 11, transform: pickerOpen ? "rotate(180deg)" : "none", transition: "transform 0.15s" }}>▼</span>
         </button>
-        <button onClick={nextPeriod} disabled={atEnd} style={{ ...btnReset, ...navBtnStyle, opacity: atEnd ? 0.3 : 1, cursor: atEnd ? "not-allowed" : "pointer" }}>
+        <button onClick={nextPeriod} aria-label="Next period" disabled={atEnd} style={{ ...btnReset, ...navBtnStyle, opacity: atEnd ? 0.3 : 1, cursor: atEnd ? "not-allowed" : "pointer" }}>
           <IcoChevRight size={15} color={TEXT} />
         </button>
 
@@ -307,9 +307,9 @@ export function AnalyticsTab({ txs, currency }: { txs: Tx[]; currency: string })
           ) : (
             <>
               <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", marginBottom: 12 }}>
-                <button onClick={() => setPickYear(y => y - 1)} style={btnReset}><IcoChevLeft size={16} color={SUB} /></button>
+                <button onClick={() => setPickYear(y => y - 1)} aria-label="Previous year" style={btnReset}><IcoChevLeft size={16} color={SUB} /></button>
                 <span style={{ fontWeight: 800, color: TEXT, fontSize: 16 }}>{viewMode === "week" ? `${MONTHS[pickMonth]} ${pickYear}` : pickYear}</span>
-                <button onClick={() => !isCurrentYear(pickYear) && setPickYear(y => y + 1)} disabled={isCurrentYear(pickYear)}
+                <button onClick={() => !isCurrentYear(pickYear) && setPickYear(y => y + 1)} aria-label="Next year" disabled={isCurrentYear(pickYear)}
                   style={{ ...btnReset, opacity: isCurrentYear(pickYear) ? 0.25 : 1, cursor: isCurrentYear(pickYear) ? "not-allowed" : "pointer" }}>
                   <IcoChevRight size={16} color={SUB} />
                 </button>
