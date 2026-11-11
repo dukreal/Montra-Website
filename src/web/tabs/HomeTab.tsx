@@ -3,7 +3,7 @@ import { IoArrowDownCircle } from "react-icons/io5";
 import { inDateSel, MONTHS, fmtDateSel } from "@/web/dates";
 import { fmtAmt } from "@/web/helpers";
 import { btnReset } from "@/web/styles";
-import { CARD, BORDER, SUB, GREEN, RED, TEXT } from "@/web/theme";
+import { CARD, BORDER, SUB, TEXT, RED_TEXT, GREEN_TEXT } from "@/web/theme";
 import type { Tx } from "@/web/types";
 import { MiniCalendar } from "@/web/components/MiniCalendar";
 import { TxRow } from "@/web/components/TxRow";
@@ -57,14 +57,14 @@ export function HomeTab({ txs, currency, onTxClick, cal }: { txs: Tx[]; currency
           <div style={{ fontSize: 14, color: SUB, fontWeight: 700, letterSpacing: "0.07em", marginBottom: 12 }}>
             {MONTHS[month].toUpperCase()} {year}
           </div>
-          <div style={{ fontSize: 34, fontWeight: 800, color: balance >= 0 ? GREEN : RED, marginBottom: 4 }}>
+          <div style={{ fontSize: 34, fontWeight: 800, color: balance >= 0 ? GREEN_TEXT : RED_TEXT, marginBottom: 4 }}>
             {balance < 0 ? "-" : ""}{fmtAmt(Math.abs(balance), currency)}
           </div>
           <div style={{ fontSize: 15, color: SUB, marginBottom: 16 }}>Net balance</div>
           <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(120px, 1fr))", gap: 10 }}>
             {[
-              { label: "Income", value: mIncome, color: GREEN, bg: "#2ECC7110" },
-              { label: "Expenses", value: mExpense, color: RED, bg: "#FF6B6B10" },
+              { label: "Income", value: mIncome, color: GREEN_TEXT, bg: "#2ECC7110" },
+              { label: "Expenses", value: mExpense, color: RED_TEXT, bg: "#FF6B6B10" },
             ].map(({ label, value, color, bg }) => (
               <div key={label} style={{ background: bg, borderRadius: 10, padding: "10px 12px" }}>
                 <div style={{ fontSize: 14, color: SUB, marginBottom: 4 }}>{label}</div>

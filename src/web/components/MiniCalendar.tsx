@@ -1,7 +1,7 @@
 import { useState, useRef, useEffect, useMemo } from "react";
 import { isRange, MONTHS, sameDay, fmtDateSel } from "@/web/dates";
 import { btnReset } from "@/web/styles";
-import { CARD, BORDER, SUB, aTint, ACCENT, TEXT, CARD2, SURFACE } from "@/web/theme";
+import { CARD, BORDER, SUB, aTint, ACCENT, ACCENT_TEXT, TEXT, CARD2, SURFACE, ON_ACCENT } from "@/web/theme";
 import type { Tx, DateSel, DateMode } from "@/web/types";
 import { IcoChevLeft, IcoChevRight } from "@/web/icons";
 
@@ -84,7 +84,7 @@ export function MiniCalendar({ year, month, transactions, selection, pending = n
           <IcoChevLeft size={17} color={SUB} />
         </button>
         <button onClick={() => { setPickYear(year); setPicking((v) => !v); }} aria-expanded={picking}
-          style={{ ...btnReset, gap: 6, padding: "6px 12px", borderRadius: 10, background: picking ? aTint(14) : "transparent", fontWeight: 700, color: picking ? ACCENT : TEXT, fontSize: 16 }}>
+          style={{ ...btnReset, gap: 6, padding: "6px 12px", borderRadius: 10, background: picking ? aTint(14) : "transparent", fontWeight: 700, color: picking ? ACCENT_TEXT : TEXT, fontSize: 16 }}>
           {MONTHS[month]} {year}
           <span style={{ fontSize: 11, transform: picking ? "rotate(180deg)" : "none", transition: "transform 0.15s" }}>▼</span>
         </button>
@@ -110,7 +110,7 @@ export function MiniCalendar({ year, month, transactions, selection, pending = n
               return (
                 <button key={m} disabled={future} onClick={() => { onJump(pickYear, mi); setPicking(false); }} style={{
                   padding: "12px 0", borderRadius: 10, fontSize: 15, fontWeight: cur ? 700 : 500,
-                  background: cur ? ACCENT : CARD2, color: cur ? "#fff" : TEXT,
+                  background: cur ? ACCENT : CARD2, color: cur ? ON_ACCENT : TEXT,
                   border: "none", cursor: future ? "not-allowed" : "pointer", opacity: future ? 0.3 : 1,
                 }}>{m.slice(0, 3)}</button>
               );
@@ -163,7 +163,7 @@ export function MiniCalendar({ year, month, transactions, selection, pending = n
                 <span style={{
                   fontSize: 15,
                   fontWeight: isSel || isToday ? 700 : 400,
-                  color: isSel ? "#fff" : isToday ? ACCENT : TEXT,
+                  color: isSel ? ON_ACCENT : isToday ? ACCENT_TEXT : TEXT,
                 }}>
                   {day}
                 </span>
@@ -182,11 +182,11 @@ export function MiniCalendar({ year, month, transactions, selection, pending = n
             {(["day", "range"] as const).map((m) => (
               <button key={m} onClick={() => onModeChange(m)} aria-pressed={mode === m} style={{
                 padding: "6px 14px", borderRadius: 8, border: "none", cursor: "pointer", fontSize: 14, fontWeight: 600,
-                background: mode === m ? SURFACE : "transparent", color: mode === m ? ACCENT : SUB,
+                background: mode === m ? SURFACE : "transparent", color: mode === m ? ACCENT_TEXT : SUB,
               }}>{m === "day" ? "Day" : "Range"}</button>
             ))}
           </div>
-          <span style={{ fontSize: 14, color: pending ? ACCENT : SUB, fontWeight: pending ? 600 : 400, textAlign: "right" }}>
+          <span style={{ fontSize: 14, color: pending ? ACCENT_TEXT : SUB, fontWeight: pending ? 600 : 400, textAlign: "right" }}>
             {mode === "day"
               ? "Pick a day"
               : pending

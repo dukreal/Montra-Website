@@ -49,12 +49,12 @@ export default function Benefits() {
               <div className="rounded-2xl border p-4 md:w-64" style={{ background: PANEL2, borderColor: HAIR }}>
                 <div className="flex items-center gap-2">
                   <MapPin size={16} color={ACCENT} />
-                  <span className="text-[13px] font-semibold" style={{ color: INK }}>Current location</span>
+                  <span className="text-[14px] font-semibold" style={{ color: INK }}>Current location</span>
                 </div>
                 <div className="mt-3 rounded-xl h-20 grid place-items-center" style={{ background: "#0f0f0f", border: `1px solid ${HAIR}` }}>
                   <MapPin size={22} color={ACCENT} />
                 </div>
-                <p className="mt-2.5 text-[12px]" style={{ color: SUB }}>9W37+4QQ, Cebu City</p>
+                <p className="mt-2.5 text-[14px]" style={{ color: SUB }}>9W37+4QQ, Cebu City</p>
               </div>
             </div>
           </Reveal>

@@ -74,6 +74,8 @@ export default function WebApp() {
         button:not(:disabled):active { transform: scale(0.97); }
         @media (prefers-reduced-motion: reduce) { .montra-tab, button { animation: none !important; transition: none !important; } }
         * { box-sizing: border-box; }
+        .montra-root :focus-visible { outline: 2px solid var(--accent-text, var(--accent)); outline-offset: 2px; }
+        .montra-main { scrollbar-gutter: stable both-edges; }
         input[type=number]::-webkit-inner-spin-button, input[type=number]::-webkit-outer-spin-button { -webkit-appearance: none; }
         input[type=number] { -moz-appearance: textfield; appearance: textfield; }
         ::-webkit-scrollbar { width: 5px; } ::-webkit-scrollbar-track { background: transparent; }

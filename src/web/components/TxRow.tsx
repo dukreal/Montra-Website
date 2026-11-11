@@ -2,7 +2,7 @@ import { useState } from "react";
 import { IoCash } from "react-icons/io5";
 import { fmtDate, fmtTime } from "@/web/dates";
 import { getCat, fmtAmt } from "@/web/helpers";
-import { CARD2, CARD, BORDER, RED, GREEN, TEXT, SUB } from "@/web/theme";
+import { CARD2, CARD, BORDER, TEXT, SUB, RED_TEXT, GREEN_TEXT } from "@/web/theme";
 import type { Tx } from "@/web/types";
 import { CatIcon } from "@/web/icons";
 
@@ -30,7 +30,7 @@ export function TxRow({ tx, currency, onClick, showDate = false }: { tx: Tx; cur
         background: cat ? `${cat.color}20` : (isExp ? "#FF6B6B20" : "#2ECC7120"),
         display: "flex", alignItems: "center", justifyContent: "center",
       }}>
-        {cat ? <CatIcon name={cat.icon} color={cat.color} size={20} /> : (isExp ? <IoCash size={20} color={RED} /> : <IoCash size={20} color={GREEN} />)}
+        {cat ? <CatIcon name={cat.icon} color={cat.color} size={20} /> : (isExp ? <IoCash size={20} color={RED_TEXT} /> : <IoCash size={20} color={GREEN_TEXT} />)}
       </div>
       <div style={{ flex: 1, minWidth: 0 }}>
         <div style={{ fontSize: 16, fontWeight: 600, color: TEXT, whiteSpace: "nowrap", overflow: "hidden", textOverflow: "ellipsis" }}>
@@ -40,7 +40,7 @@ export function TxRow({ tx, currency, onClick, showDate = false }: { tx: Tx; cur
           {showDate ? `${fmtDate(tx.created_at)} · ` : ""}{fmtTime(tx.created_at)}{tx.notes ? ` · ${tx.notes}` : ""}
         </div>
       </div>
-      <div style={{ fontSize: 18, fontWeight: 700, color: isExp ? RED : GREEN, flexShrink: 0 }}>
+      <div style={{ fontSize: 18, fontWeight: 700, color: isExp ? RED_TEXT : GREEN_TEXT, flexShrink: 0 }}>
         {isExp ? "-" : "+"}{fmtAmt(tx.amount, currency)}
       </div>
     </button>

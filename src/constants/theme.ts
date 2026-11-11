@@ -2,8 +2,8 @@
    MONTRA — MARKETING WEBSITE
    Polished fintech landing, dark ground + green accent.
    Patterns: pill nav, two-tone headings, floating UI cards,
-   dark step section, bento benefits, testimonial slider.
-   ═══════════════════════════════════════════════════════════════ */
+   dark step section, bento benefits.  
+═══════════════════════════════════════════════════════════════ */
 export const ACCENT = "#27AE60";
 
 export const ACCENT_SOFT = "#2ECC71";
@@ -13,6 +13,8 @@ export const INK = "#ffffff";
 export const SUB = "#a3a3a3";
 
 export const MUTE = "#6f6f6f";
+
+export const MUTE_TEXT = "#8c8c8c";
 
 export const BG = "#0b0b0b";
 

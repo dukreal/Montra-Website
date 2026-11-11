@@ -4,7 +4,7 @@ import { IoCash } from "react-icons/io5";
 import { fmtDate, fmtTime, inDateSel, fmtDateSel, isRange } from "@/web/dates";
 import { getCat, fmtAmt } from "@/web/helpers";
 import { inputStyle, btnReset } from "@/web/styles";
-import { RED, GREEN, CARD2, CARD, BORDER, SUB, TEXT, aTint, ACCENT } from "@/web/theme";
+import { RED, GREEN, CARD2, CARD, BORDER, SUB, TEXT, aTint, ACCENT, ACCENT_TEXT, RED_TEXT, GREEN_TEXT } from "@/web/theme";
 import type { Tx } from "@/web/types";
 import { MiniCalendar } from "@/web/components/MiniCalendar";
 import { TxRow } from "@/web/components/TxRow";
@@ -17,6 +17,7 @@ function TxCard({ tx, currency, onClick }: { tx: Tx; currency: string; onClick: 
   const [hov, setHov] = useState(false);
   const isExp = tx.type === "expense";
   const tone = isExp ? RED : GREEN;
+  const toneText = isExp ? RED_TEXT : GREEN_TEXT;
   const cat = getCat(tx.type, tx.parent_category);
   const clip: React.CSSProperties = { whiteSpace: "nowrap", overflow: "hidden", textOverflow: "ellipsis" };
   return (
@@ -37,16 +38,16 @@ function TxCard({ tx, currency, onClick }: { tx: Tx; currency: string; onClick: 
           width: 44, height: 44, borderRadius: 12, flexShrink: 0,
           background: `${cat?.color ?? tone}20`, display: "flex", alignItems: "center", justifyContent: "center",
         }}>
-          {cat ? <CatIcon name={cat.icon} color={cat.color} size={22} /> : <IoCash size={22} color={tone} />}
+          {cat ? <CatIcon name={cat.icon} color={cat.color} size={22} /> : <IoCash size={22} color={toneText} />}
         </div>
-        <span style={{ fontSize: 13, color: SUB, fontWeight: 600, whiteSpace: "nowrap" }}>{fmtDate(tx.created_at)}</span>
+        <span style={{ fontSize: 14, color: SUB, fontWeight: 600, whiteSpace: "nowrap" }}>{fmtDate(tx.created_at)}</span>
       </div>
       <div style={{ width: "100%", minWidth: 0 }}>
         <div style={{ fontSize: 16, fontWeight: 700, color: TEXT, ...clip }}>{tx.sub_category || tx.parent_category || "Uncategorized"}</div>
         <div style={{ fontSize: 14, color: SUB, marginTop: 2, ...clip }}>{tx.sub_category ? tx.parent_category : fmtTime(tx.created_at)}</div>
         {tx.notes && <div style={{ fontSize: 14, color: SUB, marginTop: 6, ...clip }}>{tx.notes}</div>}
       </div>
-      <div style={{ width: "100%", fontSize: 20, fontWeight: 800, color: tone, ...clip }}>
+      <div style={{ width: "100%", fontSize: 20, fontWeight: 800, color: toneText, ...clip }}>
         {isExp ? "-" : "+"}{fmtAmt(tx.amount, currency)}
       </div>
     </button>
@@ -187,7 +188,7 @@ export function SearchTab({ txs, currency, onTxClick }: { txs: Tx[]; currency: s
           padding: "7px 15px", borderRadius: 100, fontSize: 16, fontWeight: 600,
           background: allActive ? aTint(10) : CARD,
           border: `1px solid ${allActive ? ACCENT : BORDER}`,
-          color: allActive ? ACCENT : SUB, cursor: "pointer",
+          color: allActive ? ACCENT_TEXT : SUB, cursor: "pointer",
         }}><IcoFlash size={13} /> All</button>
         {SEARCH_CHIPS.map((c) => {
           const on = fields.has(c.id);
@@ -197,7 +198,7 @@ export function SearchTab({ txs, currency, onTxClick }: { txs: Tx[]; currency: s
               padding: "7px 15px", borderRadius: 100, fontSize: 16, fontWeight: 600,
               background: on ? aTint(10) : CARD,
               border: `1px solid ${on ? ACCENT : BORDER}`,
-              color: on ? ACCENT : SUB, cursor: "pointer",
+              color: on ? ACCENT_TEXT : SUB, cursor: "pointer",
             }}><c.Icon size={13} /> {c.label}</button>
           );
         })}
@@ -208,7 +209,7 @@ export function SearchTab({ txs, currency, onTxClick }: { txs: Tx[]; currency: s
             return (
               <div style={{
                 display: "flex", alignItems: "center", borderRadius: 100,
-                background: on ? aTint(10) : CARD, border: `1px solid ${on ? ACCENT : BORDER}`, color: on ? ACCENT : SUB,
+                background: on ? aTint(10) : CARD, border: `1px solid ${on ? ACCENT : BORDER}`, color: on ? ACCENT_TEXT : SUB,
               }}>
                 <button onClick={openCal} aria-haspopup="dialog" aria-expanded={calOpen} style={{
                   display: "flex", alignItems: "center", gap: 6, height: "100%",
@@ -259,7 +260,7 @@ export function SearchTab({ txs, currency, onTxClick }: { txs: Tx[]; currency: s
               display: "flex", alignItems: "center", justifyContent: "space-between", gap: 10,
               minWidth: 226, height: 38, padding: "0 14px", borderRadius: 12,
               background: sortOpen ? aTint(10) : CARD, border: `1px solid ${sortOpen ? ACCENT : BORDER}`,
-              color: sortOpen ? ACCENT : TEXT, fontSize: 15, fontWeight: 600, cursor: "pointer",
+              color: sortOpen ? ACCENT_TEXT : TEXT, fontSize: 15, fontWeight: 600, cursor: "pointer",
             }}>
               <span style={{ display: "flex", alignItems: "center", gap: 8 }}><IcoSort size={15} /> {sortLabel}</span>
               <span style={{ display: "flex", transform: sortOpen ? "rotate(180deg)" : "none", transition: "transform 0.15s" }}><IcoChevDown size={15} /></span>
@@ -283,7 +284,7 @@ export function SearchTab({ txs, currency, onTxClick }: { txs: Tx[]; currency: s
                         style={{
                           width: "100%", display: "flex", alignItems: "center", justifyContent: "space-between",
                           padding: "11px 12px", borderRadius: 10, border: "none", textAlign: "left", cursor: "pointer",
-                          background: on ? aTint(12) : undefined, color: on ? ACCENT : TEXT, fontSize: 15, fontWeight: on ? 700 : 500,
+                          background: on ? aTint(12) : undefined, color: on ? ACCENT_TEXT : TEXT, fontSize: 15, fontWeight: on ? 700 : 500,
                         }}>
                         {o.label}
                         {on && <IcoCheck size={15} />}
@@ -303,7 +304,7 @@ export function SearchTab({ txs, currency, onTxClick }: { txs: Tx[]; currency: s
                 <button key={id} onClick={() => setView(id)} aria-pressed={on} aria-label={label} title={label} style={{
                   width: 38, height: 30, borderRadius: 9, border: "none", cursor: "pointer",
                   display: "flex", alignItems: "center", justifyContent: "center",
-                  background: on ? aTint(14) : "transparent", color: on ? ACCENT : SUB,
+                  background: on ? aTint(14) : "transparent", color: on ? ACCENT_TEXT : SUB,
                 }}>
                   <Icon size={17} />
                 </button>
