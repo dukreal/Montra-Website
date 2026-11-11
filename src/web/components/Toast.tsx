@@ -5,7 +5,7 @@ import { IcoCheck, IcoX } from "@/web/icons";
 export function Toast({ message, error = false }: { message: string; error?: boolean }) {
   const ink = error ? ON_RED : ON_ACCENT;
   return (
-    <div style={{
+    <div className="montra-toast" style={{
       position: "fixed", bottom: 28, right: 28, zIndex: 2000,
       maxWidth: "min(420px, calc(100vw - 56px))",
       background: error ? RED : ACCENT, color: ink, padding: "12px 20px", borderRadius: 14,

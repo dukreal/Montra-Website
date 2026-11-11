@@ -4,7 +4,7 @@ import { supabase } from "@/lib/supabaseClient";
 import logoUrl from "@/assets/images/logo.png";
 import { loadSet, saveSet, saveTx, loadTx } from "@/web/storage";
 import { btnReset, outlineBtn } from "@/web/styles";
-import { PALETTES, BG, SURFACE, BORDER, TEXT, SUB, aTint, ACCENT, ACCENT_TEXT, CARD, TEXT_SCALE, accentTextFor, RED_TEXT } from "@/web/theme";
+import { PALETTES, BG, SURFACE, BORDER, TEXT, SUB, aTint, ACCENT, ACCENT_TEXT, CARD, TEXT_SCALE, accentTextFor, RED_TEXT, ON_ACCENT } from "@/web/theme";
 import type { Tx, Settings, Tab, TxType } from "@/web/types";
 import { EditModal } from "@/web/components/EditModal";
 import { LoadErrorModal } from "@/web/components/LoadErrorModal";
@@ -205,6 +205,17 @@ export function AppShell({ user, onSignOut }: { user: User | null; onSignOut: ()
     { id: "settings", label: "Settings", Icon: IcoSettings },
   ];
 
+  /* Bottom tab bar button (phones). Settings is opened from Profile, so Profile stays highlighted there. */
+  const barTab = (id: Tab, label: string, Icon: React.FC<IP>) => {
+    const active = tab === id || (id === "profile" && tab === "settings");
+    return (
+      <button key={id} type="button" className="montra-tabbar-btn" onClick={() => setTab(id)} aria-current={active ? "page" : undefined}>
+        <Icon size={24} color={active ? ACCENT_TEXT : SUB} />
+        <span style={{ fontSize: 14, fontWeight: active ? 700 : 500, lineHeight: 1, color: active ? ACCENT_TEXT : SUB }}>{label}</span>
+      </button>
+    );
+  };
+
   const avatar = user?.user_metadata?.avatar_url as string | undefined;
   const name = (user?.user_metadata?.full_name as string) || user?.email || "Guest";
   const initials = name.split(" ").map((n: string) => n[0]).join("").slice(0, 2).toUpperCase();
@@ -212,7 +223,7 @@ export function AppShell({ user, onSignOut }: { user: User | null; onSignOut: ()
   const themeVars = { ...PALETTES[settings.theme], "--accent": settings.accent, "--accent-text": accentTextFor(settings.accent, settings.theme) } as React.CSSProperties;
 
   return (
-    <div style={{ ...themeVars, display: "flex", height: "100vh", background: BG, fontFamily: "Inter, sans-serif", overflow: "hidden" }}>
+    <div className="montra-shell" style={{ ...themeVars, display: "flex", background: BG, fontFamily: "Inter, sans-serif", overflow: "hidden" }}>
       {/* Sidebar */}
       <nav className="montra-nav" style={{ width: 268, background: SURFACE, borderRight: `1px solid ${BORDER}`, display: "flex", flexDirection: "column", flexShrink: 0 }}>
         {/* Logo */}
@@ -329,6 +340,18 @@ export function AppShell({ user, onSignOut }: { user: User | null; onSignOut: ()
           </div>
         )}
       </main>
+
+      {/* Bottom tab bar: shown instead of the sidebar under 860px */}
+      <nav className="montra-tabbar" aria-label="Main navigation" style={{ background: SURFACE, borderTop: `1px solid ${BORDER}` }}>
+        {barTab("home", "Home", IcoHome)}
+        {barTab("search", "Search", IcoSearch)}
+        <button type="button" className="montra-tabbar-add" aria-label="Add transaction" aria-current={tab === "add" ? "page" : undefined}
+          onClick={() => setTab("add")} style={{ background: ACCENT }}>
+          <IcoPlus size={30} color={ON_ACCENT} />
+        </button>
+        {barTab("analytics", "Analytics", IcoBarChart)}
+        {barTab("profile", "Profile", IcoUser)}
+      </nav>
 
       {showLoadError && (
         <LoadErrorModal detail={loadError} onRetry={fetchFromSupabase} onClose={() => setShowLoadError(false)} />

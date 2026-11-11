@@ -40,15 +40,27 @@ export default function WebApp() {
           .montra-home-left { width: 100% !important; }
           .montra-main { padding: 32px 28px 48px !important; }
         }
+        .montra-shell { height: 100vh; height: 100dvh; }
+        .montra-tabbar { display: none; }
         @media (max-width: 860px) {
-          .montra-nav { width: 76px !important; }
-          .montra-nav-label { display: none; }
-          .montra-nav button { justify-content: center !important; padding: 14px 0 !important; }
-          .montra-nav > div:first-child { display: none !important; }
-          .montra-nav > div:last-child > div { display: none !important; }
-          .montra-nav > div:last-child button { font-size: 12px !important; justify-content: center !important; padding: 10px 0 !important; }
-          .montra-nav > div:last-child a { font-size: 0 !important; justify-content: center !important; }
-          .montra-nav > div { padding-left: 8px !important; padding-right: 8px !important; }
+          .montra-nav { display: none !important; }
+          .montra-tabbar {
+            position: fixed; left: 0; right: 0; bottom: 0; z-index: 900;
+            display: flex; align-items: flex-end;
+            height: calc(68px + env(safe-area-inset-bottom)); padding-bottom: env(safe-area-inset-bottom);
+          }
+          .montra-tabbar-btn {
+            flex: 1 1 0; min-width: 0; height: 68px; padding: 0;
+            display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 4px;
+            background: none; border: none; cursor: pointer;
+          }
+          .montra-tabbar-add {
+            flex: 0 0 64px; width: 64px; height: 64px; margin-bottom: 18px; padding: 0;
+            border: none; border-radius: 50%; cursor: pointer;
+            display: flex; align-items: center; justify-content: center;
+            box-shadow: 0 8px 24px rgba(0,0,0,0.45);
+          }
+          .montra-toast { left: 16px !important; right: 16px !important; bottom: calc(100px + env(safe-area-inset-bottom)) !important; max-width: none !important; }
           .montra-settings { flex-direction: column !important; gap: 20px !important; }
           .montra-settings-nav { width: 100% !important; }
         }
@@ -64,6 +76,7 @@ export default function WebApp() {
           .montra-segname { white-space: normal !important; overflow: visible !important; }
         }
         @media (max-width: 400px) { .montra-period { font-size: 13px !important; gap: 4px !important; } }
+        @media (max-width: 860px) { .montra-main { padding-bottom: calc(112px + env(safe-area-inset-bottom)) !important; } }
         @keyframes donutIn { from { opacity: 0; transform: rotate(-25deg) scale(0.92); } to { opacity: 1; transform: none; } }
         @keyframes popIn { from { opacity: 0; transform: translateY(12px) scale(0.97); } to { opacity: 1; transform: none; } }
         .montra-opt { background: transparent; } .montra-opt:hover { background: var(--card2); }
