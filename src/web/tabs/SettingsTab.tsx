@@ -207,12 +207,15 @@ export function SettingsTab({ settings, onSave, onClear, txCount, user, onRefres
                     }}>{c.code}</div>
                     <span style={{ flex: 1, fontSize: 16, fontWeight: 600, color: on ? ACCENT_TEXT : TEXT }}>{c.name}</span>
                     {!c.enabled && <span style={{ fontSize: 14, fontWeight: 600, color: SUB }}>Coming soon</span>}
-                    {on && (
-                      <div style={{ width: 20, height: 20, borderRadius: "50%", background: ACCENT, display: "flex", alignItems: "center", justifyContent: "center", flexShrink: 0 }}>
-                        <IcoCheck size={10} color={ON_ACCENT} />
-                      </div>
-                    )}
-                  </div>
+                    <div style={{
+                      width: 20, height: 20, borderRadius: "50%",
+                      border: `2px solid ${on ? ACCENT : BORDER}`,
+                      background: on ? ACCENT : "transparent",
+                      display: "flex", alignItems: "center", justifyContent: "center",
+                      flexShrink: 0, transition: "all 0.15s",
+                    }}>
+                      {on && <IcoCheck size={10} color={ON_ACCENT} />}
+                    </div>                  </div>
                 );
               })}
             </div>
