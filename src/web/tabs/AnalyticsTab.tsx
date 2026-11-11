@@ -1,5 +1,6 @@
 import { useState, useRef, useEffect, useCallback, useMemo } from "react";
 import { mondayOf, MONTHS, isoWeekNum, fmtShort, fmtDate } from "@/web/dates";
+import { useIsPhone } from "@/web/hooks";
 import { fmtAmt, getCat } from "@/web/helpers";
 import { btnReset, navBtnStyle } from "@/web/styles";
 import { SUB, BORDER, TEXT, CARD, ACCENT, ACCENT_TEXT, CARD2, aTint, GREEN, RED, ON_ACCENT, ON_RED, RED_TEXT, GREEN_TEXT } from "@/web/theme";
@@ -155,7 +156,17 @@ export function AnalyticsTab({ txs, currency }: { txs: Tx[]; currency: string })
   const today = new Date();
   const [year, setYear] = useState(today.getFullYear());
   const [month, setMonth] = useState(today.getMonth());
-  const [selectedSeg, setSelectedSeg] = useState<Segment | null>(null);
+const [selectedSeg, setSelectedSeg] = useState<Segment | null>(null);
+  /* On phones, bring the transactions panel into view after a slice or category is picked
+     (the short delay lets the card finish growing first) */
+  const isPhone = useIsPhone();
+  const slicePanelRef = useRef<HTMLDivElement>(null);
+  useEffect(() => {
+    if (!selectedSeg || !isPhone) return;
+    const smooth = !window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+    const t = setTimeout(() => slicePanelRef.current?.scrollIntoView({ behavior: smooth ? "smooth" : "auto", block: "nearest" }), 500);
+    return () => clearTimeout(t);
+  }, [selectedSeg, isPhone]);
 
   // The donut is 280px, but shrinks to fit the card on narrow phones.
   const [viewportW, setViewportW] = useState(window.innerWidth);
@@ -270,9 +281,11 @@ export function AnalyticsTab({ txs, currency }: { txs: Tx[]; currency: string })
   return (
     <div style={{ display: "flex", flexDirection: "column", gap: 14 }}>
 
+      <h2 className="montra-phone-title">Analytics</h2>
+
       {/* Period pill with nav arrows */}
       <div style={{ display: "flex", justifyContent: "center", alignItems: "center", gap: 8, position: "relative" }}>
-        <button onClick={prevPeriod} aria-label="Previous period" style={{ ...btnReset, ...navBtnStyle }}>
+        <button onClick={prevPeriod} aria-label="Previous period" className="montra-navbtn" style={{ ...btnReset, ...navBtnStyle }}>
           <IcoChevLeft size={15} color={TEXT} />
         </button>
         <button className="montra-period" onClick={togglePicker} aria-expanded={pickerOpen} style={{
@@ -284,7 +297,7 @@ export function AnalyticsTab({ txs, currency }: { txs: Tx[]; currency: string })
           {periodLabel}
           <span style={{ fontSize: 11, transform: pickerOpen ? "rotate(180deg)" : "none", transition: "transform 0.15s" }}>▼</span>
         </button>
-        <button onClick={nextPeriod} aria-label="Next period" disabled={atEnd} style={{ ...btnReset, ...navBtnStyle, opacity: atEnd ? 0.3 : 1, cursor: atEnd ? "not-allowed" : "pointer" }}>
+        <button onClick={nextPeriod} aria-label="Next period" disabled={atEnd} className="montra-navbtn" style={{ ...btnReset, ...navBtnStyle, opacity: atEnd ? 0.3 : 1, cursor: atEnd ? "not-allowed" : "pointer" }}>
           <IcoChevRight size={15} color={TEXT} />
         </button>
 
@@ -352,7 +365,7 @@ export function AnalyticsTab({ txs, currency }: { txs: Tx[]; currency: string })
           const key = v.toLowerCase() as "week" | "month" | "year";
           const active = viewMode === key;
           return (
-            <button key={v} onClick={() => { setViewMode(key); setSelectedSeg(null); setPickerOpen(false); }} style={{
+            <button key={v} className="montra-seg" onClick={() => { setViewMode(key); setSelectedSeg(null); setPickerOpen(false); }} style={{
               flex: 1, padding: "9px 0", borderRadius: 9,
               background: active ? ACCENT : "transparent",
               color: active ? ON_ACCENT : SUB,
@@ -398,13 +411,13 @@ export function AnalyticsTab({ txs, currency }: { txs: Tx[]; currency: string })
             <div style={{ color: SUB, fontSize: 15, marginTop: 3 }}>Top categories this period</div>
           </div>
           <div style={{ display: "flex", background: CARD2, borderRadius: 10, padding: 3, gap: 2, border: `1px solid ${BORDER}` }}>
-            <button onClick={() => { setTxType("expense"); setSelectedSeg(null); }} style={{
+            <button className="montra-typebtn" onClick={() => { setTxType("expense"); setSelectedSeg(null); }} style={{
               padding: "6px 13px", borderRadius: 8,
               background: txType === "expense" ? RED : "transparent",
               color: txType === "expense" ? ON_RED : SUB,
               border: "none", fontWeight: 600, fontSize: 15, cursor: "pointer", transition: "all 0.2s",
             }}>Expense</button>
-            <button onClick={() => { setTxType("income"); setSelectedSeg(null); }} style={{
+            <button className="montra-typebtn" onClick={() => { setTxType("income"); setSelectedSeg(null); }} style={{
               padding: "6px 13px", borderRadius: 8,
               background: txType === "income" ? GREEN : "transparent",
               color: txType === "income" ? ON_ACCENT : SUB,
@@ -458,6 +471,7 @@ export function AnalyticsTab({ txs, currency }: { txs: Tx[]; currency: string })
       </div>
 
       {/* Slice detail / tap-a-slice card */}
+      <div ref={slicePanelRef} className="montra-slice-panel">
       <AnimatedCard>
         {selectedSeg ? (
           <div>
@@ -490,7 +504,7 @@ export function AnalyticsTab({ txs, currency }: { txs: Tx[]; currency: string })
           </div>
         )}
       </AnimatedCard>
-
+      </div>
     </div>
   );
 }

@@ -46,6 +46,7 @@ export default function WebApp() {
         .montra-phone-only { display: none; }
         .montra-cat-head { display: none; }
         .montra-chips { display: contents; }
+        .montra-phone-title { display: none; }
         .montra-daystrip::-webkit-scrollbar { display: none; }
         @media (max-width: 860px) {
           .montra-nav { display: none !important; }
@@ -73,7 +74,7 @@ export default function WebApp() {
           .montra-desk-only { display: none !important; }
           .montra-phone-only { display: inline; }
           .montra-add { display: flex; flex-direction: column; }
-          .montra-add-title { text-align: center; font-size: 24px !important; margin-bottom: 18px !important; }
+          .montra-add-title { text-align: center; font-size: 24px !important; line-height: 44px !important; margin: 0 0 12px !important; }
           .montra-amtcard { order: 1; margin-bottom: 20px; background: var(--card); border: 1px solid var(--border); border-radius: 20px; }
           .montra-typebar { padding: 0 !important; margin-bottom: 0 !important; background: transparent !important; border: none !important; border-bottom: 1px solid var(--border) !important; border-radius: 0 !important; }
           .montra-typebar button { padding: 14px !important; border: none !important; border-radius: 0 !important; }
@@ -101,6 +102,13 @@ export default function WebApp() {
           .montra-sort-btn { min-width: 0 !important; width: 100%; height: 44px !important; }
           .montra-viewtoggle { display: none !important; }
           .montra-count { order: 4; flex: 0 0 100%; }
+          .montra-phone-title { display: block; margin: 0; line-height: 44px; font-size: 24px; font-weight: 800; text-align: center; color: var(--text); }
+          .montra-navbtn { min-width: 44px; min-height: 44px; }
+          .montra-seg { min-height: 44px; }
+          .montra-typebtn { min-height: 44px; }
+          .montra-period { min-height: 44px; }
+          .montra-sum > div > div:last-child { overflow-wrap: anywhere; }
+          .montra-slice-panel { scroll-margin-bottom: 112px; }
           .montra-settings-nav { width: 100% !important; }
         }
         @media (max-width: 720px) { .montra-cats { grid-template-columns: repeat(3, 1fr) !important; } }
@@ -108,10 +116,6 @@ export default function WebApp() {
           .montra-main { padding: 24px 16px 40px !important; }
           .montra-cats { grid-template-columns: repeat(2, 1fr) !important; }
           .montra-period { font-size: 15px !important; }
-          .montra-sum { grid-template-columns: 1fr !important; }
-          .montra-sum > div { display: flex !important; justify-content: space-between !important; align-items: center !important; text-align: left !important; border: none !important; padding: 8px 4px !important; }
-          .montra-sum > div + div { border-top: 1px solid var(--border) !important; }
-          .montra-sum > div > div { margin: 0 !important; }
           .montra-segname { white-space: normal !important; overflow: visible !important; }
         }
         @media (max-width: 400px) { .montra-period { font-size: 13px !important; gap: 4px !important; } }
