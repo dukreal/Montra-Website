@@ -80,7 +80,7 @@ export function ProfileTab({ txs, settings, onSave, user, isGuest, onSignOut, on
               const on = cur === c;
               const enabled = c === "₱";
               return (
-                <button key={c} disabled={!enabled} onClick={() => enabled && onSave({ ...settings, currency: c })}
+                <button key={c} className="montra-tap" disabled={!enabled} onClick={() => enabled && onSave({ ...settings, currency: c })}
                   style={{
                     minWidth: 30, padding: "5px 10px", borderRadius: 7, cursor: enabled ? "pointer" : "not-allowed",
                     background: on ? SURFACE : "transparent", border: "none",

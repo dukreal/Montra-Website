@@ -83,7 +83,7 @@ export function MiniCalendar({ year, month, transactions, selection, pending = n
         <button onClick={onPrevMonth} aria-label="Previous month" style={btnReset}>
           <IcoChevLeft size={17} color={SUB} />
         </button>
-        <button onClick={() => { setPickYear(year); setPicking((v) => !v); }} aria-expanded={picking}
+        <button className="montra-calmonth" onClick={() => { setPickYear(year); setPicking((v) => !v); }} aria-expanded={picking}
           style={{ ...btnReset, gap: 6, padding: "6px 12px", borderRadius: 10, background: picking ? aTint(14) : "transparent", fontWeight: 700, color: picking ? ACCENT_TEXT : TEXT, fontSize: 16 }}>
           {MONTHS[month]} {year}
           <span style={{ fontSize: 11, transform: picking ? "rotate(180deg)" : "none", transition: "transform 0.15s" }}>▼</span>

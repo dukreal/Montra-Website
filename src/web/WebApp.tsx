@@ -109,6 +109,13 @@ export default function WebApp() {
           .montra-period { min-height: 44px; }
           .montra-sum > div > div:last-child { overflow-wrap: anywhere; }
           .montra-slice-panel { scroll-margin-bottom: 112px; }
+          .montra-tap { min-width: 44px !important; min-height: 44px !important; }
+          .montra-calmonth { min-height: 44px; padding: 6px 6px !important; white-space: nowrap; }
+          button[aria-label="Previous month"], button[aria-label="Next month"], button[aria-label="Previous year"], button[aria-label="Next year"], button[aria-label="Close"] { min-width: 44px !important; min-height: 44px !important; }
+          [role="group"][aria-label="Selection mode"] button { min-height: 44px !important; }
+          .montra-datewrap button[aria-haspopup="dialog"] { min-height: 44px; margin: -1px 0; }
+          .montra-datewrap button[aria-label="Clear date filter"] { position: relative; }
+          .montra-datewrap button[aria-label="Clear date filter"]::after { content: ""; position: absolute; inset: -9px; }
           .montra-settings-nav { width: 100% !important; }
         }
         @media (max-width: 720px) { .montra-cats { grid-template-columns: repeat(3, 1fr) !important; } }
