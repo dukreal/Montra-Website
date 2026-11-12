@@ -31,7 +31,7 @@ export function ProfileTab({ txs, settings, onSave, user, isGuest, onSignOut, on
 
   return (
     <div style={{ maxWidth: 560, margin: "0 auto" }}>
-      <h2 style={{ color: TEXT, textAlign: "center", margin: "0 0 24px", fontSize: 30, fontWeight: 800 }}>Profile</h2>
+      <h2 className="montra-profile-title" style={{ color: TEXT, textAlign: "center", margin: "0 0 24px", fontSize: 30, fontWeight: 800 }}>Profile</h2>
 
       {/* Identity card */}
       <div style={{ display: "flex", alignItems: "center", gap: 16, background: CARD, border: `1px solid ${BORDER}`, borderRadius: 20, padding: "18px 20px", marginBottom: 16 }}>

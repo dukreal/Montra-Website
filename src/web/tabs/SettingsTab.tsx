@@ -47,7 +47,7 @@ export function SettingsTab({ settings, onSave, onClear, txCount, user, onRefres
     <div className="montra-settings" style={{ display: "flex", gap: 0, minHeight: 500 }}>
       {/* ── Sidebar nav ── */}
       <div className="montra-settings-nav" style={{ width: 220, flexShrink: 0 }}>
-        <h2 style={{ margin: "0 0 20px", fontSize: 22, fontWeight: 800, color: TEXT }}>Settings</h2>
+        <h2 className="montra-settings-title" style={{ margin: "0 0 20px", fontSize: 22, fontWeight: 800, color: TEXT }}>Settings</h2>
         <div style={{ display: "flex", flexDirection: "column", gap: 4 }}>
           {navItems.map(item => {
             const active = section === item.id;

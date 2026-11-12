@@ -92,6 +92,7 @@ export default function WebApp() {
           .montra-cat-head { display: flex; align-items: center; gap: 12px; padding: 14px 16px; border-bottom: 1px solid var(--border); }
           .montra-cat-card .montra-cats { padding: 12px; }
           .montra-search-title { text-align: center; font-size: 24px !important; line-height: 44px !important; margin: 0 0 12px !important; }
+          .montra-profile-title, .montra-settings-title { text-align: center; font-size: 24px !important; line-height: 44px !important; margin: 0 0 12px !important; }
           .montra-chips { display: flex; flex: 0 0 100%; order: 1; gap: 8px; overflow-x: auto; padding: 4px; margin: -4px; scrollbar-width: none; }
           .montra-chips::-webkit-scrollbar { display: none; }
           .montra-chips > button { flex: 0 0 auto; min-height: 44px; }
