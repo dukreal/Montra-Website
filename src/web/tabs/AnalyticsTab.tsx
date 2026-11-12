@@ -377,7 +377,7 @@ const [selectedSeg, setSelectedSeg] = useState<Segment | null>(null);
       </div>
 
       {/* Income / Expense / Balance summary */}
-      <div style={{ background: CARD, borderRadius: 16, padding: "18px 12px", border: `1px solid ${BORDER}` }}>
+      <div className="montra-sumcard" style={{ background: CARD, borderRadius: 16, padding: "18px 12px", border: `1px solid ${BORDER}` }}>
         <div className="montra-sum" style={{ display: "grid", gridTemplateColumns: "1fr 1fr 1fr" }}>
           <div style={{ textAlign: "center" }}>
             <div style={{ color: SUB, fontSize: 15, marginBottom: 6 }}>Income</div>

@@ -118,7 +118,7 @@ export default function WebApp() {
           .montra-period { font-size: 15px !important; }
           .montra-segname { white-space: normal !important; overflow: visible !important; }
         }
-        @media (max-width: 400px) { .montra-period { font-size: 13px !important; gap: 4px !important; } }
+        @media (max-width: 400px) { .montra-period { font-size: 13px !important; gap: 4px !important; } .montra-sum { grid-template-columns: repeat(3, minmax(max-content, 1fr)) !important; overflow-x: auto; } .montra-sumcard { padding: 18px 6px !important; } .montra-sum > div { padding: 0 4px; } .montra-sum > div > div:last-child { font-size: 14px !important; white-space: nowrap; overflow-wrap: normal; } }
         @media (max-width: 860px) { .montra-main { padding-bottom: calc(112px + env(safe-area-inset-bottom)) !important; } }
         @keyframes donutIn { from { opacity: 0; transform: rotate(-25deg) scale(0.92); } to { opacity: 1; transform: none; } }
         @keyframes popIn { from { opacity: 0; transform: translateY(12px) scale(0.97); } to { opacity: 1; transform: none; } }
