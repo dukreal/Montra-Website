@@ -136,7 +136,7 @@ export default function WebApp() {
         .montra-tab { animation: fadeIn 0.28s ease backwards; }
         button { transition: background-color 0.15s ease, color 0.15s ease, border-color 0.15s ease, opacity 0.15s ease, transform 0.12s ease; }
         button:not(:disabled):active { transform: scale(0.97); }
-        @media (prefers-reduced-motion: reduce) { .montra-tab, button { animation: none !important; transition: none !important; } }
+        @media (prefers-reduced-motion: reduce) { .montra-tab, .montra-sheet, .montra-scrim, button { animation: none !important; transition: none !important; } }
         * { box-sizing: border-box; }
         .montra-root :focus-visible { outline: 2px solid var(--accent-text, var(--accent)); outline-offset: 2px; }
         .montra-main { scrollbar-gutter: stable both-edges; }
