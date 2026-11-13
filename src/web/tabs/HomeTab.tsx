@@ -73,10 +73,6 @@ export function HomeTab({ txs, currency, onTxClick, cal, onOpenSettings, showDot
         year={year} month={month} transactions={txs} selectedDay={phoneDay}
         income={fInc} expense={fExp} currency={currency}
         onSelectDay={(d) => { setYear(d.getFullYear()); setMonth(d.getMonth()); dates.pick(d, true); }}
-        onJump={(y, m) => {
-          const cap = y === today.getFullYear() && m === today.getMonth() ? today.getDate() : new Date(y, m + 1, 0).getDate();
-          setYear(y); setMonth(m); dates.pick(new Date(y, m, Math.min(phoneDay.getDate(), cap)), true);
-        }}
         onOpenSettings={onOpenSettings} showDots={showDots}
       />
       {/* Left column */}

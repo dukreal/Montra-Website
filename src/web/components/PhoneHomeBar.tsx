@@ -14,7 +14,7 @@ const WEEKDAYS = ["SUN", "MON", "TUE", "WED", "THU", "FRI", "SAT"];
 /* Phone-only Home header (shown under 860px, hidden by CSS above that): title and settings,
    a month pill that opens the "Select Date" bottom sheet (months and a full calendar), a horizontal
    day strip you can slide, and an Income / Expense / Balance card. It always has one picked day. */
-export function PhoneHomeBar({ year, month, transactions, selectedDay, income, expense, currency, onSelectDay, onJump, onOpenSettings, showDots = true }: {
+export function PhoneHomeBar({ year, month, transactions, selectedDay, income, expense, currency, onSelectDay, onOpenSettings, showDots = true }: {
   year: number;
   month: number;
   transactions: Tx[];
@@ -23,12 +23,13 @@ export function PhoneHomeBar({ year, month, transactions, selectedDay, income, e
   expense: number;
   currency: string;
   onSelectDay: (d: Date) => void;
-  onJump: (year: number, month: number) => void;
   onOpenSettings: () => void;
   showDots?: boolean;
 }) {
   const [today] = useState(() => new Date());
   const [picking, setPicking] = useState(false);
+  /* The date being browsed in the sheet. Home only changes when "Done" applies it. */
+  const [draft, setDraft] = useState(selectedDay);
   const stripRef = useRef<HTMLDivElement>(null);
 
   const todayStart = new Date(today.getFullYear(), today.getMonth(), today.getDate());
@@ -70,15 +71,15 @@ export function PhoneHomeBar({ year, month, transactions, selectedDay, income, e
       </div>
 
       <div style={{ display: "flex", justifyContent: "center", marginBottom: 12 }}>
-        <button type="button" aria-haspopup="dialog" aria-expanded={picking} onClick={() => setPicking(true)}
+        <button type="button" aria-haspopup="dialog" aria-expanded={picking} onClick={() => { setDraft(selectedDay); setPicking(true); }}
           style={{ ...btnReset, gap: 8, minHeight: 44, padding: "0 18px", borderRadius: 22, background: aTint(14), color: ACCENT_TEXT, fontWeight: 700, fontSize: 16 }}>
           {MONTHS[month]} {year}
           <IcoChevDown size={16} color={ACCENT_TEXT} />
         </button>
       </div>
 
-      <PhoneDateSheet open={picking} year={year} month={month} selectedDay={selectedDay} today={today} txDays={txDays} showDots={showDots}
-        onSelectDay={onSelectDay} onJump={onJump} onClose={() => setPicking(false)} />
+      <PhoneDateSheet open={picking} draft={draft} today={today} transactions={transactions} showDots={showDots}
+        onDraft={setDraft} onDone={() => { onSelectDay(draft); setPicking(false); }} onCancel={() => setPicking(false)} />
 
       <div ref={stripRef} className="montra-daystrip" role="group" aria-label="Pick a day"
         style={{ position: "relative", display: "flex", gap: 8, overflowX: "auto", padding: "4px 2px 8px", marginBottom: 12 }}>

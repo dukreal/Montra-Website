@@ -1,7 +1,8 @@
-import { useEffect, useId, useRef } from "react";
+import { useEffect, useId, useMemo, useRef } from "react";
 import { createPortal } from "react-dom";
 import { MONTHS, M3, sameDay } from "@/web/dates";
 import { ACCENT, ACCENT_TEXT, BORDER, CARD, ON_ACCENT, SUB, TEXT, aTint } from "@/web/theme";
+import type { Tx } from "@/web/types";
 import { IcoChevLeft, IcoChevRight } from "@/web/icons";
 
 const WEEKDAYS = ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"];
@@ -9,25 +10,26 @@ const cellBtn: React.CSSProperties = { border: "none", background: "none", paddi
 
 /* ─── PhoneDateSheet ─────────────────────────────────────────────────────── */
 /* Phone bottom sheet opened from the Home month pill: year arrows, a 4 x 3 month grid and a full
-   month calendar. Every tap applies right away (the page behind updates); "Done" just closes it.
+   month calendar. It only edits a DRAFT date (`draft`): the page behind does not change while you
+   browse. "Done" applies the draft (onDone); the dimmed area and Escape close it and throw the draft away.
    Rendered inside the app shell (not inside the scrolling page) so the Text Size zoom and the
    page's overflow can never shift or clip it. */
-export function PhoneDateSheet({ open, year, month, selectedDay, today, txDays, showDots, onSelectDay, onJump, onClose }: {
+export function PhoneDateSheet({ open, draft, today, transactions, showDots, onDraft, onDone, onCancel }: {
   open: boolean;
-  year: number;
-  month: number;
-  selectedDay: Date;
+  draft: Date;
   today: Date;
-  txDays: Set<number>;
+  transactions: Tx[];
   showDots: boolean;
-  onSelectDay: (d: Date) => void;
-  onJump: (year: number, month: number) => void;
-  onClose: () => void;
+  onDraft: (d: Date) => void;
+  onDone: () => void;
+  onCancel: () => void;
 }) {
   const sheetRef = useRef<HTMLDivElement>(null);
   const titleId = useId();
   const host = typeof document === "undefined" ? null : document.querySelector(".montra-shell");
 
+  const year = draft.getFullYear();
+  const month = draft.getMonth();
   const todayStart = new Date(today.getFullYear(), today.getMonth(), today.getDate());
   const atNow = year >= today.getFullYear();
   const firstDay = new Date(year, month, 1).getDay();
@@ -35,18 +37,33 @@ export function PhoneDateSheet({ open, year, month, selectedDay, today, txDays, 
   /* Always 6 week rows, so the sheet keeps the same height whichever month is shown */
   const cells: (number | null)[] = Array.from({ length: 42 }, (_, i) => (i >= firstDay && i < firstDay + daysInMonth ? i - firstDay + 1 : null));
 
+  /* Days with transactions in the month shown in the sheet */
+  const txDays = useMemo(() => {
+    const set = new Set<number>();
+    transactions.forEach((tx) => {
+      const d = new Date(tx.created_at);
+      if (d.getFullYear() === year && d.getMonth() === month) set.add(d.getDate());
+    });
+    return set;
+  }, [transactions, year, month]);
+
+  /* New draft in another month/year: keep the same day number, but never past the month's end or past today */
+  const moveTo = (y: number, m: number) => {
+    const cap = y === today.getFullYear() && m === today.getMonth() ? today.getDate() : new Date(y, m + 1, 0).getDate();
+    onDraft(new Date(y, m, Math.min(draft.getDate(), cap)));
+  };
   const changeYear = (delta: number) => {
     const y = year + delta;
-    onJump(y, y === today.getFullYear() ? Math.min(month, today.getMonth()) : month);
+    moveTo(y, y === today.getFullYear() ? Math.min(month, today.getMonth()) : month);
   };
 
-  /* While open: move focus into the sheet, close on Escape, keep Tab inside, and give focus back on close */
+  /* While open: move focus into the sheet, cancel on Escape, keep Tab inside, and give focus back on close */
   useEffect(() => {
     if (!open) return;
     const before = document.activeElement as HTMLElement | null;
     sheetRef.current?.focus();
     const onKey = (e: KeyboardEvent) => {
-      if (e.key === "Escape") { onClose(); return; }
+      if (e.key === "Escape") { onCancel(); return; }
       if (e.key !== "Tab" || !sheetRef.current) return;
       const items = [...sheetRef.current.querySelectorAll<HTMLElement>("button:not(:disabled)")];
       if (!items.length) return;
@@ -56,12 +73,12 @@ export function PhoneDateSheet({ open, year, month, selectedDay, today, txDays, 
     };
     window.addEventListener("keydown", onKey);
     return () => { window.removeEventListener("keydown", onKey); before?.focus?.(); };
-  }, [open, onClose]);
+  }, [open, onCancel]);
 
   if (!host) return null;
   return createPortal(
     <>
-      <div className="montra-scrim" onClick={onClose} aria-hidden="true" style={{
+      <div className="montra-scrim" onClick={onCancel} aria-hidden="true" style={{
         position: "fixed", inset: 0, zIndex: 1100, background: "rgba(0,0,0,0.6)",
         opacity: open ? 1 : 0, visibility: open ? "visible" : "hidden", transition: open ? "opacity 0.22s ease" : "opacity 0.22s ease, visibility 0s linear 0.22s",
       }} />
@@ -93,7 +110,7 @@ export function PhoneDateSheet({ open, year, month, selectedDay, today, txDays, 
             const future = year > today.getFullYear() || (year === today.getFullYear() && mi > today.getMonth());
             const cur = mi === month;
             return (
-              <button key={m} type="button" disabled={future} aria-pressed={cur} aria-label={`${MONTHS[mi]} ${year}`} onClick={() => onJump(year, mi)} style={{
+              <button key={m} type="button" disabled={future} aria-pressed={cur} aria-label={`${MONTHS[mi]} ${year}`} onClick={() => moveTo(year, mi)} style={{
                 ...cellBtn, height: 44, borderRadius: 12, fontSize: 16, fontWeight: cur ? 800 : 600,
                 background: cur ? ACCENT : "transparent", color: cur ? ON_ACCENT : TEXT,
                 opacity: future ? 0.3 : 1, cursor: future ? "not-allowed" : "pointer",
@@ -110,10 +127,10 @@ export function PhoneDateSheet({ open, year, month, selectedDay, today, txDays, 
             if (!day) return <span key={i} aria-hidden="true" style={{ height: 44 }} />;
             const date = new Date(year, month, day);
             const future = date > todayStart;
-            const isSel = sameDay(date, selectedDay);
+            const isSel = sameDay(date, draft);
             const isToday = sameDay(date, today);
             return (
-              <button key={i} type="button" disabled={future} aria-pressed={isSel} aria-label={`${MONTHS[month]} ${day}, ${year}`} onClick={() => onSelectDay(date)} style={{
+              <button key={i} type="button" disabled={future} aria-pressed={isSel} aria-label={`${MONTHS[month]} ${day}, ${year}`} onClick={() => onDraft(date)} style={{
                 ...cellBtn, position: "relative", height: 44, borderRadius: 12, fontSize: 16, fontWeight: isSel || isToday ? 800 : 500,
                 background: isSel ? ACCENT : "transparent", color: isSel ? ON_ACCENT : isToday ? ACCENT_TEXT : TEXT,
                 boxShadow: isToday && !isSel ? `inset 0 0 0 1.5px ${aTint(40)}` : "none",
@@ -128,7 +145,7 @@ export function PhoneDateSheet({ open, year, month, selectedDay, today, txDays, 
           })}
         </div>
 
-        <button type="button" onClick={onClose} style={{ ...cellBtn, position: "sticky", bottom: 0, background: CARD, width: "100%", height: 52, fontSize: 17, fontWeight: 800, color: ACCENT_TEXT }}>Done</button>
+        <button type="button" onClick={onDone} style={{ ...cellBtn, position: "sticky", bottom: 0, background: CARD, width: "100%", height: 52, fontSize: 17, fontWeight: 800, color: ACCENT_TEXT }}>Done</button>
       </div>
     </>,
     host,
