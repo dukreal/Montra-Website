@@ -8,6 +8,9 @@ import { IcoChevLeft, IcoChevRight } from "@/web/icons";
 const WEEKDAYS = ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"];
 const cellBtn: React.CSSProperties = { border: "none", background: "none", padding: 0, cursor: "pointer", font: "inherit" };
 
+/* The month being browsed in the sheet and the day picked in it. `day` is null until a day is tapped. */
+export type SheetDraft = { year: number; month: number; day: number | null };
+
 /* ─── PhoneDateSheet ─────────────────────────────────────────────────────── */
 /* Phone bottom sheet opened from the Home month pill: year arrows, a 4 x 3 month grid and a full
    month calendar. It only edits a DRAFT date (`draft`): the page behind does not change while you
@@ -16,11 +19,11 @@ const cellBtn: React.CSSProperties = { border: "none", background: "none", paddi
    page's overflow can never shift or clip it. */
 export function PhoneDateSheet({ open, draft, today, transactions, showDots, onDraft, onDone, onCancel }: {
   open: boolean;
-  draft: Date;
+  draft: SheetDraft;
   today: Date;
   transactions: Tx[];
   showDots: boolean;
-  onDraft: (d: Date) => void;
+  onDraft: (d: SheetDraft) => void;
   onDone: () => void;
   onCancel: () => void;
 }) {
@@ -28,8 +31,7 @@ export function PhoneDateSheet({ open, draft, today, transactions, showDots, onD
   const titleId = useId();
   const host = typeof document === "undefined" ? null : document.querySelector(".montra-shell");
 
-  const year = draft.getFullYear();
-  const month = draft.getMonth();
+  const { year, month } = draft;
   const todayStart = new Date(today.getFullYear(), today.getMonth(), today.getDate());
   const atNow = year >= today.getFullYear();
   const firstDay = new Date(year, month, 1).getDay();
@@ -47,9 +49,9 @@ export function PhoneDateSheet({ open, draft, today, transactions, showDots, onD
     return set;
   }, [transactions, year, month]);
 
-  /* Another month or year starts on its 1st; the previously picked day number is not carried over */
+  /* Another month or year: no day is picked until the user taps one */
   const moveTo = (y: number, m: number) => {
-    onDraft(new Date(y, m, 1));
+    onDraft({ year: y, month: m, day: null });
   };
   const changeYear = (delta: number) => {
     const y = year + delta;
@@ -126,10 +128,10 @@ export function PhoneDateSheet({ open, draft, today, transactions, showDots, onD
             if (!day) return <span key={i} aria-hidden="true" style={{ height: 44 }} />;
             const date = new Date(year, month, day);
             const future = date > todayStart;
-            const isSel = sameDay(date, draft);
+            const isSel = draft.day === day;
             const isToday = sameDay(date, today);
             return (
-              <button key={i} type="button" disabled={future} aria-pressed={isSel} aria-label={`${MONTHS[month]} ${day}, ${year}`} onClick={() => onDraft(date)} style={{
+              <button key={i} type="button" disabled={future} aria-pressed={isSel} aria-label={`${MONTHS[month]} ${day}, ${year}`} onClick={() => onDraft({ ...draft, day })} style={{
                 ...cellBtn, position: "relative", height: 44, borderRadius: 12, fontSize: 16, fontWeight: isSel || isToday ? 800 : 500,
                 background: isSel ? ACCENT : "transparent", color: isSel ? ON_ACCENT : isToday ? ACCENT_TEXT : TEXT,
                 boxShadow: isToday && !isSel ? `inset 0 0 0 1.5px ${aTint(40)}` : "none",
@@ -144,7 +146,10 @@ export function PhoneDateSheet({ open, draft, today, transactions, showDots, onD
           })}
         </div>
 
-        <button type="button" onClick={onDone} style={{ ...cellBtn, position: "sticky", bottom: 0, background: CARD, width: "100%", height: 52, fontSize: 17, fontWeight: 800, color: ACCENT_TEXT }}>Done</button>
+        <button type="button" disabled={draft.day === null} onClick={onDone} style={{
+          ...cellBtn, position: "sticky", bottom: 0, background: CARD, width: "100%", height: 52, fontSize: 17, fontWeight: 800,
+          color: draft.day === null ? SUB : ACCENT_TEXT, cursor: draft.day === null ? "not-allowed" : "pointer",
+        }}>{draft.day === null ? "Pick a day" : "Done"}</button>
       </div>
     </>,
     host,
