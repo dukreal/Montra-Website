@@ -121,6 +121,8 @@ export default function WebApp() {
           /* Empty Home: fill only the room left under the header (not the desktop 440px), so the page does not scroll.
              --tz is the Text Size zoom of the page; the viewport height has to be divided by it. */
           .montra-empty { height: max(120px, calc(100dvh / var(--tz, 1) - 490px - env(safe-area-inset-bottom))) !important; }
+          /* Empty Search: same idea, so the page does not scroll; desktop keeps calc(100vh - 300px) */
+          .montra-main { --search-empty-min: max(120px, calc(100dvh / var(--tz, 1) - 410px - env(safe-area-inset-bottom))); }
         }
         @media (max-width: 720px) { .montra-cats { grid-template-columns: repeat(3, 1fr) !important; } }
         @media (max-width: 560px) {

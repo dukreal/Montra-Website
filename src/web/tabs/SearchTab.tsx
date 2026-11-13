@@ -325,7 +325,7 @@ export function SearchTab({ txs, currency, onTxClick, showDots }: { txs: Tx[]; c
           <motion.div key="empty" {...collapse} style={{ overflow: "hidden" }}>
             {/* fills the space under the toolbar so the message sits in the middle of the page */}
             <div style={{
-              minHeight: "calc(100vh - 300px)", padding: "20px 0", color: SUB, textAlign: "center",
+              minHeight: "var(--search-empty-min, calc(100vh - 300px))", padding: "20px 0", color: SUB, textAlign: "center",
               display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center",
             }}>
               <div style={{ display: "flex", justifyContent: "center", marginBottom: 10, opacity: 0.35 }}><IcoSearch size={44} color={SUB} /></div>
