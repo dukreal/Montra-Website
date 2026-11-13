@@ -118,6 +118,9 @@ export default function WebApp() {
           .montra-datewrap button[aria-label="Clear date filter"] { position: relative; }
           .montra-datewrap button[aria-label="Clear date filter"]::after { content: ""; position: absolute; inset: -9px; }
           .montra-settings-nav { width: 100% !important; }
+          /* Empty Home: fill only the room left under the header (not the desktop 440px), so the page does not scroll.
+             --tz is the Text Size zoom of the page; the viewport height has to be divided by it. */
+          .montra-empty { height: max(120px, calc(100dvh / var(--tz, 1) - 490px - env(safe-area-inset-bottom))) !important; }
         }
         @media (max-width: 720px) { .montra-cats { grid-template-columns: repeat(3, 1fr) !important; } }
         @media (max-width: 560px) {

@@ -124,7 +124,7 @@ export function HomeTab({ txs, currency, onTxClick, cal, onOpenSettings, showDot
         </div>
 
         {filtered.length === 0 ? (
-          <div className="montra-tab" style={{ flex: "none", height: 440, display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center", color: SUB, gap: 10 }}>
+          <div className="montra-tab montra-empty" style={{ flex: "none", height: 440, display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center", color: SUB, gap: 10 }}>
             <IoArrowDownCircle size={44} color={BORDER} />
             <span style={{ fontWeight: 600, color: TEXT }}>No transactions</span>
             <span style={{ fontSize: 16 }}>
