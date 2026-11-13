@@ -5,14 +5,17 @@ import { BORDER, TEXT, SUB, aTint, ACCENT, ACCENT_TEXT, CARD, ACCENT_THEMES, CAR
 import type { Settings, ThemeMode, TextSize } from "@/web/types";
 import { IcoPalette, IcoGlobe, IcoWallet, IcoUser, IcoDoc, IcoHelp, IcoSun, IcoMoon, IcoCheck } from "@/web/icons";
 import type { IP } from "@/web/icons";
+import { useIsPhone } from "@/web/hooks";
+import { SettingsPhone } from "@/web/tabs/SettingsPhone";
 
 /* ─── SettingsTab ────────────────────────────────────────────────────────── */
 type SettingsSection = "appearance" | "language" | "currency" | "account" | "data" | "about";
 
-export function SettingsTab({ settings, onSave, onClear, txCount, user, onRefresh }: {
+export function SettingsTab({ settings, onSave, onClear, txCount, user, onRefresh, onBack }: {
   settings: Settings; onSave: (s: Settings) => void; onClear: () => void | Promise<void>; txCount: number;
-  user: User | null; onRefresh?: () => void;
+  user: User | null; onRefresh?: () => void; onBack: () => void;
 }) {
+  const isPhone = useIsPhone();
   const [section, setSection] = useState<SettingsSection>("appearance");
   const [confirmClear, setConfirmClear] = useState(false);
   const [clearing, setClearing] = useState(false);
@@ -31,6 +34,10 @@ export function SettingsTab({ settings, onSave, onClear, txCount, user, onRefres
     { id: "data", label: "Data", Icon: IcoDoc },
     { id: "about", label: "About", Icon: IcoHelp },
   ];
+
+  if (isPhone) {
+    return <SettingsPhone settings={settings} onSave={onSave} onClear={onClear} txCount={txCount} user={user} onRefresh={onRefresh} onBack={onBack} />;
+  }
 
   const sectionHead = (title: string, sub: string) => (
     <div style={{ marginBottom: 28, paddingBottom: 20, borderBottom: `1px solid ${BORDER}` }}>
