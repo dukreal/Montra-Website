@@ -1,4 +1,4 @@
-import { useEffect, useId, useMemo, useRef } from "react";
+import { useEffect, useId, useMemo, useRef, useState } from "react";
 import { createPortal } from "react-dom";
 import { MONTHS, M3, sameDay } from "@/web/dates";
 import { ACCENT, ACCENT_TEXT, BORDER, CARD, ON_ACCENT, SUB, TEXT, aTint } from "@/web/theme";
@@ -13,8 +13,9 @@ export type SheetDraft = { year: number; month: number; day: number | null };
 
 /* ─── PhoneDateSheet ─────────────────────────────────────────────────────── */
 /* Phone bottom sheet opened from the Home month pill: year arrows, a 4 x 3 month grid and a full
-   month calendar. It only edits a DRAFT date (`draft`): the page behind does not change while you
-   browse. "Done" applies the draft (onDone); the dimmed area and Escape close it and throw the draft away.
+   month calendar. It only edits a DRAFT (`draft`): the page behind does not change while you browse.
+   Changing the month or year clears the picked day, and "Done" stays disabled until a day is tapped.
+   "Done" applies the draft (onDone); the dimmed area and Escape close it and throw the draft away.
    Rendered inside the app shell (not inside the scrolling page) so the Text Size zoom and the
    page's overflow can never shift or clip it. */
 export function PhoneDateSheet({ open, draft, today, transactions, showDots, onDraft, onDone, onCancel }: {
@@ -29,6 +30,31 @@ export function PhoneDateSheet({ open, draft, today, transactions, showDots, onD
 }) {
   const sheetRef = useRef<HTMLDivElement>(null);
   const titleId = useId();
+
+  /* Drag the handle (or the title) down to close. `dragY` is how far the sheet has been pulled, null when not dragging.
+     A long enough pull, or a quick flick, closes the sheet like the dimmed area does (the draft is thrown away);
+     otherwise the sheet springs back. */
+  const [dragY, setDragY] = useState<number | null>(null);
+  const grab = useRef<{ y: number; t: number; id: number } | null>(null);
+  const dragging = dragY !== null;
+  const onGrabDown = (e: React.PointerEvent<HTMLDivElement>) => {
+    grab.current = { y: e.clientY, t: e.timeStamp, id: e.pointerId };
+    e.currentTarget.setPointerCapture(e.pointerId);
+    setDragY(0);
+  };
+  const onGrabMove = (e: React.PointerEvent<HTMLDivElement>) => {
+    if (!grab.current || grab.current.id !== e.pointerId) return;
+    setDragY(Math.max(0, e.clientY - grab.current.y));
+  };
+  const onGrabEnd = (e: React.PointerEvent<HTMLDivElement>) => {
+    const g = grab.current;
+    if (!g || g.id !== e.pointerId) return;
+    grab.current = null;
+    const dy = Math.max(0, e.clientY - g.y);
+    const speed = dy / Math.max(1, e.timeStamp - g.t);
+    setDragY(null);
+    if (e.type === "pointerup" && (dy >= 120 || (dy >= 40 && speed >= 0.5))) onCancel();
+  };
   const host = typeof document === "undefined" ? null : document.querySelector(".montra-shell");
 
   const { year, month } = draft;
@@ -81,19 +107,24 @@ export function PhoneDateSheet({ open, draft, today, transactions, showDots, onD
     <>
       <div className="montra-scrim" onClick={onCancel} aria-hidden="true" style={{
         position: "fixed", inset: 0, zIndex: 1100, background: "rgba(0,0,0,0.6)",
-        opacity: open ? 1 : 0, visibility: open ? "visible" : "hidden", transition: open ? "opacity 0.22s ease" : "opacity 0.22s ease, visibility 0s linear 0.22s",
+        opacity: open ? 1 - Math.min((dragY ?? 0) / 400, 1) * 0.8 : 0, visibility: open ? "visible" : "hidden",
+        transition: dragging ? "none" : open ? "opacity 0.22s ease" : "opacity 0.22s ease, visibility 0s linear 0.22s",
       }} />
       <div ref={sheetRef} className="montra-sheet" role="dialog" aria-modal="true" aria-labelledby={titleId} tabIndex={-1} style={{
         position: "fixed", left: 0, right: 0, bottom: 0, zIndex: 1101, margin: "0 auto", maxWidth: 560, outline: "none",
         maxHeight: "calc(100dvh - 24px)", overflowY: "auto", overscrollBehavior: "contain",
         background: CARD, border: `1px solid ${BORDER}`, borderBottom: "none", borderRadius: "24px 24px 0 0",
         padding: "10px 16px calc(8px + env(safe-area-inset-bottom))", boxShadow: "0 -18px 48px rgba(0,0,0,0.4)",
-        transform: open ? "none" : "translateY(100%)", visibility: open ? "visible" : "hidden",
+        transform: dragging ? `translateY(${dragY}px)` : open ? "none" : "translateY(100%)", visibility: open ? "visible" : "hidden",
         /* Visible at once when opening (so focus can move in); hidden only after the slide-down ends */
-        transition: open ? "transform 0.26s cubic-bezier(.2,.8,.2,1)" : "transform 0.26s cubic-bezier(.2,.8,.2,1), visibility 0s linear 0.26s",
+        transition: dragging ? "none" : open ? "transform 0.26s cubic-bezier(.2,.8,.2,1)" : "transform 0.26s cubic-bezier(.2,.8,.2,1), visibility 0s linear 0.26s",
       }}>
-        <div aria-hidden="true" style={{ width: 40, height: 4, borderRadius: 2, margin: "0 auto 10px", background: "color-mix(in srgb, var(--sub) 55%, transparent)" }} />
-        <h2 id={titleId} style={{ margin: "0 0 4px", textAlign: "center", fontSize: 18, fontWeight: 800, color: TEXT }}>Select Date</h2>
+        {/* Grab zone: the handle and the title. touch-action none so a downward touch drags the sheet instead of scrolling. */}
+        <div onPointerDown={onGrabDown} onPointerMove={onGrabMove} onPointerUp={onGrabEnd} onPointerCancel={onGrabEnd}
+          style={{ margin: "-10px -16px 0", padding: "10px 16px 0", touchAction: "none", userSelect: "none", cursor: dragging ? "grabbing" : "grab" }}>
+          <div aria-hidden="true" style={{ width: 40, height: 4, borderRadius: 2, margin: "0 auto 10px", background: "color-mix(in srgb, var(--sub) 55%, transparent)" }} />
+          <h2 id={titleId} style={{ margin: "0 0 4px", textAlign: "center", fontSize: 18, fontWeight: 800, color: TEXT }}>Select Date</h2>
+        </div>
 
         <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", marginBottom: 4 }}>
           <button type="button" aria-label="Previous year" onClick={() => changeYear(-1)} style={{ ...cellBtn, width: 48, height: 44, display: "flex", alignItems: "center", justifyContent: "center" }}>
