@@ -47,10 +47,9 @@ export function PhoneDateSheet({ open, draft, today, transactions, showDots, onD
     return set;
   }, [transactions, year, month]);
 
-  /* New draft in another month/year: keep the same day number, but never past the month's end or past today */
+  /* Another month or year starts on its 1st; the previously picked day number is not carried over */
   const moveTo = (y: number, m: number) => {
-    const cap = y === today.getFullYear() && m === today.getMonth() ? today.getDate() : new Date(y, m + 1, 0).getDate();
-    onDraft(new Date(y, m, Math.min(draft.getDate(), cap)));
+    onDraft(new Date(y, m, 1));
   };
   const changeYear = (delta: number) => {
     const y = year + delta;
