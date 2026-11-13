@@ -71,7 +71,7 @@ const FIELD_HINTS: Record<SearchField, string[]> = {
   amount: ["amount"],
 };
 const joinOr = (w: string[]) => (w.length <= 1 ? w.join("") : `${w.slice(0, -1).join(", ")} or ${w[w.length - 1]}`);
-export function SearchTab({ txs, currency, onTxClick }: { txs: Tx[]; currency: string; onTxClick: (tx: Tx) => void }) {
+export function SearchTab({ txs, currency, onTxClick, showDots }: { txs: Tx[]; currency: string; onTxClick: (tx: Tx) => void; showDots: boolean }) {
   const SEARCH_CHIPS: { id: SearchField; label: string; Icon: React.FC<IP> }[] = [
     { id: "sub_category", label: "Category", Icon: IcoTag },
     { id: "notes", label: "Notes", Icon: IcoDoc },
@@ -250,6 +250,7 @@ export function SearchTab({ txs, currency, onTxClick }: { txs: Tx[]; currency: s
                   onSelectDay={(d) => { if (dates.pick(d)) setCalOpen(false); }}
                   onPrevMonth={() => shiftCal(-1)} onNextMonth={() => shiftCal(1)}
                   onJump={(y, m) => { setCalYear(y); setCalMonth(m); }}
+                  showDots={showDots}
                 />
               </motion.div>
             )}

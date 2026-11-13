@@ -11,7 +11,7 @@ export const loadTx = (): Tx[] => {
   }
 };
 export const saveTx = (t: Tx[]) => localStorage.setItem(TX_KEY, JSON.stringify(t));
-export const SET_DEFAULTS: Settings = { currency: "₱", theme: "dark", accent: "#27AE60", textSize: "medium", language: "english" };
+export const SET_DEFAULTS: Settings = { currency: "₱", theme: "dark", accent: "#27AE60", textSize: "medium", language: "english", customDate: true, transactionDots: true };
 export const loadSet = (): Settings => {
   try {
     return { ...SET_DEFAULTS, ...JSON.parse(localStorage.getItem(SET_KEY) || "{}") };

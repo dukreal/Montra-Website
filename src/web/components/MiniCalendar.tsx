@@ -15,7 +15,7 @@ const calLayer = (active: boolean): React.CSSProperties => ({
   pointerEvents: active ? "auto" : "none",
   transition: "opacity 0.2s ease, transform 0.2s ease, visibility 0.2s",
 });
-export function MiniCalendar({ year, month, transactions, selection, pending = null, mode = "day", onModeChange, onSelectDay, onPrevMonth, onNextMonth, onJump }: {
+export function MiniCalendar({ year, month, transactions, selection, pending = null, mode = "day", onModeChange, onSelectDay, onPrevMonth, onNextMonth, onJump, showDots = true }: {
   year: number;
   month: number;
   transactions: Tx[];
@@ -27,6 +27,7 @@ export function MiniCalendar({ year, month, transactions, selection, pending = n
   onPrevMonth: () => void;
   onNextMonth: () => void;
   onJump: (year: number, month: number) => void;
+  showDots?: boolean;
 }) {
   const today = new Date();
   const [picking, setPicking] = useState(false);
@@ -167,7 +168,7 @@ export function MiniCalendar({ year, month, transactions, selection, pending = n
                 }}>
                   {day}
                 </span>
-                {hasTx && !isSel && (
+                {showDots && hasTx && !isSel && (
                   <span style={{ width: 4, height: 4, borderRadius: "50%", background: ACCENT, display: "block" }} />
                 )}
               </button>

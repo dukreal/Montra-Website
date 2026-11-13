@@ -11,7 +11,7 @@ import { TxRow } from "@/web/components/TxRow";
 import { useIsPhone } from "@/web/hooks";
 import type { HomeCalendar } from "@/web/hooks";
 
-export function HomeTab({ txs, currency, onTxClick, cal, onOpenSettings }: { txs: Tx[]; currency: string; onTxClick: (tx: Tx) => void; cal: HomeCalendar; onOpenSettings: () => void }) {
+export function HomeTab({ txs, currency, onTxClick, cal, onOpenSettings, showDots }: { txs: Tx[]; currency: string; onTxClick: (tx: Tx) => void; cal: HomeCalendar; onOpenSettings: () => void; showDots: boolean }) {
   const { year, setYear, month, setMonth, dates } = cal;
 
   const { mIncome, mExpense } = useMemo(() => {
@@ -77,7 +77,7 @@ export function HomeTab({ txs, currency, onTxClick, cal, onOpenSettings }: { txs
           const cap = y === today.getFullYear() && m === today.getMonth() ? today.getDate() : new Date(y, m + 1, 0).getDate();
           setYear(y); setMonth(m); dates.pick(new Date(y, m, Math.min(phoneDay.getDate(), cap)), true);
         }}
-        onOpenSettings={onOpenSettings}
+        onOpenSettings={onOpenSettings} showDots={showDots}
       />
       {/* Left column */}
       <div className="montra-home-left" style={{ width: 340, flexShrink: 0, display: "flex", flexDirection: "column", gap: 14 }}>
@@ -109,6 +109,7 @@ export function HomeTab({ txs, currency, onTxClick, cal, onOpenSettings }: { txs
           onSelectDay={(d) => { dates.pick(d); }}
           onPrevMonth={prevMonth} onNextMonth={nextMonth}
           onJump={(y, m) => { setYear(y); setMonth(m); if (dates.mode === "day") dates.clear(); }}
+          showDots={showDots}
         />
       </div>
 

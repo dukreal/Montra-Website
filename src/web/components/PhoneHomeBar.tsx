@@ -14,7 +14,7 @@ const WEEKDAYS = ["SUN", "MON", "TUE", "WED", "THU", "FRI", "SAT"];
    a month pill whose month/year picker floats over the page (like Analytics) instead of pushing
    the content down, a horizontal day strip you can slide, and an Income / Expense / Balance card.
    It always has one picked day. */
-export function PhoneHomeBar({ year, month, transactions, selectedDay, income, expense, currency, onSelectDay, onJump, onOpenSettings }: {
+export function PhoneHomeBar({ year, month, transactions, selectedDay, income, expense, currency, onSelectDay, onJump, onOpenSettings, showDots = true }: {
   year: number;
   month: number;
   transactions: Tx[];
@@ -25,6 +25,7 @@ export function PhoneHomeBar({ year, month, transactions, selectedDay, income, e
   onSelectDay: (d: Date) => void;
   onJump: (year: number, month: number) => void;
   onOpenSettings: () => void;
+  showDots?: boolean;
 }) {
   const [today] = useState(() => new Date());
   const [picking, setPicking] = useState(false);
@@ -135,7 +136,7 @@ export function PhoneHomeBar({ year, month, transactions, selectedDay, income, e
               }}>
               <span style={{ fontSize: 14, lineHeight: "14px", fontWeight: 600, color: isSel ? ON_ACCENT : SUB }}>{WEEKDAYS[d.getDay()]}</span>
               <span style={{ fontSize: 20, lineHeight: "20px", fontWeight: 800, color: isSel ? ON_ACCENT : isToday ? ACCENT_TEXT : TEXT }}>{d.getDate()}</span>
-              <span style={{ position: "absolute", bottom: 4, left: "50%", marginLeft: -2, width: 4, height: 4, borderRadius: "50%", background: hasTx ? (isSel ? ON_ACCENT : ACCENT) : "transparent" }} />
+              <span style={{ position: "absolute", bottom: 4, left: "50%", marginLeft: -2, width: 4, height: 4, borderRadius: "50%", background: showDots && hasTx ? (isSel ? ON_ACCENT : ACCENT) : "transparent" }} />
             </button>
           );
         })}

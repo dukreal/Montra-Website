@@ -3,7 +3,9 @@ import type { User } from "@supabase/supabase-js";
 import logoUrl from "@/assets/images/logo.png";
 import { BORDER, TEXT, SUB, aTint, ACCENT, ACCENT_TEXT, CARD, CARD2, SURFACE, ACCENT_THEMES, RED, ON_ACCENT, ON_RED, RED_TEXT } from "@/web/theme";
 import type { Settings, ThemeMode, TextSize } from "@/web/types";
-import { IcoPalette, IcoText, IcoSun, IcoMoon, IcoCheck, IcoChevLeft, IcoDoc, IcoUser } from "@/web/icons";
+import { IcoPalette, IcoText, IcoSun, IcoMoon, IcoCheck, IcoChevLeft, IcoDoc, IcoUser, IcoCalendar } from "@/web/icons";
+import { Switch, DotGlyph } from "@/web/components/Switch";
+import { ADVANCED_OPTIONS } from "@/web/advanced";
 
 /* ─── SettingsPhone ──────────────────────────────────────────────────────── */
 /* Phone layout of Settings: one scrolling page of grouped cards, like the mobile app.
@@ -13,6 +15,7 @@ import { IcoPalette, IcoText, IcoSun, IcoMoon, IcoCheck, IcoChevLeft, IcoDoc, Ic
 const HUES = {
   purple: { dark: "#A78BFA", light: "#6D28D9" },
   blue: { dark: "#60A5FA", light: "#1D4ED8" },
+  amber: { dark: "#FB923C", light: "#9A4B0D" },
 } as const;
 type Hue = keyof typeof HUES;
 
@@ -165,6 +168,23 @@ export function SettingsPhone({ settings, onSave, onClear, txCount, user, onRefr
             key: s.size, name: s.name, on: settings.textSize === s.size, onPick: () => onSave({ ...settings, textSize: s.size }), content: s.label,
           }))} />
         </div>
+      </Section>
+
+      {/* ADVANCED */}
+      <Section label="Advanced">
+        {ADVANCED_OPTIONS.map((o, i) => {
+          const on = settings[o.key];
+          return (
+            <button key={o.key} type="button" role="switch" aria-checked={on} onClick={() => onSave({ ...settings, [o.key]: !on })}
+              style={{ ...rowBase, ...(i ? sep : null), cursor: "pointer" }}>
+              <Tile tone={o.key === "customDate" ? "blue" : "amber"} theme={theme}>
+                {(c) => (o.key === "customDate" ? <IcoCalendar size={22} color={c} /> : <DotGlyph color={c} />)}
+              </Tile>
+              <RowText title={o.title} sub={o.sub} />
+              <Switch on={on} />
+            </button>
+          );
+        })}
       </Section>
 
       {/* LANGUAGE */}

@@ -320,10 +320,10 @@ export function AppShell({ user, onSignOut }: { user: User | null; onSignOut: ()
                 <button onClick={fetchFromSupabase} style={{ ...outlineBtn, flex: "none", padding: "8px 18px" }}>Retry</button>
               </div>
             )}
-            {tab === "home" && <HomeTab txs={transactions} currency={settings.currency} onTxClick={setDetailTx} cal={homeCal} onOpenSettings={openSettings} />}
-            {tab === "add" && <AddTab onAdd={addTx} />}
+            {tab === "home" && <HomeTab txs={transactions} currency={settings.currency} onTxClick={setDetailTx} cal={homeCal} onOpenSettings={openSettings} showDots={settings.transactionDots} />}
+            {tab === "add" && <AddTab onAdd={addTx} customDate={settings.customDate} />}
             {tab === "analytics" && <AnalyticsTab txs={transactions} currency={settings.currency} />}
-            {tab === "search" && <SearchTab txs={transactions} currency={settings.currency} onTxClick={setDetailTx} />}
+            {tab === "search" && <SearchTab txs={transactions} currency={settings.currency} onTxClick={setDetailTx} showDots={settings.transactionDots} />}
             {tab === "profile" && (
               <ProfileTab
                 txs={transactions} settings={settings} onSave={setSettings}

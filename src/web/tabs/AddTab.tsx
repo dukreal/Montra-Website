@@ -8,7 +8,7 @@ import type { Tx, TxType } from "@/web/types";
 import { CatIcon, IcoPlus, IcoGrid, IcoChevLeft, IcoChevRight } from "@/web/icons";
 
 /* ─── AddTab ─────────────────────────────────────────────────────────────── */
-export function AddTab({ onAdd }: { onAdd: (tx: Tx) => void }) {
+export function AddTab({ onAdd, customDate }: { onAdd: (tx: Tx) => void; customDate: boolean }) {
   const [type, setType] = useState<TxType>("expense");
   const [amount, setAmount] = useState("");
   const [parentCat, setParentCat] = useState("");
@@ -32,7 +32,8 @@ export function AddTab({ onAdd }: { onAdd: (tx: Tx) => void }) {
     if (!n || n <= 0) { setError("Enter a valid amount."); return; }
     if (!parentCat) { setError("Select a category."); return; }
     if (parentObj && parentObj.subs.length > 0 && !subCat) { setError("Select a subcategory."); return; }
-    const [yyyy, mm, dd] = date.split("-").map(Number);
+    /* With "Custom Date" off in Settings, a new transaction is always dated today */
+    const [yyyy, mm, dd] = (customDate ? date : todayISO()).split("-").map(Number);
     const now = new Date();
     const created = new Date(yyyy, mm - 1, dd, now.getHours(), now.getMinutes(), now.getSeconds());
     onAdd({
@@ -199,7 +200,7 @@ export function AddTab({ onAdd }: { onAdd: (tx: Tx) => void }) {
       </div>
 
       {/* Date */}
-      <div className="montra-add-date" style={{ marginBottom: 28 }}>
+      <div className="montra-add-date" hidden={!customDate} style={{ marginBottom: 28 }}>
         <label style={fieldLabel}>DATE</label>
         <button type="button" onClick={() => setShowCal(true)}
           style={{ ...inputStyle, textAlign: "left", cursor: "pointer" }}>
