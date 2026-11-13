@@ -15,7 +15,7 @@ const calLayer = (active: boolean): React.CSSProperties => ({
   pointerEvents: active ? "auto" : "none",
   transition: "opacity 0.2s ease, transform 0.2s ease, visibility 0.2s",
 });
-export function MiniCalendar({ year, month, transactions, selection, pending = null, mode = "day", onModeChange, onSelectDay, onPrevMonth, onNextMonth, onJump }: {
+export function MiniCalendar({ year, month, transactions, selection, pending = null, mode = "day", onModeChange, onSelectDay, onPrevMonth, onNextMonth, onJump, showDots = true }: {
   year: number;
   month: number;
   transactions: Tx[];
@@ -27,6 +27,7 @@ export function MiniCalendar({ year, month, transactions, selection, pending = n
   onPrevMonth: () => void;
   onNextMonth: () => void;
   onJump: (year: number, month: number) => void;
+  showDots?: boolean;
 }) {
   const today = new Date();
   const [picking, setPicking] = useState(false);
@@ -80,15 +81,15 @@ export function MiniCalendar({ year, month, transactions, selection, pending = n
     }}>
      <div ref={innerRef} style={{ padding: "18px 16px" }}>
       <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", marginBottom: 14 }}>
-        <button onClick={onPrevMonth} style={btnReset}>
+        <button onClick={onPrevMonth} aria-label="Previous month" style={btnReset}>
           <IcoChevLeft size={17} color={SUB} />
         </button>
-        <button onClick={() => { setPickYear(year); setPicking((v) => !v); }} aria-expanded={picking}
+        <button className="montra-calmonth" onClick={() => { setPickYear(year); setPicking((v) => !v); }} aria-expanded={picking}
           style={{ ...btnReset, gap: 6, padding: "6px 12px", borderRadius: 10, background: picking ? aTint(14) : "transparent", fontWeight: 700, color: picking ? ACCENT_TEXT : TEXT, fontSize: 16 }}>
           {MONTHS[month]} {year}
           <span style={{ fontSize: 11, transform: picking ? "rotate(180deg)" : "none", transition: "transform 0.15s" }}>▼</span>
         </button>
-        <button onClick={() => !atCurrentMonth && onNextMonth()} disabled={atCurrentMonth} style={{ ...btnReset, opacity: atCurrentMonth ? 0.25 : 1, cursor: atCurrentMonth ? "not-allowed" : "pointer" }}>
+        <button onClick={() => !atCurrentMonth && onNextMonth()} aria-label="Next month" disabled={atCurrentMonth} style={{ ...btnReset, opacity: atCurrentMonth ? 0.25 : 1, cursor: atCurrentMonth ? "not-allowed" : "pointer" }}>
           <IcoChevRight size={17} color={SUB} />
         </button>
       </div>
@@ -96,9 +97,9 @@ export function MiniCalendar({ year, month, transactions, selection, pending = n
       <div style={{ display: "grid", position: "relative" }}>
         <div style={{ ...calLayer(picking), transform: picking ? "none" : "scale(0.97)" }}>
           <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", marginBottom: 12 }}>
-            <button onClick={() => setPickYear((y) => y - 1)} style={btnReset}><IcoChevLeft size={16} color={SUB} /></button>
+            <button onClick={() => setPickYear((y) => y - 1)} aria-label="Previous year" style={btnReset}><IcoChevLeft size={16} color={SUB} /></button>
             <span style={{ fontWeight: 800, color: TEXT, fontSize: 16 }}>{pickYear}</span>
-            <button onClick={() => pickYear < today.getFullYear() && setPickYear((y) => y + 1)} disabled={pickYear >= today.getFullYear()}
+            <button onClick={() => pickYear < today.getFullYear() && setPickYear((y) => y + 1)} aria-label="Next year" disabled={pickYear >= today.getFullYear()}
               style={{ ...btnReset, opacity: pickYear >= today.getFullYear() ? 0.25 : 1, cursor: pickYear >= today.getFullYear() ? "not-allowed" : "pointer" }}>
               <IcoChevRight size={16} color={SUB} />
             </button>
@@ -167,7 +168,7 @@ export function MiniCalendar({ year, month, transactions, selection, pending = n
                 }}>
                   {day}
                 </span>
-                {hasTx && !isSel && (
+                {showDots && hasTx && !isSel && (
                   <span style={{ width: 4, height: 4, borderRadius: "50%", background: ACCENT, display: "block" }} />
                 )}
               </button>

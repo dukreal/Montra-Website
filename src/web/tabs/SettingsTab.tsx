@@ -3,16 +3,21 @@ import type { User } from "@supabase/supabase-js";
 import { dangerBtn, outlineBtn } from "@/web/styles";
 import { BORDER, TEXT, SUB, aTint, ACCENT, ACCENT_TEXT, CARD, ACCENT_THEMES, CARD2, RED, ON_ACCENT, ON_RED, RED_TEXT } from "@/web/theme";
 import type { Settings, ThemeMode, TextSize } from "@/web/types";
-import { IcoPalette, IcoGlobe, IcoWallet, IcoUser, IcoDoc, IcoHelp, IcoSun, IcoMoon, IcoCheck } from "@/web/icons";
+import { IcoPalette, IcoGlobe, IcoWallet, IcoUser, IcoDoc, IcoHelp, IcoSun, IcoMoon, IcoCheck, IcoSettings } from "@/web/icons";
 import type { IP } from "@/web/icons";
+import { useIsPhone } from "@/web/hooks";
+import { SettingsPhone } from "@/web/tabs/SettingsPhone";
+import { Switch } from "@/web/components/Switch";
+import { ADVANCED_OPTIONS } from "@/web/advanced";
 
 /* ─── SettingsTab ────────────────────────────────────────────────────────── */
-type SettingsSection = "appearance" | "language" | "currency" | "account" | "data" | "about";
+type SettingsSection = "appearance" | "advanced" | "language" | "currency" | "account" | "data" | "about";
 
-export function SettingsTab({ settings, onSave, onClear, txCount, user, onRefresh }: {
+export function SettingsTab({ settings, onSave, onClear, txCount, user, onRefresh, onBack }: {
   settings: Settings; onSave: (s: Settings) => void; onClear: () => void | Promise<void>; txCount: number;
-  user: User | null; onRefresh?: () => void;
+  user: User | null; onRefresh?: () => void; onBack: () => void;
 }) {
+  const isPhone = useIsPhone();
   const [section, setSection] = useState<SettingsSection>("appearance");
   const [confirmClear, setConfirmClear] = useState(false);
   const [clearing, setClearing] = useState(false);
@@ -25,12 +30,17 @@ export function SettingsTab({ settings, onSave, onClear, txCount, user, onRefres
 
   const navItems: { id: SettingsSection; label: string; Icon: React.FC<IP> }[] = [
     { id: "appearance", label: "Appearance", Icon: IcoPalette },
+    { id: "advanced", label: "Advanced", Icon: IcoSettings },
     { id: "language", label: "Language", Icon: IcoGlobe },
     { id: "currency", label: "Currency", Icon: IcoWallet },
     ...(user ? [{ id: "account" as SettingsSection, label: "Account", Icon: IcoUser }] : []),
     { id: "data", label: "Data", Icon: IcoDoc },
     { id: "about", label: "About", Icon: IcoHelp },
   ];
+
+  if (isPhone) {
+    return <SettingsPhone settings={settings} onSave={onSave} onClear={onClear} txCount={txCount} user={user} onRefresh={onRefresh} onBack={onBack} />;
+  }
 
   const sectionHead = (title: string, sub: string) => (
     <div style={{ marginBottom: 28, paddingBottom: 20, borderBottom: `1px solid ${BORDER}` }}>
@@ -47,7 +57,7 @@ export function SettingsTab({ settings, onSave, onClear, txCount, user, onRefres
     <div className="montra-settings" style={{ display: "flex", gap: 0, minHeight: 500 }}>
       {/* ── Sidebar nav ── */}
       <div className="montra-settings-nav" style={{ width: 220, flexShrink: 0 }}>
-        <h2 style={{ margin: "0 0 20px", fontSize: 22, fontWeight: 800, color: TEXT }}>Settings</h2>
+        <h2 className="montra-settings-title" style={{ margin: "0 0 20px", fontSize: 22, fontWeight: 800, color: TEXT }}>Settings</h2>
         <div style={{ display: "flex", flexDirection: "column", gap: 4 }}>
           {navItems.map(item => {
             const active = section === item.id;
@@ -141,6 +151,30 @@ export function SettingsTab({ settings, onSave, onClear, txCount, user, onRefres
                   );
                 })}
               </div>
+            </div>
+          </div>
+        )}
+
+        {/* ADVANCED */}
+        {section === "advanced" && (
+          <div>
+            {sectionHead("Advanced", "Optional behavior when adding and viewing transactions.")}
+            <div style={{ display: "flex", flexDirection: "column", gap: 10 }}>
+              {ADVANCED_OPTIONS.map((o) => {
+                const on = settings[o.key];
+                return (
+                  <button key={o.key} type="button" role="switch" aria-checked={on} onClick={() => onSave({ ...settings, [o.key]: !on })} style={{
+                    display: "flex", alignItems: "center", gap: 14, width: "100%", padding: "14px 18px", textAlign: "left" as const,
+                    font: "inherit", borderRadius: 13, cursor: "pointer", background: CARD, border: `2px solid ${BORDER}`,
+                  }}>
+                    <div style={{ flex: 1 }}>
+                      <div style={{ fontSize: 16, fontWeight: 700, color: TEXT }}>{o.title}</div>
+                      <div style={{ fontSize: 15, color: SUB, marginTop: 2 }}>{o.sub}</div>
+                    </div>
+                    <Switch on={on} />
+                  </button>
+                );
+              })}
             </div>
           </div>
         )}

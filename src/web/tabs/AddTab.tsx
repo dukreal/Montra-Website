@@ -3,12 +3,12 @@ import { IoArrowDownCircle, IoArrowUpCircle } from "react-icons/io5";
 import { CATS } from "@/web/categories";
 import { MONTHS, sameDay, todayISO } from "@/web/dates";
 import { fieldLabel, inputStyle, primaryBtn, overlay, modalBox, btnReset, outlineBtn } from "@/web/styles";
-import { TEXT, CARD, BORDER, RED, GREEN, SUB, ACCENT, ACCENT_TEXT, aTint, ON_ACCENT, RED_TEXT, GREEN_TEXT } from "@/web/theme";
+import { TEXT, CARD, CARD2, BORDER, RED, GREEN, SUB, ACCENT, ACCENT_TEXT, aTint, ON_ACCENT, RED_TEXT, GREEN_TEXT } from "@/web/theme";
 import type { Tx, TxType } from "@/web/types";
-import { CatIcon, IcoPlus, IcoChevLeft, IcoChevRight } from "@/web/icons";
+import { CatIcon, IcoPlus, IcoGrid, IcoChevLeft, IcoChevRight } from "@/web/icons";
 
 /* ─── AddTab ─────────────────────────────────────────────────────────────── */
-export function AddTab({ onAdd }: { onAdd: (tx: Tx) => void }) {
+export function AddTab({ onAdd, customDate }: { onAdd: (tx: Tx) => void; customDate: boolean }) {
   const [type, setType] = useState<TxType>("expense");
   const [amount, setAmount] = useState("");
   const [parentCat, setParentCat] = useState("");
@@ -32,7 +32,8 @@ export function AddTab({ onAdd }: { onAdd: (tx: Tx) => void }) {
     if (!n || n <= 0) { setError("Enter a valid amount."); return; }
     if (!parentCat) { setError("Select a category."); return; }
     if (parentObj && parentObj.subs.length > 0 && !subCat) { setError("Select a subcategory."); return; }
-    const [yyyy, mm, dd] = date.split("-").map(Number);
+    /* With "Custom Date" off in Settings, a new transaction is always dated today */
+    const [yyyy, mm, dd] = (customDate ? date : todayISO()).split("-").map(Number);
     const now = new Date();
     const created = new Date(yyyy, mm - 1, dd, now.getHours(), now.getMinutes(), now.getSeconds());
     onAdd({
@@ -47,11 +48,12 @@ export function AddTab({ onAdd }: { onAdd: (tx: Tx) => void }) {
   };
 
   return (
-    <div style={{ maxWidth: 600, margin: "0 auto" }}>
-      <h2 style={{ color: TEXT, fontSize: 28, fontWeight: 800, marginBottom: 28, marginTop: 0 }}>Add Transaction</h2>
+    <div className="montra-add" style={{ maxWidth: 600, margin: "0 auto" }}>
+      <h2 className="montra-add-title" style={{ color: TEXT, fontSize: 28, fontWeight: 800, marginBottom: 28, marginTop: 0 }}>Add Transaction</h2>
 
+      <div className="montra-amtcard">
       {/* Type toggle */}
-      <div style={{ display: "flex", background: CARD, borderRadius: 14, padding: 4, marginBottom: 24, border: `1px solid ${BORDER}` }}>
+      <div className="montra-typebar" style={{ display: "flex", background: CARD, borderRadius: 14, padding: 4, marginBottom: 24, border: `1px solid ${BORDER}` }}>
         {(["expense", "income"] as TxType[]).map((t) => {
           const active = type === t;
           const clr = t === "expense" ? RED : GREEN;
@@ -77,7 +79,7 @@ export function AddTab({ onAdd }: { onAdd: (tx: Tx) => void }) {
       </div>
 
       {/* Amount */}
-      <div style={{ marginBottom: 22 }}>
+      <div className="montra-amount" style={{ marginBottom: 22 }}>
         <label style={fieldLabel}>AMOUNT <span style={{ color: RED_TEXT }}>*</span></label>
         <div style={{ position: "relative" }}>
           <span style={{ position: "absolute", left: 16, top: "50%", transform: "translateY(-50%)", color: amount ? (isExp ? RED_TEXT : GREEN_TEXT) : SUB, fontSize: 28, fontWeight: 700, pointerEvents: "none" }}>
@@ -87,7 +89,7 @@ export function AddTab({ onAdd }: { onAdd: (tx: Tx) => void }) {
           <input
             key={type}
             type="number"
-            placeholder="0.00"
+            placeholder="0.00" aria-label="Amount"
             value={amount}
             onChange={(e) => { setAmount(e.target.value); setError(""); }}
             style={{
@@ -101,9 +103,22 @@ export function AddTab({ onAdd }: { onAdd: (tx: Tx) => void }) {
         </div>
       </div>
 
+      </div>
+
       {/* Parent Category */}
-      <div style={{ marginBottom: 20 }}>
+      <div className="montra-add-cat" style={{ marginBottom: 20 }}>
         <label style={fieldLabel}>CATEGORY <span style={{ color: RED_TEXT }}>*</span></label>
+        <div className="montra-cat-card">
+        {/* Phone header: shows the chosen category, like the mobile app */}
+        <div className="montra-cat-head">
+          <span style={{ width: 44, height: 44, borderRadius: 12, flexShrink: 0, display: "flex", alignItems: "center", justifyContent: "center", background: parentObj ? `${parentObj.color}20` : CARD2 }}>
+            {parentObj ? <CatIcon name={parentObj.icon} color={parentObj.color} size={24} /> : <IcoGrid size={22} color={SUB} />}
+          </span>
+          <span style={{ minWidth: 0 }}>
+            <span style={{ display: "block", fontSize: 16, fontWeight: 700, color: parentObj ? TEXT : SUB }}>{parentObj ? parentObj.name : "No category selected"}</span>
+            <span style={{ display: "block", fontSize: 14, color: SUB }}>{subCat || (parentObj ? "Select a subcategory below" : "Please select below")}</span>
+          </span>
+        </div>
         <div className="montra-cats" style={{ display: "grid", gridTemplateColumns: "repeat(4, 1fr)", gap: 8 }}>
           {cats.map((cat) => (
             <button
@@ -138,11 +153,12 @@ export function AddTab({ onAdd }: { onAdd: (tx: Tx) => void }) {
             </span>
           </button>
         </div>
+        </div>
       </div>
 
       {/* Sub Category */}
       {parentObj && (
-        <div style={{ marginBottom: 20 }}>
+        <div className="montra-add-sub" style={{ marginBottom: 20 }}>
           <label style={fieldLabel}>SUBCATEGORY <span style={{ color: RED_TEXT }}>*</span></label>
           <div style={{ display: "flex", flexWrap: "wrap" as const, gap: 8 }}>
             {parentObj.subs.map((sub) => (
@@ -173,18 +189,18 @@ export function AddTab({ onAdd }: { onAdd: (tx: Tx) => void }) {
       )}
 
       {/* Notes */}
-      <div style={{ marginBottom: 18 }}>
+      <div className="montra-add-notes" style={{ marginBottom: 18 }}>
         <div style={{ display: "flex", justifyContent: "space-between", alignItems: "baseline" }}>
           <label style={fieldLabel}>NOTES (optional)</label>
           <span style={{ fontSize: 14, color: notes.length >= 150 ? RED_TEXT : SUB, fontWeight: 600 }}>{notes.length}/150</span>
         </div>
-        <textarea placeholder="Add a note..." value={notes} maxLength={150} onChange={(e) => setNotes(e.target.value.slice(0, 150))} rows={2}
+        <textarea aria-label="Notes" placeholder="Add a note..." value={notes} maxLength={150} onChange={(e) => setNotes(e.target.value.slice(0, 150))} rows={2}
           style={{ ...inputStyle, resize: "none" as const, fontFamily: "inherit" }}
         />
       </div>
 
       {/* Date */}
-      <div style={{ marginBottom: 28 }}>
+      <div className="montra-add-date" hidden={!customDate} style={{ marginBottom: 28 }}>
         <label style={fieldLabel}>DATE</label>
         <button type="button" onClick={() => setShowCal(true)}
           style={{ ...inputStyle, textAlign: "left", cursor: "pointer" }}>
@@ -193,11 +209,13 @@ export function AddTab({ onAdd }: { onAdd: (tx: Tx) => void }) {
         {showCal && <DatePickerModal value={date} onClose={() => setShowCal(false)} onSelect={setDate} />}
       </div>
 
-      {error && <div style={{ color: RED_TEXT, fontSize: 16, marginBottom: 14 }}>{error}</div>}
+      <div className="montra-add-foot">
+        {error && <div style={{ color: RED_TEXT, fontSize: 16, marginBottom: 14 }}>{error}</div>}
 
-      <button onClick={handleSubmit} style={{ ...primaryBtn, width: "100%", fontSize: 16, padding: "16px" }}>
-        Save Transaction
-      </button>
+        <button onClick={handleSubmit} style={{ ...primaryBtn, width: "100%", fontSize: 16, padding: "16px" }}>
+          Save Transaction
+        </button>
+      </div>
     </div>
   );
 }
@@ -228,9 +246,9 @@ function DatePickerModal({ value, onClose, onSelect }: { value: string; onClose:
     <div style={overlay} onClick={onClose}>
       <div style={{ ...modalBox, width: 460, padding: 32 }} onClick={(e) => e.stopPropagation()}>
         <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", marginBottom: 24 }}>
-          <button onClick={() => shift(-1)} style={{ ...btnReset, padding: 8 }}><IcoChevLeft size={22} color={SUB} /></button>
+          <button onClick={() => shift(-1)} aria-label="Previous month" style={{ ...btnReset, padding: 8 }}><IcoChevLeft size={22} color={SUB} /></button>
           <span style={{ fontWeight: 800, color: TEXT, fontSize: 20 }}>{MONTHS[view.month]} {view.year}</span>
-          <button onClick={() => !atCurrentMonth && shift(1)} disabled={atCurrentMonth} style={{ ...btnReset, padding: 8, opacity: atCurrentMonth ? 0.25 : 1, cursor: atCurrentMonth ? "not-allowed" : "pointer" }}>
+          <button onClick={() => !atCurrentMonth && shift(1)} aria-label="Next month" disabled={atCurrentMonth} style={{ ...btnReset, padding: 8, opacity: atCurrentMonth ? 0.25 : 1, cursor: atCurrentMonth ? "not-allowed" : "pointer" }}>
             <IcoChevRight size={22} color={SUB} />
           </button>
         </div>
