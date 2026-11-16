@@ -332,7 +332,7 @@ export function SettingsTab({ settings, onSave, onClear, txCount, user, onRefres
                 <IcoWallet size={28} color={ACCENT_TEXT} />
               </div>
               <div style={{ fontWeight: 800, fontSize: 24, color: TEXT, marginBottom: 4 }}>Montra Web</div>
-              <div style={{ fontSize: 15, color: SUB, marginBottom: 20 }}>Version 2.1.0 · Built with React + Supabase</div>
+              <div style={{ fontSize: 15, color: SUB, marginBottom: 20 }}>Version 2.2.0 · Built with React + Supabase</div>
               <div style={{ fontSize: 16, color: SUB, lineHeight: 1.8, maxWidth: 320, margin: "0 auto" }}>
                 Track your income and expenses with a clean, fast interface. Guest mode keeps data in your browser; when you sign in, it syncs to your account.
               </div>

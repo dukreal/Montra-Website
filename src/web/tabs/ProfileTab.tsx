@@ -131,7 +131,7 @@ export function ProfileTab({ txs, settings, onSave, user, isGuest, onSignOut, on
         <IcoLogout size={17} color={RED_TEXT} /> {isGuest ? "Sign in" : "Sign out"}
       </button>
 
-      <div style={{ textAlign: "center", fontSize: 14, color: SUB, marginTop: 20 }}>Montra · v2.1.0</div>
+      <div style={{ textAlign: "center", fontSize: 14, color: SUB, marginTop: 20 }}>Montra · v2.2.0</div>
     </div>
   );
 }
