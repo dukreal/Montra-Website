@@ -4,11 +4,11 @@ import { IoCash } from "react-icons/io5";
 import { fmtDate, fmtTime, inDateSel, fmtDateSel, isRange } from "@/web/dates";
 import { getCat, fmtAmt } from "@/web/helpers";
 import { inputStyle, btnReset } from "@/web/styles";
-import { RED, GREEN, CARD2, CARD, BORDER, SUB, TEXT, aTint, ACCENT } from "@/web/theme";
+import { RED, GREEN, CARD2, CARD, BORDER, SUB, TEXT, aTint, ACCENT, ACCENT_TEXT, RED_TEXT, GREEN_TEXT } from "@/web/theme";
 import type { Tx } from "@/web/types";
 import { MiniCalendar } from "@/web/components/MiniCalendar";
 import { TxRow } from "@/web/components/TxRow";
-import { useDateSelection } from "@/web/hooks";
+import { useDateSelection, useIsPhone } from "@/web/hooks";
 import { CatIcon, IcoTag, IcoDoc, IcoCash, IcoSearch, IcoX, IcoFlash, IcoCalendar, IcoSort, IcoChevDown, IcoCheck, IcoList, IcoGrid } from "@/web/icons";
 import type { IP } from "@/web/icons";
 
@@ -17,6 +17,7 @@ function TxCard({ tx, currency, onClick }: { tx: Tx; currency: string; onClick: 
   const [hov, setHov] = useState(false);
   const isExp = tx.type === "expense";
   const tone = isExp ? RED : GREEN;
+  const toneText = isExp ? RED_TEXT : GREEN_TEXT;
   const cat = getCat(tx.type, tx.parent_category);
   const clip: React.CSSProperties = { whiteSpace: "nowrap", overflow: "hidden", textOverflow: "ellipsis" };
   return (
@@ -37,16 +38,16 @@ function TxCard({ tx, currency, onClick }: { tx: Tx; currency: string; onClick: 
           width: 44, height: 44, borderRadius: 12, flexShrink: 0,
           background: `${cat?.color ?? tone}20`, display: "flex", alignItems: "center", justifyContent: "center",
         }}>
-          {cat ? <CatIcon name={cat.icon} color={cat.color} size={22} /> : <IoCash size={22} color={tone} />}
+          {cat ? <CatIcon name={cat.icon} color={cat.color} size={22} /> : <IoCash size={22} color={toneText} />}
         </div>
-        <span style={{ fontSize: 13, color: SUB, fontWeight: 600, whiteSpace: "nowrap" }}>{fmtDate(tx.created_at)}</span>
+        <span style={{ fontSize: 14, color: SUB, fontWeight: 600, whiteSpace: "nowrap" }}>{fmtDate(tx.created_at)}</span>
       </div>
       <div style={{ width: "100%", minWidth: 0 }}>
         <div style={{ fontSize: 16, fontWeight: 700, color: TEXT, ...clip }}>{tx.sub_category || tx.parent_category || "Uncategorized"}</div>
         <div style={{ fontSize: 14, color: SUB, marginTop: 2, ...clip }}>{tx.sub_category ? tx.parent_category : fmtTime(tx.created_at)}</div>
         {tx.notes && <div style={{ fontSize: 14, color: SUB, marginTop: 6, ...clip }}>{tx.notes}</div>}
       </div>
-      <div style={{ width: "100%", fontSize: 20, fontWeight: 800, color: tone, ...clip }}>
+      <div style={{ width: "100%", fontSize: 20, fontWeight: 800, color: toneText, ...clip }}>
         {isExp ? "-" : "+"}{fmtAmt(tx.amount, currency)}
       </div>
     </button>
@@ -70,7 +71,7 @@ const FIELD_HINTS: Record<SearchField, string[]> = {
   amount: ["amount"],
 };
 const joinOr = (w: string[]) => (w.length <= 1 ? w.join("") : `${w.slice(0, -1).join(", ")} or ${w[w.length - 1]}`);
-export function SearchTab({ txs, currency, onTxClick }: { txs: Tx[]; currency: string; onTxClick: (tx: Tx) => void }) {
+export function SearchTab({ txs, currency, onTxClick, showDots }: { txs: Tx[]; currency: string; onTxClick: (tx: Tx) => void; showDots: boolean }) {
   const SEARCH_CHIPS: { id: SearchField; label: string; Icon: React.FC<IP> }[] = [
     { id: "sub_category", label: "Category", Icon: IcoTag },
     { id: "notes", label: "Notes", Icon: IcoDoc },
@@ -81,6 +82,9 @@ export function SearchTab({ txs, currency, onTxClick }: { txs: Tx[]; currency: s
   const [fields, setFields] = useState<Set<SearchField>>(new Set());
   const [sort, setSort] = useState<SortKey>("newest");
   const [view, setView] = useState<"list" | "grid">("list");
+  /* Phones always use the list (the square grid cards are too big there) */
+  const isPhone = useIsPhone();
+  const shownView = isPhone ? "list" : view;
   const [sortOpen, setSortOpen] = useState(false);
   /* Optional single-day filter picked from the mini calendar */
   const dates = useDateSelection(null);
@@ -165,29 +169,30 @@ export function SearchTab({ txs, currency, onTxClick }: { txs: Tx[]; currency: s
 
   return (
     <div>
-      <h2 style={{ color: TEXT, margin: "0 0 20px", fontSize: 28, fontWeight: 800 }}>Search</h2>
+      <h2 className="montra-search-title" style={{ color: TEXT, margin: "0 0 20px", fontSize: 28, fontWeight: 800 }}>Search</h2>
       <div style={{ position: "relative", marginBottom: 14 }}>
         <div style={{ position: "absolute", left: 14, top: "50%", transform: "translateY(-50%)", color: SUB, pointerEvents: "none" }}>
           <IcoSearch size={17} />
         </div>
         <input
-          type="text" placeholder={placeholder} aria-label={placeholder} value={query} autoFocus
+          type="text" placeholder={placeholder} aria-label={placeholder} value={query} autoFocus={!isPhone}
           onChange={(e) => setQuery(e.target.value)}
           style={{ ...inputStyle, paddingLeft: 44 }}
         />
         {query && (
-          <button onClick={() => setQuery("")} style={{ ...btnReset, position: "absolute", right: 12, top: "50%", transform: "translateY(-50%)" }}>
+          <button onClick={() => setQuery("")} aria-label="Clear search" style={{ ...btnReset, position: "absolute", right: 12, top: "50%", transform: "translateY(-50%)" }}>
             <IcoX size={16} color={SUB} />
           </button>
         )}
       </div>
-      <div style={{ display: "flex", gap: 8, marginBottom: 20, flexWrap: "wrap" }}>
+      <div className="montra-search-bar" style={{ display: "flex", gap: 8, marginBottom: 20, flexWrap: "wrap" }}>
+        <div className="montra-chips">
         <button onClick={() => setFields(new Set())} style={{
           display: "flex", alignItems: "center", gap: 6,
           padding: "7px 15px", borderRadius: 100, fontSize: 16, fontWeight: 600,
           background: allActive ? aTint(10) : CARD,
           border: `1px solid ${allActive ? ACCENT : BORDER}`,
-          color: allActive ? ACCENT : SUB, cursor: "pointer",
+          color: allActive ? ACCENT_TEXT : SUB, cursor: "pointer",
         }}><IcoFlash size={13} /> All</button>
         {SEARCH_CHIPS.map((c) => {
           const on = fields.has(c.id);
@@ -197,18 +202,19 @@ export function SearchTab({ txs, currency, onTxClick }: { txs: Tx[]; currency: s
               padding: "7px 15px", borderRadius: 100, fontSize: 16, fontWeight: 600,
               background: on ? aTint(10) : CARD,
               border: `1px solid ${on ? ACCENT : BORDER}`,
-              color: on ? ACCENT : SUB, cursor: "pointer",
+              color: on ? ACCENT_TEXT : SUB, cursor: "pointer",
             }}><c.Icon size={13} /> {c.label}</button>
           );
         })}
+        </div>
         {/* Date filter (mini calendar) */}
-        <div style={{ position: "relative", display: "flex" }}>
+        <div className="montra-datewrap" style={{ position: "relative", display: "flex" }}>
           {(() => {
             const on = !!dateFilter || calOpen;
             return (
               <div style={{
                 display: "flex", alignItems: "center", borderRadius: 100,
-                background: on ? aTint(10) : CARD, border: `1px solid ${on ? ACCENT : BORDER}`, color: on ? ACCENT : SUB,
+                background: on ? aTint(10) : CARD, border: `1px solid ${on ? ACCENT : BORDER}`, color: on ? ACCENT_TEXT : SUB,
               }}>
                 <button onClick={openCal} aria-haspopup="dialog" aria-expanded={calOpen} style={{
                   display: "flex", alignItems: "center", gap: 6, height: "100%",
@@ -244,22 +250,23 @@ export function SearchTab({ txs, currency, onTxClick }: { txs: Tx[]; currency: s
                   onSelectDay={(d) => { if (dates.pick(d)) setCalOpen(false); }}
                   onPrevMonth={() => shiftCal(-1)} onNextMonth={() => shiftCal(1)}
                   onJump={(y, m) => { setCalYear(y); setCalMonth(m); }}
+                  showDots={showDots}
                 />
               </motion.div>
             )}
           </AnimatePresence>
         </div>
 
-        <div style={{ marginLeft: "auto", display: "flex", alignItems: "center", gap: 10, flexWrap: "wrap" }}>
-          <span style={{ color: SUB, fontSize: 15 }}>{results.length} result{results.length !== 1 ? "s" : ""}</span>
+        <div className="montra-search-tools" style={{ marginLeft: "auto", display: "flex", alignItems: "center", gap: 10, flexWrap: "wrap" }}>
+          <span className="montra-count" style={{ color: SUB, fontSize: 15 }}>{results.length} result{results.length !== 1 ? "s" : ""}</span>
 
           {/* Sort */}
-          <div style={{ position: "relative" }}>
-            <button onClick={() => { closeCal(); setSortOpen((o) => !o); }} aria-haspopup="listbox" aria-expanded={sortOpen} style={{
+          <div className="montra-sortwrap" style={{ position: "relative" }}>
+            <button onClick={() => { closeCal(); setSortOpen((o) => !o); }} aria-haspopup="listbox" aria-expanded={sortOpen} className="montra-sort-btn" style={{
               display: "flex", alignItems: "center", justifyContent: "space-between", gap: 10,
               minWidth: 226, height: 38, padding: "0 14px", borderRadius: 12,
               background: sortOpen ? aTint(10) : CARD, border: `1px solid ${sortOpen ? ACCENT : BORDER}`,
-              color: sortOpen ? ACCENT : TEXT, fontSize: 15, fontWeight: 600, cursor: "pointer",
+              color: sortOpen ? ACCENT_TEXT : TEXT, fontSize: 15, fontWeight: 600, cursor: "pointer",
             }}>
               <span style={{ display: "flex", alignItems: "center", gap: 8 }}><IcoSort size={15} /> {sortLabel}</span>
               <span style={{ display: "flex", transform: sortOpen ? "rotate(180deg)" : "none", transition: "transform 0.15s" }}><IcoChevDown size={15} /></span>
@@ -283,7 +290,7 @@ export function SearchTab({ txs, currency, onTxClick }: { txs: Tx[]; currency: s
                         style={{
                           width: "100%", display: "flex", alignItems: "center", justifyContent: "space-between",
                           padding: "11px 12px", borderRadius: 10, border: "none", textAlign: "left", cursor: "pointer",
-                          background: on ? aTint(12) : undefined, color: on ? ACCENT : TEXT, fontSize: 15, fontWeight: on ? 700 : 500,
+                          background: on ? aTint(12) : undefined, color: on ? ACCENT_TEXT : TEXT, fontSize: 15, fontWeight: on ? 700 : 500,
                         }}>
                         {o.label}
                         {on && <IcoCheck size={15} />}
@@ -296,14 +303,14 @@ export function SearchTab({ txs, currency, onTxClick }: { txs: Tx[]; currency: s
           </div>
 
           {/* List / grid */}
-          <div role="group" aria-label="Layout" style={{ display: "flex", gap: 2, padding: 3, borderRadius: 12, background: CARD, border: `1px solid ${BORDER}` }}>
+          <div role="group" aria-label="Layout" className="montra-viewtoggle" style={{ display: "flex", gap: 2, padding: 3, borderRadius: 12, background: CARD, border: `1px solid ${BORDER}` }}>
             {([["list", "List view", IcoList], ["grid", "Grid view", IcoGrid]] as const).map(([id, label, Icon]) => {
               const on = view === id;
               return (
                 <button key={id} onClick={() => setView(id)} aria-pressed={on} aria-label={label} title={label} style={{
                   width: 38, height: 30, borderRadius: 9, border: "none", cursor: "pointer",
                   display: "flex", alignItems: "center", justifyContent: "center",
-                  background: on ? aTint(14) : "transparent", color: on ? ACCENT : SUB,
+                  background: on ? aTint(14) : "transparent", color: on ? ACCENT_TEXT : SUB,
                 }}>
                   <Icon size={17} />
                 </button>
@@ -318,7 +325,7 @@ export function SearchTab({ txs, currency, onTxClick }: { txs: Tx[]; currency: s
           <motion.div key="empty" {...collapse} style={{ overflow: "hidden" }}>
             {/* fills the space under the toolbar so the message sits in the middle of the page */}
             <div style={{
-              minHeight: "calc(100vh - 300px)", padding: "20px 0", color: SUB, textAlign: "center",
+              minHeight: "var(--search-empty-min, calc(100vh - 300px))", padding: "20px 0", color: SUB, textAlign: "center",
               display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center",
             }}>
               <div style={{ display: "flex", justifyContent: "center", marginBottom: 10, opacity: 0.35 }}><IcoSearch size={44} color={SUB} /></div>
@@ -335,7 +342,7 @@ export function SearchTab({ txs, currency, onTxClick }: { txs: Tx[]; currency: s
         )}
       </AnimatePresence>
 
-      {view === "list" ? (
+      {shownView === "list" ? (
         <div key="list" className="montra-tab">
           <AnimatePresence initial={false}>
             {results.map((tx) => (

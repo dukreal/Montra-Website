@@ -22,6 +22,8 @@ export interface Settings {
   accent: string;
   textSize: TextSize;
   language: Language;
+  customDate: boolean;
+  transactionDots: boolean;
 }
 
 /* ─── Date selection (single day or range) ───────────────────────────────── */

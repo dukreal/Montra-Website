@@ -1,11 +1,10 @@
-import { INK, MUTE, BG, HAIR } from '@/constants/theme'
-
+import { INK, MUTE_TEXT, BG, HAIR } from '@/constants/theme'
 /* ─────────────────────── STAT STRIP ─────────────────────── */
 export default function StatStrip() {
   const stats = [
-    ["100%", "Offline-first"],
     ["₱", "Peso native"],
-    ["12", "Categories"],
+    ["18", "Categories"],
+    ["4", "Accent colors"],
     ["2", "Languages"],
   ];
   return (
@@ -14,7 +13,7 @@ export default function StatStrip() {
         {stats.map(([n, l]) => (
           <div key={l} className="text-center">
             <div className="text-3xl md:text-4xl font-black" style={{ color: INK }}>{n}</div>
-            <div className="text-sm mt-1.5" style={{ color: MUTE }}>{l}</div>
+            <div className="text-sm mt-1.5" style={{ color: MUTE_TEXT }}>{l}</div>
           </div>
         ))}
       </div>

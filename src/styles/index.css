@@ -28,6 +28,16 @@ body {
 }
 
 
+/* Keyboard focus ring on the landing page (white on the dark page, dark on the green CTA band) */
+.montra-landing :focus-visible {
+  outline: 2px solid #ffffff;
+  outline-offset: 3px;
+}
+
+.montra-cta :focus-visible {
+  outline-color: #03130a;
+}
+
 /* Hide scrollbars inside the phone frame */
 .montra-scroll::-webkit-scrollbar {
   width: 0;

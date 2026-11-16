@@ -8,7 +8,6 @@ const LINKS = [
   { label: 'Home', href: '#top' },
   { label: 'How it works', href: '#how' },
   { label: 'Benefits', href: '#benefits' },
-  { label: 'Reviews', href: '#reviews' },
 ]
 
 /* ─────────────────────── NAV ─────────────────────── */
@@ -29,7 +28,7 @@ export default function Header() {
         </nav>
         <div className="flex items-center gap-2.5">
           <span className="hidden sm:inline-flex"><WebVersionButton /></span>
-          <span className="hidden sm:inline-flex"><DownloadButton /></span>
+          <span className="hidden lg:inline-flex"><DownloadButton /></span>
           <button
             type="button"
             aria-label={open ? "Close menu" : "Open menu"}

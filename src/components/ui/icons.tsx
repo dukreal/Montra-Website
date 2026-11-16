@@ -248,8 +248,6 @@ export const Download = makeIcon(
   </>
 );
 
-export const Star = makeIcon(<path d="m12 3 2.6 5.6 6.1.7-4.5 4.2 1.2 6L12 16.9 6.6 19.5l1.2-6L3.3 9.3l6.1-.7z" />);
-
 export const ShieldCheck = makeIcon(
   <>
     <path d="M12 3 5 6v6c0 4 3 6.6 7 8 4-1.4 7-4 7-8V6z" />
@@ -296,14 +294,4 @@ export const STEPS = [
   { n: "STEP 1", title: "Add a transaction", body: "Tap the + button, choose expense or income, and enter the amount in seconds." },
   { n: "STEP 2", title: "Tag it with context", body: "Pick a category and sub-category, drop a location, and attach a receipt photo." },
   { n: "STEP 3", title: "Watch it add up", body: "Montra rolls everything into daily balances and monthly analytics automatically." },
-];
-
-
-/* ─────────────────────── TESTIMONIALS ─────────────────────── */
-export const REVIEWS = [
-  { stars: 5, quote: "Montra made budgeting effortless. Logging a jeepney fare takes two taps and the monthly view is gorgeous.", name: "Maya Collins", role: "Financial Consultant" },
-  { stars: 5, quote: "Fast, clean, and genuinely useful. The location tagging is a small thing that I now can't live without.", name: "Daniel Cruz", role: "Small Business Owner" },
-  { stars: 5, quote: "I've tried every tracker out there. This is the first one I've actually kept using past a week.", name: "Lara Whitmore", role: "Freelance Designer" },
-  { stars: 5, quote: "The analytics breakdown finally showed me where my salary was quietly disappearing each month.", name: "Paolo Reyes", role: "Software Engineer" },
-  { stars: 5, quote: "Works perfectly offline on my commute. Everything syncs the moment I'm back online.", name: "Bea Santos", role: "Nurse" },
 ];

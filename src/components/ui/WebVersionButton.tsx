@@ -1,5 +1,5 @@
 import { Monitor } from '@/components/ui/icons'
-import { ACCENT_SOFT, INK, PANEL2, HAIR } from '@/constants/theme'
+import { ACCENT } from '@/constants/theme'
 
 export default function WebVersionButton({ size = "md" }: { size?: "md" | "lg" }) {
   const lg = size === "lg";
@@ -7,12 +7,12 @@ export default function WebVersionButton({ size = "md" }: { size?: "md" | "lg" }
     <a
       href="#/app"
       title="Open the web version"
-      className={`inline-flex items-center gap-2.5 rounded-full font-bold cursor-pointer transition active:scale-[0.98] hover:brightness-125 ${
-        lg ? "px-8 py-4 text-base" : "px-5 py-2.5 text-sm"
+      className={`inline-flex items-center justify-center gap-2.5 whitespace-nowrap rounded-full font-bold cursor-pointer transition active:scale-[0.98] hover:brightness-110 ${
+        lg ? "w-full max-w-xs sm:w-auto sm:max-w-none px-8 py-4 text-base" : "px-5 py-2.5 text-sm"
       }`}
-      style={{ background: PANEL2, color: INK, border: `1px solid ${HAIR}` }}
+      style={{ background: ACCENT, color: "#03130a", boxShadow: `0 12px 34px ${ACCENT}44` }}
     >
-      <Monitor size={lg ? 20 : 17} color={ACCENT_SOFT} strokeWidth={2.2} />
+      <Monitor size={lg ? 20 : 17} color="#03130a" strokeWidth={2.2} />
       Web Version
     </a>
   );
