@@ -280,7 +280,7 @@ export function SettingsPhone({ settings, onSave, onClear, txCount, user, onRefr
           <span aria-hidden="true" style={{ width: 44, height: 44, borderRadius: 12, flexShrink: 0, display: "flex", alignItems: "center", justifyContent: "center", background: CARD2 }}>
             <img src={logoUrl} alt="" style={{ width: 28, height: 28, objectFit: "contain", maxWidth: "none" }} />
           </span>
-          <RowText title="Montra Web" sub="Version 2.1.0 · Built with React + Supabase" />
+          <RowText title="Montra Web" sub="Version 2.2.0 · Built with React + Supabase" />
         </div>
         <p style={{ ...sep, margin: 0, padding: 16, fontSize: 15, lineHeight: 1.55, color: SUB }}>
           Track your income and expenses with a clean, fast interface. Guest mode keeps data in your browser; when you sign in, it syncs to your account.
