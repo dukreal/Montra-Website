@@ -3,7 +3,7 @@ import Reveal from '@/components/ui/Reveal'
 import PhoneMock from '@/components/ui/PhoneMock'
 import FloatCard from '@/components/ui/FloatCard'
 import { ShieldCheck, Gift, Globe } from '@/components/ui/icons'
-import { ACCENT, INK, SUB, MUTE, HAIR } from '@/constants/theme'
+import { ACCENT, INK, SUB, MUTE_TEXT, HAIR } from '@/constants/theme'
 import shotSettings from '@/assets/images/screenshot-settings.png'
 
 /* ─────────────────────── SECURE SECTION ─────────────────────── */
@@ -19,21 +19,21 @@ export default function Secure() {
                 <ShieldCheck size={16} color={ACCENT} />
               </span>
               <div>
-                <p className="text-[12px] font-bold" style={{ color: INK }}>Encrypted</p>
-                <p className="text-[10px]" style={{ color: MUTE }}>On-device storage</p>
+                <p className="text-[14px] font-bold" style={{ color: INK }}>Private</p>
+                <p className="text-[14px]" style={{ color: MUTE_TEXT }}>Per-account access</p>
               </div>
             </FloatCard>
           </div>
         </Reveal>
         <Reveal delay={120} className="order-1 lg:order-2">
-          <Duo a="Your money data is" b="safe with Montra" className="text-[32px] md:text-[46px]" />
+          <Duo a="Your data" b="stays yours" className="text-[32px] md:text-[46px]" />
           <p className="mt-6 text-lg leading-relaxed max-w-md" style={{ color: SUB }}>
-            Everything is stored locally on your device first. No account is required to get started, and your
-            records never leave your phone unless you choose to back them up.
+            The mobile app works fully offline. Sign in and your records sync to your own account, where only you can read
+            them. On the web, guest mode keeps everything in your browser.
           </p>
           <ul className="mt-8 space-y-4">
             {[
-              [ShieldCheck, "Offline-first, on-device storage"],
+              [ShieldCheck, "Works offline, syncs when you sign in"],
               [Globe, "Available in English and Filipino"],
               [Gift, "Completely free to use"],
             ].map(([Icon, label], idx) => (

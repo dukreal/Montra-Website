@@ -3,7 +3,7 @@ import { IoCash } from "react-icons/io5";
 import { fmtDate, fmtTime } from "@/web/dates";
 import { getCat, fmtAmt } from "@/web/helpers";
 import { overlay, modalBox, btnReset, outlineBtn, dangerBtn, primaryBtn } from "@/web/styles";
-import { RED, GREEN, TEXT, SUB, CARD2, BORDER, SURFACE } from "@/web/theme";
+import { RED, GREEN, TEXT, SUB, CARD2, BORDER, SURFACE, ON_RED, RED_TEXT, GREEN_TEXT } from "@/web/theme";
 import type { Tx } from "@/web/types";
 import { CatIcon, IcoX } from "@/web/icons";
 
@@ -13,6 +13,7 @@ export function TxDetailModal({ tx, currency, onClose, onDelete, onEdit }: {
 }) {
   const isExp = tx.type === "expense";
   const tone = isExp ? RED : GREEN;
+  const toneText = isExp ? RED_TEXT : GREEN_TEXT;
   const cat = getCat(tx.type, tx.parent_category);
   const [confirmDel, setConfirmDel] = useState(false);
   const catClr = cat?.color ?? tone;
@@ -28,7 +29,7 @@ export function TxDetailModal({ tx, currency, onClose, onDelete, onEdit }: {
         {/* Top bar: category + close */}
         <div style={{ display: "flex", alignItems: "center", gap: 14, padding: "22px 24px 0" }}>
           <div style={{ width: 48, height: 48, borderRadius: 14, background: `${catClr}1e`, border: `1px solid ${catClr}55`, display: "flex", alignItems: "center", justifyContent: "center", flexShrink: 0 }}>
-            {cat ? <CatIcon name={cat.icon} color={cat.color} size={24} /> : <IoCash size={24} color={tone} />}
+            {cat ? <CatIcon name={cat.icon} color={cat.color} size={24} /> : <IoCash size={24} color={toneText} />}
           </div>
           <div style={{ flex: 1, minWidth: 0 }}>
             <div style={{ fontSize: 18, fontWeight: 700, color: TEXT, overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap" }}>
@@ -45,10 +46,10 @@ export function TxDetailModal({ tx, currency, onClose, onDelete, onEdit }: {
 
         {/* Amount */}
         <div style={{ padding: "26px 24px 24px", display: "flex", flexWrap: "wrap", alignItems: "center", justifyContent: "space-between", gap: 12 }}>
-          <div style={{ fontSize: 40, fontWeight: 800, color: tone, lineHeight: 1.1, letterSpacing: "-0.02em", minWidth: 0, overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap" }}>
+          <div style={{ fontSize: 40, fontWeight: 800, color: toneText, lineHeight: 1.1, letterSpacing: "-0.02em", minWidth: 0, overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap" }}>
             {isExp ? "-" : "+"}{fmtAmt(tx.amount, currency)}
           </div>
-          <span style={{ display: "inline-flex", alignItems: "center", gap: 7, padding: "6px 14px", borderRadius: 100, border: `1px solid ${tone}55`, color: tone, fontWeight: 700, fontSize: 14, flexShrink: 0 }}>
+          <span style={{ display: "inline-flex", alignItems: "center", gap: 7, padding: "6px 14px", borderRadius: 100, border: `1px solid ${tone}55`, color: toneText, fontWeight: 700, fontSize: 14, flexShrink: 0 }}>
             <span style={{ width: 8, height: 8, borderRadius: "50%", background: tone }} />
             {isExp ? "Expense" : "Income"}
           </span>
@@ -66,7 +67,7 @@ export function TxDetailModal({ tx, currency, onClose, onDelete, onEdit }: {
 
         {tx.notes && (
           <div style={{ margin: "18px 24px 0", background: SURFACE, borderRadius: 12, padding: "14px 16px", borderLeft: `3px solid ${tone}` }}>
-            <div style={{ fontSize: 13, color: SUB, fontWeight: 700, letterSpacing: "0.06em", marginBottom: 6 }}>NOTE</div>
+            <div style={{ fontSize: 14, color: SUB, fontWeight: 700, letterSpacing: "0.06em", marginBottom: 6 }}>NOTE</div>
             <div style={{ fontSize: 16, color: TEXT, lineHeight: 1.5, wordBreak: "break-word" }}>{tx.notes}</div>
           </div>
         )}
@@ -82,7 +83,7 @@ export function TxDetailModal({ tx, currency, onClose, onDelete, onEdit }: {
           {confirmDel ? (
             <>
               <button onClick={() => setConfirmDel(false)} style={outlineBtn}>Keep</button>
-              <button onClick={() => { onDelete(tx.id); onClose(); }} style={{ ...dangerBtn, background: RED, color: "#fff", border: "none" }}>Confirm delete</button>
+              <button onClick={() => { onDelete(tx.id); onClose(); }} style={{ ...dangerBtn, background: RED, color: ON_RED, border: "none" }}>Confirm delete</button>
             </>
           ) : (
             <>

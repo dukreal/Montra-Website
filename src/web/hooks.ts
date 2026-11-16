@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useSyncExternalStore } from "react";
 import { isRange, sameDay } from "@/web/dates";
 import type { DateSel, DateMode } from "@/web/types";
 
@@ -9,9 +9,10 @@ export function useDateSelection(initial: DateSel | null) {
   const [mode, setModeState] = useState<DateMode>("day");
   const [pending, setPending] = useState<Date | null>(null);
   /** Returns true once the selection is complete */
-  const pick = (d: Date) => {
-    if (mode === "day") {
-      setSel(sel && !isRange(sel) && sameDay(sel.start, d) ? null : { start: d, end: d });
+  const pick = (d: Date, asDay = false) => {
+    if (mode === "day" || asDay) {
+      if (mode !== "day") { setModeState("day"); setPending(null); }
+      setSel(!asDay && sel && !isRange(sel) && sameDay(sel.start, d) ? null : { start: d, end: d });
       return true;
     }
     if (!pending) { setPending(d); setSel({ start: d, end: d }); return false; }
@@ -28,6 +29,17 @@ export function useDateSelection(initial: DateSel | null) {
   /* Stop waiting for an end date; keeps the start day selected */
   const settle = () => setPending(null);
   return { sel, mode, pending, pick, setMode, clear, settle };
+}
+
+/* True on phone-width screens (same 860px breakpoint as the CSS). */
+const PHONE_QUERY = "(max-width: 860px)";
+const subscribePhone = (cb: () => void) => {
+  const mq = window.matchMedia(PHONE_QUERY);
+  mq.addEventListener("change", cb);
+  return () => mq.removeEventListener("change", cb);
+};
+export function useIsPhone() {
+  return useSyncExternalStore(subscribePhone, () => window.matchMedia(PHONE_QUERY).matches, () => false);
 }
 
 /* ─── HomeTab ─────────────────────────────────────────────────────────────── */

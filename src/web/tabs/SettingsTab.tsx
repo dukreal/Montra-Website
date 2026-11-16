@@ -1,20 +1,26 @@
 import { useState } from "react";
 import type { User } from "@supabase/supabase-js";
 import { dangerBtn, outlineBtn } from "@/web/styles";
-import { BORDER, TEXT, SUB, aTint, ACCENT, CARD, ACCENT_THEMES, CARD2, RED } from "@/web/theme";
+import { BORDER, TEXT, SUB, aTint, ACCENT, ACCENT_TEXT, CARD, ACCENT_THEMES, CARD2, RED, ON_ACCENT, ON_RED, RED_TEXT } from "@/web/theme";
 import type { Settings, ThemeMode, TextSize } from "@/web/types";
-import { IcoPalette, IcoGlobe, IcoWallet, IcoUser, IcoDoc, IcoHelp, IcoSun, IcoMoon, IcoCheck } from "@/web/icons";
+import { IcoPalette, IcoGlobe, IcoWallet, IcoUser, IcoDoc, IcoHelp, IcoSun, IcoMoon, IcoCheck, IcoSettings } from "@/web/icons";
 import type { IP } from "@/web/icons";
+import { useIsPhone } from "@/web/hooks";
+import { SettingsPhone } from "@/web/tabs/SettingsPhone";
+import { Switch } from "@/web/components/Switch";
+import { ADVANCED_OPTIONS } from "@/web/advanced";
 
 /* ─── SettingsTab ────────────────────────────────────────────────────────── */
-type SettingsSection = "appearance" | "language" | "currency" | "account" | "data" | "about";
+type SettingsSection = "appearance" | "advanced" | "language" | "currency" | "account" | "data" | "about";
 
-export function SettingsTab({ settings, onSave, onClear, txCount, user, onRefresh }: {
-  settings: Settings; onSave: (s: Settings) => void; onClear: () => void; txCount: number;
-  user: User | null; onRefresh?: () => void;
+export function SettingsTab({ settings, onSave, onClear, txCount, user, onRefresh, onBack }: {
+  settings: Settings; onSave: (s: Settings) => void; onClear: () => void | Promise<void>; txCount: number;
+  user: User | null; onRefresh?: () => void; onBack: () => void;
 }) {
+  const isPhone = useIsPhone();
   const [section, setSection] = useState<SettingsSection>("appearance");
   const [confirmClear, setConfirmClear] = useState(false);
+  const [clearing, setClearing] = useState(false);
 
   const currencies = [
     { code: "₱", name: "Philippine Peso (PHP)", enabled: true },
@@ -24,12 +30,17 @@ export function SettingsTab({ settings, onSave, onClear, txCount, user, onRefres
 
   const navItems: { id: SettingsSection; label: string; Icon: React.FC<IP> }[] = [
     { id: "appearance", label: "Appearance", Icon: IcoPalette },
+    { id: "advanced", label: "Advanced", Icon: IcoSettings },
     { id: "language", label: "Language", Icon: IcoGlobe },
     { id: "currency", label: "Currency", Icon: IcoWallet },
     ...(user ? [{ id: "account" as SettingsSection, label: "Account", Icon: IcoUser }] : []),
     { id: "data", label: "Data", Icon: IcoDoc },
     { id: "about", label: "About", Icon: IcoHelp },
   ];
+
+  if (isPhone) {
+    return <SettingsPhone settings={settings} onSave={onSave} onClear={onClear} txCount={txCount} user={user} onRefresh={onRefresh} onBack={onBack} />;
+  }
 
   const sectionHead = (title: string, sub: string) => (
     <div style={{ marginBottom: 28, paddingBottom: 20, borderBottom: `1px solid ${BORDER}` }}>
@@ -46,7 +57,7 @@ export function SettingsTab({ settings, onSave, onClear, txCount, user, onRefres
     <div className="montra-settings" style={{ display: "flex", gap: 0, minHeight: 500 }}>
       {/* ── Sidebar nav ── */}
       <div className="montra-settings-nav" style={{ width: 220, flexShrink: 0 }}>
-        <h2 style={{ margin: "0 0 20px", fontSize: 22, fontWeight: 800, color: TEXT }}>Settings</h2>
+        <h2 className="montra-settings-title" style={{ margin: "0 0 20px", fontSize: 22, fontWeight: 800, color: TEXT }}>Settings</h2>
         <div style={{ display: "flex", flexDirection: "column", gap: 4 }}>
           {navItems.map(item => {
             const active = section === item.id;
@@ -55,12 +66,12 @@ export function SettingsTab({ settings, onSave, onClear, txCount, user, onRefres
                 display: "flex", alignItems: "center", gap: 10,
                 width: "100%", padding: "12px 14px", borderRadius: 10,
                 background: active ? aTint(14) : "transparent",
-                color: active ? ACCENT : SUB,
+                color: active ? ACCENT_TEXT : SUB,
                 border: "none", fontWeight: active ? 700 : 500, fontSize: 16,
                 cursor: "pointer", textAlign: "left" as const,
                 transition: "background 0.15s, color 0.15s",
               }}>
-                <item.Icon size={16} color={active ? ACCENT : SUB} />
+                <item.Icon size={16} color={active ? ACCENT_TEXT : SUB} />
                 {item.label}
               </button>
             );
@@ -92,8 +103,8 @@ export function SettingsTab({ settings, onSave, onClear, txCount, user, onRefres
                       border: `2px solid ${on ? ACCENT : BORDER}`,
                       cursor: "pointer", transition: "all 0.15s",
                     }}>
-                      <Icon size={22} color={on ? ACCENT : SUB} />
-                      <span style={{ fontSize: 16, fontWeight: 700, color: on ? ACCENT : SUB }}>{label}</span>
+                      <Icon size={22} color={on ? ACCENT_TEXT : SUB} />
+                      <span style={{ fontSize: 16, fontWeight: 700, color: on ? ACCENT_TEXT : SUB }}>{label}</span>
                     </button>
                   );
                 })}
@@ -114,7 +125,7 @@ export function SettingsTab({ settings, onSave, onClear, txCount, user, onRefres
                       cursor: "pointer", transition: "all 0.15s",
                     }}>
                       <div style={{ width: 28, height: 28, borderRadius: "50%", background: c.key }} />
-                      <span style={{ fontSize: 14, fontWeight: 700, color: on ? c.key : SUB }}>{c.name}</span>
+                      <span style={{ fontSize: 14, fontWeight: 700, color: on ? c.text[settings.theme] : SUB }}>{c.name}</span>
                     </button>
                   );
                 })}
@@ -134,12 +145,36 @@ export function SettingsTab({ settings, onSave, onClear, txCount, user, onRefres
                       border: `2px solid ${on ? ACCENT : BORDER}`,
                       cursor: "pointer", transition: "all 0.15s",
                     }}>
-                      <span style={{ fontSize: px, fontWeight: 800, color: on ? ACCENT : SUB, lineHeight: 1 }}>Aa</span>
-                      <span style={{ fontSize: 14, fontWeight: 700, color: on ? ACCENT : SUB }}>{label}</span>
+                      <span style={{ fontSize: px, fontWeight: 800, color: on ? ACCENT_TEXT : SUB, lineHeight: 1 }}>Aa</span>
+                      <span style={{ fontSize: 14, fontWeight: 700, color: on ? ACCENT_TEXT : SUB }}>{label}</span>
                     </button>
                   );
                 })}
               </div>
+            </div>
+          </div>
+        )}
+
+        {/* ADVANCED */}
+        {section === "advanced" && (
+          <div>
+            {sectionHead("Advanced", "Optional behavior when adding and viewing transactions.")}
+            <div style={{ display: "flex", flexDirection: "column", gap: 10 }}>
+              {ADVANCED_OPTIONS.map((o) => {
+                const on = settings[o.key];
+                return (
+                  <button key={o.key} type="button" role="switch" aria-checked={on} onClick={() => onSave({ ...settings, [o.key]: !on })} style={{
+                    display: "flex", alignItems: "center", gap: 14, width: "100%", padding: "14px 18px", textAlign: "left" as const,
+                    font: "inherit", borderRadius: 13, cursor: "pointer", background: CARD, border: `2px solid ${BORDER}`,
+                  }}>
+                    <div style={{ flex: 1 }}>
+                      <div style={{ fontSize: 16, fontWeight: 700, color: TEXT }}>{o.title}</div>
+                      <div style={{ fontSize: 15, color: SUB, marginTop: 2 }}>{o.sub}</div>
+                    </div>
+                    <Switch on={on} />
+                  </button>
+                );
+              })}
             </div>
           </div>
         )}
@@ -162,7 +197,7 @@ export function SettingsTab({ settings, onSave, onClear, txCount, user, onRefres
                   }}>
                     <span style={{ fontSize: 32 }}>{l.flag}</span>
                     <div style={{ flex: 1 }}>
-                      <div style={{ fontSize: 16, fontWeight: 700, color: on ? ACCENT : TEXT }}>{l.label}</div>
+                      <div style={{ fontSize: 16, fontWeight: 700, color: on ? ACCENT_TEXT : TEXT }}>{l.label}</div>
                       <div style={{ fontSize: 15, color: SUB, marginTop: 2 }}>{l.sub}</div>
                     </div>
                     {!l.enabled && <span style={{ fontSize: 14, fontWeight: 600, color: SUB }}>Coming soon</span>}
@@ -173,7 +208,7 @@ export function SettingsTab({ settings, onSave, onClear, txCount, user, onRefres
                       display: "flex", alignItems: "center", justifyContent: "center",
                       flexShrink: 0, transition: "all 0.15s",
                     }}>
-                      {on && <IcoCheck size={10} color="#fff" />}
+                      {on && <IcoCheck size={10} color={ON_ACCENT} />}
                     </div>
                   </div>
                 );
@@ -200,18 +235,21 @@ export function SettingsTab({ settings, onSave, onClear, txCount, user, onRefres
                   }}>
                     <div style={{
                       width: 42, height: 42, borderRadius: 10, flexShrink: 0,
-                      background: on ? aTint(18) : CARD2,
+                      background: on ? aTint(12) : CARD2,
                       display: "flex", alignItems: "center", justifyContent: "center",
-                      fontSize: c.code.length > 1 ? 11 : 16, fontWeight: 800, color: on ? ACCENT : SUB,
+                      fontSize: c.code.length > 1 ? 11 : 16, fontWeight: 800, color: on ? ACCENT_TEXT : SUB,
                     }}>{c.code}</div>
-                    <span style={{ flex: 1, fontSize: 16, fontWeight: 600, color: on ? ACCENT : TEXT }}>{c.name}</span>
+                    <span style={{ flex: 1, fontSize: 16, fontWeight: 600, color: on ? ACCENT_TEXT : TEXT }}>{c.name}</span>
                     {!c.enabled && <span style={{ fontSize: 14, fontWeight: 600, color: SUB }}>Coming soon</span>}
-                    {on && (
-                      <div style={{ width: 20, height: 20, borderRadius: "50%", background: ACCENT, display: "flex", alignItems: "center", justifyContent: "center", flexShrink: 0 }}>
-                        <IcoCheck size={10} color="#fff" />
-                      </div>
-                    )}
-                  </div>
+                    <div style={{
+                      width: 20, height: 20, borderRadius: "50%",
+                      border: `2px solid ${on ? ACCENT : BORDER}`,
+                      background: on ? ACCENT : "transparent",
+                      display: "flex", alignItems: "center", justifyContent: "center",
+                      flexShrink: 0, transition: "all 0.15s",
+                    }}>
+                      {on && <IcoCheck size={10} color={ON_ACCENT} />}
+                    </div>                  </div>
                 );
               })}
             </div>
@@ -227,14 +265,14 @@ export function SettingsTab({ settings, onSave, onClear, txCount, user, onRefres
                 <div style={{ width: 52, height: 52, borderRadius: "50%", background: aTint(18), display: "flex", alignItems: "center", justifyContent: "center", flexShrink: 0, overflow: "hidden" }}>
                   {user.user_metadata?.avatar_url
                     ? <img src={user.user_metadata.avatar_url as string} style={{ width: "100%", height: "100%", objectFit: "cover" }} />
-                    : <span style={{ fontSize: 24, fontWeight: 800, color: ACCENT }}>{(user.user_metadata?.full_name as string || user.email || "?")[0].toUpperCase()}</span>}
+                    : <span style={{ fontSize: 24, fontWeight: 800, color: ACCENT_TEXT }}>{(user.user_metadata?.full_name as string || user.email || "?")[0].toUpperCase()}</span>}
                 </div>
                 <div style={{ flex: 1, minWidth: 0 }}>
                   <div style={{ fontWeight: 700, fontSize: 18, color: TEXT, overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap" }}>{user.user_metadata?.full_name as string || "Signed in"}</div>
                   <div style={{ fontSize: 16, color: SUB, marginTop: 3, overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap" }}>{user.email}</div>
                 </div>
                 <button onClick={onRefresh} style={{
-                  background: aTint(9), border: `1px solid ${aTint(27)}`, color: ACCENT,
+                  background: aTint(9), border: `1px solid ${aTint(27)}`, color: ACCENT_TEXT,
                   borderRadius: 9, padding: "8px 16px", fontSize: 16, fontWeight: 600, cursor: "pointer", flexShrink: 0,
                 }}>Sync now</button>
               </div>
@@ -245,33 +283,39 @@ export function SettingsTab({ settings, onSave, onClear, txCount, user, onRefres
         {/* DATA */}
         {section === "data" && (
           <div>
-            {sectionHead("Data", "Your transactions are stored locally in this browser.")}
+            {sectionHead("Data", user ? "Your transactions are saved to your Montra account." : "Your transactions are stored in this browser only.")}
             <div style={{ background: CARD, border: `1px solid ${BORDER}`, borderRadius: 16, padding: 24, marginBottom: 20 }}>
               <div style={{ display: "flex", alignItems: "center", gap: 16 }}>
                 <div style={{ flex: 1 }}>
                   <div style={{ fontSize: 15, color: SUB, marginBottom: 6, fontWeight: 600, letterSpacing: "0.05em" }}>STORED TRANSACTIONS</div>
-                  <div style={{ fontSize: 36, fontWeight: 800, color: ACCENT, lineHeight: 1 }}>{txCount}</div>
+                  <div style={{ fontSize: 36, fontWeight: 800, color: ACCENT_TEXT, lineHeight: 1 }}>{txCount}</div>
                 </div>
                 <div style={{ width: 52, height: 52, borderRadius: 14, background: aTint(12), display: "flex", alignItems: "center", justifyContent: "center" }}>
-                  <IcoDoc size={24} color={ACCENT} />
+                  <IcoDoc size={24} color={ACCENT_TEXT} />
                 </div>
               </div>
               <div style={{ fontSize: 15, color: SUB, marginTop: 14, paddingTop: 14, borderTop: `1px solid ${BORDER}` }}>
-                All data lives in your browser only. Nothing is sent to any server.
+                {user ? "Synced to your account. A copy is also kept in this browser." : "Guest data lives in this browser only. Nothing is sent to any server."}
               </div>
             </div>
             <div style={{ background: "#FF6B6B0d", border: "1px solid #FF6B6B30", borderRadius: 16, padding: 20 }}>
-              <div style={{ fontSize: 16, fontWeight: 800, color: RED, marginBottom: 6, letterSpacing: "0.04em" }}>DANGER ZONE</div>
+              <div style={{ fontSize: 16, fontWeight: 800, color: RED_TEXT, marginBottom: 6, letterSpacing: "0.04em" }}>DANGER ZONE</div>
               <div style={{ fontSize: 16, color: SUB, marginBottom: 16, lineHeight: 1.6 }}>
-                Permanently delete all {txCount} transaction{txCount !== 1 ? "s" : ""}. This cannot be undone.
+                {user
+                  ? `This permanently deletes all ${txCount} transaction${txCount !== 1 ? "s" : ""} from your Montra account. If you also use the Montra mobile app, they will be deleted there too. This cannot be undone.`
+                  : `This permanently deletes all ${txCount} transaction${txCount !== 1 ? "s" : ""} stored in this browser. This cannot be undone.`}
               </div>
               {!confirmClear ? (
                 <button onClick={() => setConfirmClear(true)} style={{ ...dangerBtn, flex: "none" }}>Clear All Data</button>
               ) : (
                 <div style={{ display: "flex", gap: 10 }}>
-                  <button onClick={() => setConfirmClear(false)} style={{ ...outlineBtn, flex: "none", padding: "10px 20px" }}>Cancel</button>
-                  <button onClick={() => { onClear(); setConfirmClear(false); }} style={{ ...dangerBtn, flex: "none", background: RED, color: "#fff", border: "none" }}>
-                    Delete All
+                  <button disabled={clearing} onClick={() => setConfirmClear(false)} style={{ ...outlineBtn, flex: "none", padding: "10px 20px", opacity: clearing ? 0.5 : 1 }}>Cancel</button>
+                  <button
+                    disabled={clearing}
+                    onClick={async () => { setClearing(true); await onClear(); setClearing(false); setConfirmClear(false); }}
+                    style={{ ...dangerBtn, flex: "none", background: RED, color: ON_RED, border: "none", opacity: clearing ? 0.7 : 1 }}
+                  >
+                    {clearing ? "Deleting…" : user ? "Yes, delete everything" : "Yes, delete all"}
                   </button>
                 </div>
               )}
@@ -285,12 +329,12 @@ export function SettingsTab({ settings, onSave, onClear, txCount, user, onRefres
             {sectionHead("About", "Montra — a simple personal finance tracker.")}
             <div style={{ background: CARD, border: `1px solid ${BORDER}`, borderRadius: 16, padding: 32, textAlign: "center", marginBottom: 14 }}>
               <div style={{ width: 64, height: 64, borderRadius: 18, background: aTint(14), border: `2px solid ${aTint(28)}`, margin: "0 auto 18px", display: "flex", alignItems: "center", justifyContent: "center" }}>
-                <IcoWallet size={28} color={ACCENT} />
+                <IcoWallet size={28} color={ACCENT_TEXT} />
               </div>
               <div style={{ fontWeight: 800, fontSize: 24, color: TEXT, marginBottom: 4 }}>Montra Web</div>
-              <div style={{ fontSize: 15, color: SUB, marginBottom: 20 }}>Version 1.0 · Built with React + Supabase</div>
+              <div style={{ fontSize: 15, color: SUB, marginBottom: 20 }}>Version 2.2.0 · Built with React + Supabase</div>
               <div style={{ fontSize: 16, color: SUB, lineHeight: 1.8, maxWidth: 320, margin: "0 auto" }}>
-                Track your income and expenses with a clean, fast interface. All data is stored locally in your browser by default.
+                Track your income and expenses with a clean, fast interface. Guest mode keeps data in your browser; when you sign in, it syncs to your account.
               </div>
             </div>
           </div>

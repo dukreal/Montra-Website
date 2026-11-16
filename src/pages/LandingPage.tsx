@@ -4,21 +4,26 @@ import Hero from '@/components/sections/Hero'
 import StatStrip from '@/components/sections/StatStrip'
 import HowItWorks from '@/components/sections/HowItWorks'
 import Benefits from '@/components/sections/Benefits'
-import Testimonials from '@/components/sections/Testimonials'
 import Secure from '@/components/sections/Secure'
 import Cta from '@/components/sections/Cta'
-import { BG } from '@/constants/theme'
+import { ACCENT, BG } from '@/constants/theme'
 
 export default function LandingPage() {
   return (
-    <div className="min-h-screen w-full" style={{ background: BG }}>
+    <div className="montra-landing relative min-h-screen w-full" style={{ background: BG }}>
+      {/* Hero glow lives at page level so it also sits behind the sticky header (no dark band above the hero) */}
+      <div className="pointer-events-none absolute inset-x-0 top-0 h-[760px] overflow-hidden">
+        <div
+          className="absolute left-1/2 -translate-x-1/2 -top-14 h-[560px] w-[900px] rounded-full blur-[140px] opacity-40"
+          style={{ background: ACCENT }}
+        />
+      </div>
       <Header />
       <main>
         <Hero />
         <StatStrip />
         <HowItWorks />
         <Benefits />
-        <Testimonials />
         <Secure />
         <Cta />
       </main>

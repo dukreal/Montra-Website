@@ -6,8 +6,8 @@ export default function MiniDonut() {
   return (
     <div className="relative" style={{ width: 92, height: 92 }}>
       <div className="rounded-full w-full h-full" style={{ background: stops }} />
-      <div className="absolute inset-0 m-auto rounded-full grid place-items-center" style={{ width: 54, height: 54, background: PANEL2 }}>
-        <span className="text-[11px] font-bold" style={{ color: INK }}>₱8.4k</span>
+      <div className="absolute inset-0 m-auto rounded-full grid place-items-center" style={{ width: 58, height: 58, background: PANEL2 }}>
+        <span className="text-[14px] font-bold" style={{ color: INK }}>₱8.4k</span>
       </div>
     </div>
   );

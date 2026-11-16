@@ -1,4 +1,4 @@
-import { ACCENT, BORDER, CARD, RED, SUB, SURFACE, TEXT } from "@/web/theme";
+import { ACCENT, BORDER, CARD, ON_ACCENT, RED, SUB, SURFACE, TEXT, RED_TEXT } from "@/web/theme";
 
 export const profileRow: React.CSSProperties = {
   display: "flex", alignItems: "center", gap: 12, width: "100%",
@@ -30,11 +30,11 @@ export const fieldLabel: React.CSSProperties = {
 };
 export const inputStyle: React.CSSProperties = {
   width: "100%", background: CARD, border: `1px solid ${BORDER}`, borderRadius: 12,
-  padding: "12px 14px", color: TEXT, fontSize: 16, outline: "none",
+  padding: "12px 14px", color: TEXT, fontSize: 16,
   boxSizing: "border-box",
 };
 export const primaryBtn: React.CSSProperties = {
-  background: ACCENT, color: "#fff", border: "none", borderRadius: 12,
+  background: ACCENT, color: ON_ACCENT, border: "none", borderRadius: 12,
   padding: "12px 20px", fontWeight: 700, fontSize: 16, cursor: "pointer",
 };
 export const outlineBtn: React.CSSProperties = {
@@ -43,5 +43,5 @@ export const outlineBtn: React.CSSProperties = {
 };
 export const dangerBtn: React.CSSProperties = {
   flex: 1, padding: "12px", borderRadius: 12, border: `1px solid ${RED}55`,
-  background: "#FF6B6B14", color: RED, cursor: "pointer", fontWeight: 600, fontSize: 16,
+  background: "#FF6B6B14", color: RED_TEXT, cursor: "pointer", fontWeight: 600, fontSize: 16,
 };

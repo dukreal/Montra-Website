@@ -1,8 +1,9 @@
 import { useState, useRef, useEffect, useCallback, useMemo } from "react";
 import { mondayOf, MONTHS, isoWeekNum, fmtShort, fmtDate } from "@/web/dates";
+import { useIsPhone } from "@/web/hooks";
 import { fmtAmt, getCat } from "@/web/helpers";
 import { btnReset, navBtnStyle } from "@/web/styles";
-import { SUB, BORDER, TEXT, CARD, ACCENT, CARD2, aTint, GREEN, RED } from "@/web/theme";
+import { SUB, BORDER, TEXT, CARD, ACCENT, ACCENT_TEXT, CARD2, aTint, GREEN, RED, ON_ACCENT, ON_RED, RED_TEXT, GREEN_TEXT } from "@/web/theme";
 import type { Tx, TxType } from "@/web/types";
 import { IcoChevLeft, IcoChevRight, CatIcon } from "@/web/icons";
 
@@ -91,10 +92,10 @@ function DonutChart({ segments, size = 220, hole = 110, currency, activeName, on
         position: "absolute", top: "50%", left: "50%", transform: "translate(-50%, -50%)",
         textAlign: "center", pointerEvents: "none", width: hole - 16,
       }}>
-        <div style={{ fontSize: 13, color: SUB, marginBottom: 4, fontWeight: 700, letterSpacing: "0.08em", whiteSpace: "nowrap", overflow: "hidden", textOverflow: "ellipsis" }}>
+        <div style={{ fontSize: 14, color: SUB, marginBottom: 4, fontWeight: 700, letterSpacing: "0.08em", whiteSpace: "nowrap", overflow: "hidden", textOverflow: "ellipsis" }}>
           {focusSeg ? focusSeg.name.split(" & ")[0].toUpperCase() : "TOTAL"}
         </div>
-        <div style={{ fontSize: amtSize, fontWeight: 800, color: focusSeg ? focusSeg.color : TEXT, lineHeight: 1.1, whiteSpace: "nowrap" }}>
+        <div style={{ fontSize: amtSize, fontWeight: 800, color: TEXT, lineHeight: 1.1, whiteSpace: "nowrap" }}>
           {amtStr}
         </div>
         {focusSeg && (
@@ -155,7 +156,17 @@ export function AnalyticsTab({ txs, currency }: { txs: Tx[]; currency: string })
   const today = new Date();
   const [year, setYear] = useState(today.getFullYear());
   const [month, setMonth] = useState(today.getMonth());
-  const [selectedSeg, setSelectedSeg] = useState<Segment | null>(null);
+const [selectedSeg, setSelectedSeg] = useState<Segment | null>(null);
+  /* On phones, bring the transactions panel into view after a slice or category is picked
+     (the short delay lets the card finish growing first) */
+  const isPhone = useIsPhone();
+  const slicePanelRef = useRef<HTMLDivElement>(null);
+  useEffect(() => {
+    if (!selectedSeg || !isPhone) return;
+    const smooth = !window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+    const t = setTimeout(() => slicePanelRef.current?.scrollIntoView({ behavior: smooth ? "smooth" : "auto", block: "nearest" }), 500);
+    return () => clearTimeout(t);
+  }, [selectedSeg, isPhone]);
 
   // The donut is 280px, but shrinks to fit the card on narrow phones.
   const [viewportW, setViewportW] = useState(window.innerWidth);
@@ -263,28 +274,30 @@ export function AnalyticsTab({ txs, currency }: { txs: Tx[]; currency: string })
   const yearOptions = Array.from({ length: 12 }, (_, i) => today.getFullYear() - 11 + i);
   const pickBtn = (on: boolean, disabled = false): React.CSSProperties => ({
     padding: "11px 0", borderRadius: 10, fontSize: 15, fontWeight: on ? 700 : 500,
-    background: on ? ACCENT : CARD2, color: on ? "#fff" : TEXT, border: "none",
+    background: on ? ACCENT : CARD2, color: on ? ON_ACCENT : TEXT, border: "none",
     cursor: disabled ? "not-allowed" : "pointer", opacity: disabled ? 0.3 : 1,
   });
 
   return (
     <div style={{ display: "flex", flexDirection: "column", gap: 14 }}>
 
+      <h2 className="montra-phone-title">Analytics</h2>
+
       {/* Period pill with nav arrows */}
       <div style={{ display: "flex", justifyContent: "center", alignItems: "center", gap: 8, position: "relative" }}>
-        <button onClick={prevPeriod} style={{ ...btnReset, ...navBtnStyle }}>
+        <button onClick={prevPeriod} aria-label="Previous period" className="montra-navbtn" style={{ ...btnReset, ...navBtnStyle }}>
           <IcoChevLeft size={15} color={TEXT} />
         </button>
         <button className="montra-period" onClick={togglePicker} aria-expanded={pickerOpen} style={{
           background: aTint(12), border: `1px solid ${aTint(35)}`,
           borderRadius: 100, padding: "8px 0", width: 320, minWidth: 0, textAlign: "center",
-          whiteSpace: "nowrap", color: ACCENT, fontWeight: 700, fontSize: 17, letterSpacing: 0.2, cursor: "pointer",
+          whiteSpace: "nowrap", color: ACCENT_TEXT, fontWeight: 700, fontSize: 17, letterSpacing: 0.2, cursor: "pointer",
           display: "flex", alignItems: "center", justifyContent: "center", gap: 8,
         }}>
           {periodLabel}
           <span style={{ fontSize: 11, transform: pickerOpen ? "rotate(180deg)" : "none", transition: "transform 0.15s" }}>▼</span>
         </button>
-        <button onClick={nextPeriod} disabled={atEnd} style={{ ...btnReset, ...navBtnStyle, opacity: atEnd ? 0.3 : 1, cursor: atEnd ? "not-allowed" : "pointer" }}>
+        <button onClick={nextPeriod} aria-label="Next period" disabled={atEnd} className="montra-navbtn" style={{ ...btnReset, ...navBtnStyle, opacity: atEnd ? 0.3 : 1, cursor: atEnd ? "not-allowed" : "pointer" }}>
           <IcoChevRight size={15} color={TEXT} />
         </button>
 
@@ -307,9 +320,9 @@ export function AnalyticsTab({ txs, currency }: { txs: Tx[]; currency: string })
           ) : (
             <>
               <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", marginBottom: 12 }}>
-                <button onClick={() => setPickYear(y => y - 1)} style={btnReset}><IcoChevLeft size={16} color={SUB} /></button>
+                <button onClick={() => setPickYear(y => y - 1)} aria-label="Previous year" style={btnReset}><IcoChevLeft size={16} color={SUB} /></button>
                 <span style={{ fontWeight: 800, color: TEXT, fontSize: 16 }}>{viewMode === "week" ? `${MONTHS[pickMonth]} ${pickYear}` : pickYear}</span>
-                <button onClick={() => !isCurrentYear(pickYear) && setPickYear(y => y + 1)} disabled={isCurrentYear(pickYear)}
+                <button onClick={() => !isCurrentYear(pickYear) && setPickYear(y => y + 1)} aria-label="Next year" disabled={isCurrentYear(pickYear)}
                   style={{ ...btnReset, opacity: isCurrentYear(pickYear) ? 0.25 : 1, cursor: isCurrentYear(pickYear) ? "not-allowed" : "pointer" }}>
                   <IcoChevRight size={16} color={SUB} />
                 </button>
@@ -352,10 +365,10 @@ export function AnalyticsTab({ txs, currency }: { txs: Tx[]; currency: string })
           const key = v.toLowerCase() as "week" | "month" | "year";
           const active = viewMode === key;
           return (
-            <button key={v} onClick={() => { setViewMode(key); setSelectedSeg(null); setPickerOpen(false); }} style={{
+            <button key={v} className="montra-seg" onClick={() => { setViewMode(key); setSelectedSeg(null); setPickerOpen(false); }} style={{
               flex: 1, padding: "9px 0", borderRadius: 9,
-              background: active ? CARD2 : "transparent",
-              color: active ? TEXT : SUB,
+              background: active ? ACCENT : "transparent",
+              color: active ? ON_ACCENT : SUB,
               border: "none", fontWeight: active ? 700 : 500, fontSize: 16, cursor: "pointer",
               transition: "background 0.2s, color 0.2s",
             }}>{v}</button>
@@ -364,19 +377,19 @@ export function AnalyticsTab({ txs, currency }: { txs: Tx[]; currency: string })
       </div>
 
       {/* Income / Expense / Balance summary */}
-      <div style={{ background: CARD, borderRadius: 16, padding: "18px 12px", border: `1px solid ${BORDER}` }}>
+      <div className="montra-sumcard" style={{ background: CARD, borderRadius: 16, padding: "18px 12px", border: `1px solid ${BORDER}` }}>
         <div className="montra-sum" style={{ display: "grid", gridTemplateColumns: "1fr 1fr 1fr" }}>
           <div style={{ textAlign: "center" }}>
             <div style={{ color: SUB, fontSize: 15, marginBottom: 6 }}>Income</div>
-            <div style={{ color: GREEN, fontWeight: 700, fontSize: 16 }}>+{fmtAmt(totalIncome, currency)}</div>
+            <div style={{ color: GREEN_TEXT, fontWeight: 700, fontSize: 16 }}>+{fmtAmt(totalIncome, currency)}</div>
           </div>
           <div style={{ textAlign: "center", borderLeft: `1px solid ${BORDER}`, borderRight: `1px solid ${BORDER}` }}>
             <div style={{ color: SUB, fontSize: 15, marginBottom: 6 }}>Expense</div>
-            <div style={{ color: RED, fontWeight: 700, fontSize: 16 }}>-{fmtAmt(totalExpense, currency)}</div>
+            <div style={{ color: RED_TEXT, fontWeight: 700, fontSize: 16 }}>-{fmtAmt(totalExpense, currency)}</div>
           </div>
           <div style={{ textAlign: "center" }}>
             <div style={{ color: SUB, fontSize: 15, marginBottom: 6 }}>Balance</div>
-            <div style={{ color: balance >= 0 ? TEXT : RED, fontWeight: 700, fontSize: 16 }}>
+            <div style={{ color: balance >= 0 ? TEXT : RED_TEXT, fontWeight: 700, fontSize: 16 }}>
               {balance >= 0 ? "+" : "-"}{fmtAmt(Math.abs(balance), currency)}
             </div>
           </div>
@@ -398,16 +411,16 @@ export function AnalyticsTab({ txs, currency }: { txs: Tx[]; currency: string })
             <div style={{ color: SUB, fontSize: 15, marginTop: 3 }}>Top categories this period</div>
           </div>
           <div style={{ display: "flex", background: CARD2, borderRadius: 10, padding: 3, gap: 2, border: `1px solid ${BORDER}` }}>
-            <button onClick={() => { setTxType("expense"); setSelectedSeg(null); }} style={{
+            <button className="montra-typebtn" onClick={() => { setTxType("expense"); setSelectedSeg(null); }} style={{
               padding: "6px 13px", borderRadius: 8,
               background: txType === "expense" ? RED : "transparent",
-              color: txType === "expense" ? "#fff" : SUB,
+              color: txType === "expense" ? ON_RED : SUB,
               border: "none", fontWeight: 600, fontSize: 15, cursor: "pointer", transition: "all 0.2s",
             }}>Expense</button>
-            <button onClick={() => { setTxType("income"); setSelectedSeg(null); }} style={{
+            <button className="montra-typebtn" onClick={() => { setTxType("income"); setSelectedSeg(null); }} style={{
               padding: "6px 13px", borderRadius: 8,
               background: txType === "income" ? GREEN : "transparent",
-              color: txType === "income" ? "#fff" : SUB,
+              color: txType === "income" ? ON_ACCENT : SUB,
               border: "none", fontWeight: 600, fontSize: 15, cursor: "pointer", transition: "all 0.2s",
             }}>Income</button>
           </div>
@@ -441,7 +454,7 @@ export function AnalyticsTab({ txs, currency }: { txs: Tx[]; currency: string })
                     <div style={{ flex: 1, minWidth: 0 }}>
                       <div style={{ display: "flex", flexWrap: "wrap", columnGap: 8, justifyContent: "space-between", alignItems: "baseline", marginBottom: 5 }}>
                         <span className="montra-segname" style={{ fontSize: 16, fontWeight: 600, color: TEXT, overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap" }}>{seg.name}</span>
-                        <span style={{ fontSize: 16, fontWeight: 700, color: seg.color, marginLeft: "auto", flexShrink: 0 }}>{fmtAmt(seg.value, currency)}</span>
+                        <span style={{ fontSize: 16, fontWeight: 700, color: TEXT, marginLeft: "auto", flexShrink: 0 }}>{fmtAmt(seg.value, currency)}</span>
                       </div>
                       <div style={{ height: 5, background: BORDER, borderRadius: 100, overflow: "hidden" }}>
                         <div style={{ height: "100%", width: `${pct}%`, background: seg.color, borderRadius: 100, transition: "width 0.5s ease" }} />
@@ -458,6 +471,7 @@ export function AnalyticsTab({ txs, currency }: { txs: Tx[]; currency: string })
       </div>
 
       {/* Slice detail / tap-a-slice card */}
+      <div ref={slicePanelRef} className="montra-slice-panel">
       <AnimatedCard>
         {selectedSeg ? (
           <div>
@@ -466,7 +480,7 @@ export function AnalyticsTab({ txs, currency }: { txs: Tx[]; currency: string })
                 <CatIcon name={selectedSeg.icon} color={selectedSeg.color} size={16} />
               </div>
               <span style={{ fontWeight: 700, color: TEXT, fontSize: 18 }}>{selectedSeg.name}</span>
-              <span style={{ marginLeft: "auto", fontWeight: 700, color: selectedSeg.color }}>{fmtAmt(selectedSeg.value, currency)}</span>
+              <span style={{ marginLeft: "auto", fontWeight: 700, color: TEXT }}>{fmtAmt(selectedSeg.value, currency)}</span>
             </div>
             <div style={{ display: "flex", flexDirection: "column", gap: 8 }}>
               {segTxs.map(tx => (
@@ -476,7 +490,7 @@ export function AnalyticsTab({ txs, currency }: { txs: Tx[]; currency: string })
                     {tx.notes ? <div style={{ fontSize: 14, color: SUB, marginTop: 2 }}>{tx.notes}</div> : null}
                     <div style={{ fontSize: 14, color: SUB, marginTop: 2 }}>{fmtDate(tx.created_at)}</div>
                   </div>
-                  <div style={{ fontSize: 16, fontWeight: 700, color: tx.type === "expense" ? RED : GREEN }}>
+                  <div style={{ fontSize: 16, fontWeight: 700, color: tx.type === "expense" ? RED_TEXT : GREEN_TEXT }}>
                     {tx.type === "expense" ? "-" : "+"}{fmtAmt(tx.amount, currency)}
                   </div>
                 </div>
@@ -490,7 +504,7 @@ export function AnalyticsTab({ txs, currency }: { txs: Tx[]; currency: string })
           </div>
         )}
       </AnimatedCard>
-
+      </div>
     </div>
   );
 }

@@ -1,13 +1,22 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { supabase } from "@/lib/supabaseClient";
 import logoUrl from "@/assets/images/logo.png";
 import { BG, CARD, BORDER, TEXT, SUB, RED } from "@/web/theme";
 import { IcoArrowLeft } from "@/web/icons";
+import { loadTx } from "@/web/storage";
 
 /* ─── LoginScreen ────────────────────────────────────────────────────────── */
 export function LoginScreen({ onGuest }: { onGuest: () => void }) {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
+  const [savedCount] = useState(() => loadTx().length);
+
+  /* Returning with the browser Back button restores this page frozen on "Redirecting…" */
+  useEffect(() => {
+    const onShow = (e: PageTransitionEvent) => { if (e.persisted) setLoading(false); };
+    window.addEventListener("pageshow", onShow);
+    return () => window.removeEventListener("pageshow", onShow);
+  }, []);
 
   const signInWithGoogle = async () => {
     setLoading(true);
@@ -28,10 +37,10 @@ export function LoginScreen({ onGuest }: { onGuest: () => void }) {
         background: CARD, border: `1px solid ${BORDER}`, borderRadius: 28,
         padding: "48px 40px", width: 380, maxWidth: "90vw", textAlign: "center",
       }}>
-        <img src={logoUrl} alt="Montra" style={{ width: 52, height: 52, objectFit: "contain", marginBottom: 16 }} />
+        <img src={logoUrl} alt="Montra" style={{ display: "block", width: 52, height: 52, objectFit: "contain", margin: "0 auto 16px" }} />
         <h1 style={{ color: TEXT, fontSize: 30, fontWeight: 800, margin: "0 0 6px" }}>Montra Web</h1>
         <p style={{ color: SUB, fontSize: 16, margin: "0 0 36px", lineHeight: 1.5 }}>
-          Sign in with the same account you use on the mobile app — your transactions will sync automatically.
+          Sign in with Google to save your transactions to your account and sync them across devices.
         </p>
 
         <button
@@ -76,8 +85,14 @@ export function LoginScreen({ onGuest }: { onGuest: () => void }) {
 
         {error && <p style={{ color: RED, fontSize: 15, marginTop: 14 }}>{error}</p>}
 
+        {savedCount > 0 && (
+          <p style={{ color: TEXT, fontSize: 14, margin: "20px 0 0", padding: "10px 12px", borderRadius: 10, lineHeight: 1.5, background: "#FF6B6B14", border: "1px solid #FF6B6B40" }}>
+            This browser has {savedCount} saved transaction{savedCount !== 1 ? "s" : ""}. Signing in replaces them with the transactions from your account, so any guest transactions would be lost.
+          </p>
+        )}
+
         <p style={{ color: SUB, fontSize: 14, marginTop: 24, lineHeight: 1.6 }}>
-          Data syncs with your Montra mobile app via Supabase.
+          Signed-in data is saved to your Montra account.
           Guest mode stores data locally in your browser only.
         </p>
       </div>
